@@ -1,0 +1,42 @@
+##
+## EPITECH PROJECT, 2022
+## B-OOP-400-RUN-4-1-arcade-nicolas.reboule
+## File description:
+## Makefile
+##
+
+OBJ_GAMES = $(OBJ_NIBBLER) $(OBJ_PACMAN)
+
+OBJ_PACMAN = $(SRC_PACMAN:.cpp $(IFLAGS_PACMAN)=.o)
+
+OBJ_NIBBLER = $(SRC_NIBBLER:.cpp $(IFLAGS_NIBBLER)=.o)
+
+IFLAGS_PACMAN = -I ../include/pacman
+
+IFLAGS_NIBBLER = -I ../include/nibbler
+
+SRC_PACMAN = $(wildcard pacman/*.cpp)
+
+SRC_NIBBLER = $(wildcard nibbler/*.cpp)
+
+NAME_NIBBLER = arcade_nibbler.so
+
+NAME_PACMAN = arcade_pacman.so
+
+all:
+	make -j$(PROC) compile
+
+compile: $(OBJ_GAMES)
+	g++ -shared -o $(NAME_PACMAN) -fPIC $(OBJ_PACMAN) $(IFLAGS_PACMAN)
+	g++ -shared -o $(NAME_NIBBLER) -fPIC $(OBJ_NIBBLER) $(IFLAGS_NIBBLER)
+	mkdir -p ../lib/
+	mv $(NAME_NIBBLER) $(NAME_PACMAN) ../lib/
+
+clean:
+	rm -f $(OBJ_NIBBLER)
+	rm -f $(OBJ_PACMAN)
+
+fclean: clean
+	rm -rf ../lib
+
+re: fclean re
