@@ -6,3 +6,24 @@
 */
 
 #include "Sfml.hpp"
+#include <unistd.h>
+
+extern "C"
+{
+    SFML::SFML(const std::string &name) : _name(name)
+    {
+        // init();
+    }
+
+    SFML::~SFML()
+    {
+        // stop();
+    }
+
+    SFML *entryPoint(void)
+    {
+        SFML *module = new SFML("SFML");
+        printf("SFML entryPoint\n");
+        return module;
+    }
+}

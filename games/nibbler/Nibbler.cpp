@@ -6,3 +6,23 @@
 */
 
 #include "Nibbler.hpp"
+
+    extern "C"
+    {
+        arcade::api::Nibbler::Nibbler(const std::string &name) : AGameModule(name)
+        {
+            std::cout << "Nibbler : hey" << std::endl;
+        }
+
+        arcade::api::Nibbler::~Nibbler()
+        {
+            std::cout << "Nibbler : bye" << std::endl;
+        }
+
+        std::shared_ptr<arcade::api::Nibbler> entryPoint(void)
+        {
+            std::cout << "Nibbler entryPoint" << std::endl;
+            std::shared_ptr<arcade::api::Nibbler> module = std::make_shared<arcade::api::Nibbler>("Nibbler");
+            return module;
+        }
+    }

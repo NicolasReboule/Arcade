@@ -7,8 +7,13 @@
 
 #include "Core.hpp"
 
-int main(void)
+void arcade::Core::setGame(const std::string &name)
 {
-    std::cout << "Arcade!" << std::endl;
-    return 0;
+    _manager.setActualGame(name);
 }
+
+std::string arcade::Core::getGame(void)
+{
+    return _manager.getActualGame().get()->getName();
+}
+

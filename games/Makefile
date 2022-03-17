@@ -11,9 +11,9 @@ OBJ_PACMAN = $(SRC_PACMAN:.cpp $(IFLAGS_PACMAN)=.o)
 
 OBJ_NIBBLER = $(SRC_NIBBLER:.cpp $(IFLAGS_NIBBLER)=.o)
 
-IFLAGS_PACMAN = -I ../include/pacman
+IFLAGS_PACMAN = -I ../include/pacman -I ../include
 
-IFLAGS_NIBBLER = -I ../include/nibbler
+IFLAGS_NIBBLER = -I ../include/nibbler -I ../include
 
 SRC_PACMAN = $(wildcard ./pacman/*.cpp)
 

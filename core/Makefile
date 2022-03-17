@@ -7,7 +7,7 @@
 
 NAME = arcade
 
-IFLAGS_CORE = -I ../include/core/
+IFLAGS_CORE = -I ../include/core/ -I ../include
 
 SRC_CORE = $(wildcard ./*.cpp)
 
