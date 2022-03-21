@@ -17,17 +17,22 @@ namespace arcade::api::event {
      */
     class IEventHandler {
     public:
-        IEventHandler() = default;
         ~IEventHandler() = default;
 
         /**
-         * Called when a mouse event is triggered
+         * @brief Called when any event is triggered
+         * @param event The event
+         */
+        virtual void onEvent(IEvent &event) = 0;
+
+        /**
+         * @brief Called when a mouse event is triggered
          * @param event the MouseEvent
          */
         virtual void onMouseEvent(MouseEvent &event) = 0;
 
         /**
-         * Called when a key event is triggered
+         * @brief Called when a key event is triggered
          * @param event the KeyEvent
          */
         virtual void onKeyEvent(KeyEvent &event) = 0;

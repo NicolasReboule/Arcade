@@ -14,9 +14,6 @@ int main(void)
     // std::list<std::string> games;
     // std::list<std::string> displays;
     // games.push_back("./lib/arcade_nibbler.so");
-    // games.push_back("./lib/arcade_pacman.so");
-    // // displays.push_back("./lib/arcade_ncurses.so");
-    // // displays.push_back("./lib/arcade_sfml.so");
     // arcade::Core core(games, displays);
     // core.setGame("Nibbler");
     // std::cout << core.getGame() << std::endl;
@@ -26,9 +23,9 @@ int main(void)
     // std::cout << core.getGame() << std::endl;
     void *h =  dlopen("./lib/arcade_ncurses.so", RTLD_LAZY);
     if (h == NULL)
-        puts("gay");
+        std::cout << dlerror() << std::endl;
     else {
-        std::shared_ptr<arcade::api::Curses>(*ok)() = (std::shared_ptr<arcade::api::Curses>(*)())dlsym(h, "entryPoint");
+        std::shared_ptr<arcade::api::Curses>(*ok)() = (std::shared_ptr<arcade::api::Curses>(*)())dlsym(h, "_ZN6arcade3api6Curses10entryPointEv");
         if (!ok)
             std::cout << dlerror() << std::endl;
         ok();

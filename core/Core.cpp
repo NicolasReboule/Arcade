@@ -9,11 +9,11 @@
 
 void arcade::Core::setGame(const std::string &name)
 {
-    _manager.setActualGame(name);
+    _manager.setGameLoader(name);
 }
 
 std::string arcade::Core::getGame(void)
 {
-    return _manager.getActualGame().get()->getName();
+    return _manager.getGameLoader()->getInstance()->getName();
 }
 

@@ -7,14 +7,14 @@
 
 #ifndef NCURSES_HPP_
     #define NCURSES_HPP_
-    #include "ADisplayModule.hpp"
+    #include "IDisplayModule.hpp"
+    #include "IGameModule.hpp"
     #include "ncurses.h"
 
 namespace arcade::api
 {
-    class Curses : public ADisplayModule {
+    class Curses : public IDisplayModule {
         public:
-            explicit Curses(const std::string &name, IGameModule &game);
             explicit Curses(const std::string &name);
 
             void init() override;
@@ -25,12 +25,16 @@ namespace arcade::api
             bool isOpen() const override;
             void clear() override;
             inline WINDOW *getWindow() { return this->_window; };
-            std::shared_ptr<Curses> entryPoint(void);
+            const std::string &getName() const override;
+            IDisplayModule *getInstance() override;
+            bool pollEvent(event::IEvent &event) override;
+            std::shared_ptr<arcade::api::Curses> entryPoint(void);
 
         protected:
             std::string _name;
             WINDOW *_window;
             bool _isOpen;
+            std::shared_ptr<IGameModule> _game;
     };
 }
 #endif /* !NCURSES_HPP_ */

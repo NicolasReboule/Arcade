@@ -13,7 +13,7 @@
 
 namespace arcade::api::event {
     /**
-     * @brief KeyEvent, triggered when key is pressed/released
+     * @brief Triggered when key is pressed/released
      */
     class KeyEvent : public IEvent {
         public:
@@ -29,6 +29,8 @@ namespace arcade::api::event {
             virtual bool isAlt() const = 0;
             virtual bool isShift() const = 0;
             virtual bool isSystem() const = 0;
+
+            virtual window::Keyboard::Key getKey() const = 0;
 
         private:
             bool _ctrl;

@@ -24,22 +24,23 @@ extern "C" {
 
     void arcade::api::Curses::destroy()
     {
-
     }
 
     void arcade::api::Curses::display()
     {
-
     }
 
     void arcade::api::Curses::update()
     {
-
     }
 
     void arcade::api::Curses::run()
     {
+    }
 
+    const std::string &arcade::api::Curses::getName() const
+    {
+        return _name;
     }
 
     bool arcade::api::Curses::isOpen() const
@@ -49,23 +50,25 @@ extern "C" {
 
     void arcade::api::Curses::clear()
     {
-
     }
 
-    arcade::api::Curses::Curses(const std::string &name, IGameModule &game): ADisplayModule(name, game)
+    arcade::api::IDisplayModule *arcade::api::Curses::getInstance()
+    {
+        return NULL;
+    }
+
+    bool arcade::api::Curses::pollEvent(arcade::api::event::IEvent &event)
+    {
+        return false;
+    }
+
+    arcade::api::Curses::Curses(const std::string &name)
     {
         _name = name;
-        _game = std::make_shared<arcade::api::Curses>(game);
         std::cout << "Constructor " << std::endl;
     }
 
-    arcade::api::Curses::Curses(const std::string &name): ADisplayModule(name)
-    {
-        _name = name;
-        std::cout << "Constructor " << std::endl;
-    }
-
-    std::shared_ptr<arcade::api::Curses> entryPoint(void)
+    std::shared_ptr<arcade::api::Curses> arcade::api::Curses::entryPoint(void)
     {
         std::cout << "Curses entryPoint" << std::endl;
         std::string name = "Curses";
