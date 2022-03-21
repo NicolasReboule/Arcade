@@ -14,16 +14,23 @@ extern "C" {
         initscr();
         curs_set(false);
         nodelay(stdscr, true);
-        std::cout << "NCURSES INIT" << std::endl;
-        while (1) {
-            if (getch() == 'a')
-                exit (84);
-
+        _isOpen = true;
+        wtimeout(stdscr, 500);
+        mvprintw(10, 10, "HUGO GROS GUEZ");
+        while (_isOpen) {
+            if (getch() == 'a') {
+                destroy();
+            }
+            update();
+            clear();
         }
     }
 
     void arcade::api::Curses::destroy()
     {
+        clear();
+        endwin();
+        _isOpen = false;
     }
 
     void arcade::api::Curses::display()
@@ -32,10 +39,7 @@ extern "C" {
 
     void arcade::api::Curses::update()
     {
-    }
-
-    void arcade::api::Curses::run()
-    {
+        wrefresh(_window);
     }
 
     const std::string &arcade::api::Curses::getName() const
@@ -50,6 +54,8 @@ extern "C" {
 
     void arcade::api::Curses::clear()
     {
+        wclear(_window);
+        wrefresh(_window);
     }
 
     arcade::api::IDisplayModule *arcade::api::Curses::getInstance()
@@ -65,12 +71,11 @@ extern "C" {
     arcade::api::Curses::Curses(const std::string &name)
     {
         _name = name;
-        std::cout << "Constructor " << std::endl;
     }
 
     std::shared_ptr<arcade::api::Curses> arcade::api::Curses::entryPoint(void)
     {
-        std::cout << "Curses entryPoint" << std::endl;
+        // std::cout << "Curses entryPoint" << std::endl;
         std::string name = "Curses";
         std::shared_ptr<arcade::api::Curses> module = std::make_shared<arcade::api::Curses>(name);
         return module;

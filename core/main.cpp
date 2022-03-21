@@ -22,14 +22,18 @@ int main(void)
     // core.setGame("j");
     // std::cout << core.getGame() << std::endl;
     void *h =  dlopen("./lib/arcade_ncurses.so", RTLD_LAZY);
+    std::shared_ptr<arcade::api::Curses> temp;
     if (h == NULL)
         std::cout << dlerror() << std::endl;
     else {
         std::shared_ptr<arcade::api::Curses>(*ok)() = (std::shared_ptr<arcade::api::Curses>(*)())dlsym(h, "_ZN6arcade3api6Curses10entryPointEv");
         if (!ok)
             std::cout << dlerror() << std::endl;
-        ok();
+        temp = ok();
         dlclose(h);
     }
+    temp->init();
+
+    // test.init();
     return 0;
 }
