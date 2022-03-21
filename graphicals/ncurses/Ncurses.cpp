@@ -11,24 +11,29 @@ extern "C" {
 
     void arcade::api::Curses::init()
     {
-        initscr();
+        _window = initscr();
         curs_set(false);
-        nodelay(stdscr, true);
+        nodelay(_window, true);
         _isOpen = true;
-        wtimeout(stdscr, 500);
-        mvprintw(10, 10, "HUGO GROS GUEZ");
+        subwin(_window, LINES - 5, COLS - 5, 5, 5); // HAUTEUR, LARGEUR, POS Y, POS X
+        box(_window, ACS_VLINE, ACS_HLINE);
         while (_isOpen) {
             if (getch() == 'a') {
                 destroy();
             }
-            update();
-            clear();
+            wrefresh(_window);
+            mvwprintw(_window, 2, 5, "ALLO");
+            // wclear(sub);
+            // clear();
+
+            // update();
+
         }
     }
 
     void arcade::api::Curses::destroy()
     {
-        clear();
+        wclear(_window);
         endwin();
         _isOpen = false;
     }
