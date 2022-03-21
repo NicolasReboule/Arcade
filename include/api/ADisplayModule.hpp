@@ -19,6 +19,7 @@ namespace arcade::api
     class ADisplayModule : public IDisplayModule {
         public:
             explicit ADisplayModule(const std::string &name, IGameModule &game);
+            ADisplayModule(const std::string &name);
             ~ADisplayModule() override = default;
             inline std::string getName() const override {return _name;};
         protected:
