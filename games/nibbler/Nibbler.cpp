@@ -9,8 +9,9 @@
 
     extern "C"
     {
-        arcade::api::Nibbler::Nibbler(const std::string &name) : AGameModule(name)
+        arcade::api::Nibbler::Nibbler(const std::string &name)
         {
+            _name = name;
             std::cout << "Nibbler : hey" << std::endl;
         }
 

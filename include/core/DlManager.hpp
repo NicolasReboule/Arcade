@@ -9,8 +9,8 @@
 #define DLMANAGER_HPP_
 
 #include "DlLoader.hpp"
-#include "api/AGameModule.hpp"
-#include "api/ADisplayModule.hpp"
+#include "api/IGameModule.hpp"
+#include "api/IDisplayModule.hpp"
 #include <iostream>
 #include <list>
 
@@ -20,17 +20,15 @@ namespace arcade {
         public:
             explicit DlManager(std::list<std::string>, std::list<std::string>);
             ~DlManager();
-            void setActualGame(const std::string &);
-            void setActualDisplay(const std::string &);
-            inline std::shared_ptr<api::IGameModule> getActualGame() const {return _actualGame;};
-            inline std::shared_ptr<api::IDisplayModule> getActualDisplay() const {return _actualDisplay;};
+            void setGameLoader(const std::string &);
+            void setDisplayLoader(const std::string &);
+            inline DlLoader<api::IGameModule> *getGameLoader() const {return _gameLoader;};
+            inline DlLoader<api::IDisplayModule> *getDisplayLoader() const {return _displayLoader;};
         private:
-            std::list<DlLoader<api::IGameModule>> _gameLoaders;
-            std::list<DlLoader<api::IDisplayModule>> _displayLoaders;
-            std::list<std::shared_ptr<api::IGameModule>> _gameInstances;
-            std::list<std::shared_ptr<api::IDisplayModule>> _displayInstances;
-            std::shared_ptr<api::IGameModule> _actualGame;
-            std::shared_ptr<api::IDisplayModule> _actualDisplay;
+            std::list<std::unique_ptr<DlLoader<api::IGameModule>>> _gameLoaders;
+            std::list<std::unique_ptr<DlLoader<api::IDisplayModule>>> _displayLoaders;
+            DlLoader<api::IGameModule> *_gameLoader;
+            DlLoader<api::IDisplayModule> *_displayLoader;
     };
 }
 

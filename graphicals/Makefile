@@ -9,13 +9,15 @@ NCURSES_FLAGS = -lncurses
 
 SDL2_FLAGS = -lSDL2
 
+IFLAGS_API = -I ../include/api
+
 SMFL_FLAGS = -lsfml-window -lsfml-graphics -lsfml-system -l sfml-audio
 
-IFLAGS_NCURSES = -I../include/ncurses/
+IFLAGS_NCURSES = -I ../include/ncurses/
 
-IFLAGS_SDL2 = -I../include/sdl2/
+IFLAGS_SDL2 = -I ../include/sdl2/
 
-IFLAGS_SFML = -I../include/sfml/
+IFLAGS_SFML = -I ../include/sfml/
 
 NAME_NCURSES = arcade_ncurses.so
 
@@ -41,7 +43,7 @@ all:
 	make -j$(PROC) compile
 
 compile: $(OBJ_GRAPHICALS)
-	g++ -shared -o $(NAME_NCURSES) -fPIC $(OBJ_NCURSES) $(IFLAGS_NCURSES) $(NCURSES_FLAGS)
+	g++ -shared -o $(NAME_NCURSES) -fPIC $(OBJ_NCURSES) $(IFLAGS_NCURSES) $(NCURSES_FLAGS) $(IFLAGS_API)
 	g++ -shared -o $(NAME_SDL2) -fPIC $(OBJ_SDL2) $(IFLAGS_SDL2) $(SDL2_FLAGS)
 	g++ -shared -o $(NAME_SFML) -fPIC $(OBJ_SFML) $(IFLAGS_SFML) $(SMFL_FLAGS)
 	mkdir -p ../lib/

@@ -8,9 +8,9 @@
 #ifndef NIBBLER_HPP_
 #define NIBBLER_HPP_
 
-#include "api/AGameModule.hpp"
+#include "api/IGameModule.hpp"
 namespace arcade::api {
-    class Nibbler : public AGameModule
+    class Nibbler : public IGameModule
     {
         public:
             explicit Nibbler(const std::string &name);
@@ -18,8 +18,13 @@ namespace arcade::api {
             inline void init() override {};
             inline void destroy() override {};
             inline void update() override {};
-            inline void draw() override {};
+            const std::string &getName() const override;
+            IGameModule *getInstance() override;
+            void onEvent(event::IEvent &event) override;
+            void render(IDisplayModule &display) override;
+
         private:
+        std::string _name;
     };
 }
 

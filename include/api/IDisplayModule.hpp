@@ -8,11 +8,15 @@
 #ifndef ARCADE_IDISPLAYMODULE_HPP
 #define ARCADE_IDISPLAYMODULE_HPP
 
-#include "IGameModule.hpp"
+#include "event/IEvent.hpp"
+#include "library/ILibrary.hpp"
 #include <iostream>
 
 namespace arcade::api {
-    class IDisplayModule {
+    /**
+     * @brief Interface for all the display
+     */
+    class IDisplayModule : library::ILibrary {
     public:
         virtual ~IDisplayModule() = default;
 
@@ -37,25 +41,39 @@ namespace arcade::api {
         virtual void display() = 0;
 
         /**
+         * @brief Check if an event is available and pop it from the event list TODO: potential event list, for now only one event
+         * @param event The event will be stored in it, if available
+         * @return if an event is available
+         */
+        virtual bool pollEvent(event::IEvent &event) = 0;
+
+        /**
+         * Get the name of the display (for example: "SFML")
+         * @return the name of the display
+         */
+        const std::string &getName() const override = 0;
+
+        /**
+         * Get the instance of the display
+         * @return the instance of the display
+         */
+        IDisplayModule *getInstance() override = 0;
+
+        /**
          * @brief Update the display
          */
         virtual void update() = 0;
 
         /**
-         * @brief Check if the window is open(
+         * @brief Check if the window is open
          * @return if the window is open
          */
         virtual bool isOpen() const = 0;
 
         /**
-         * @brief Clear the window
+         * @brief Clear the window, should always clear the screen to black
          */
         virtual void clear() = 0;
-
-        /**
-         * @brief Return the instance name
-         */
-        virtual std::string getName() const = 0;
     };
 }
 

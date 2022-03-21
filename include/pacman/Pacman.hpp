@@ -8,9 +8,9 @@
 #ifndef PACMAN_HPP_
 #define PACMAN_HPP_
 
-#include "api/AGameModule.hpp"
+#include "api/IGameModule.hpp"
 namespace arcade::api {
-    class Pacman : public AGameModule
+    class Pacman : public IGameModule
     {
         public:
             explicit Pacman(const std::string &name);
@@ -18,8 +18,9 @@ namespace arcade::api {
             inline void init() override {};
             inline void destroy() override {};
             inline void update() override {};
-            inline void draw() override {};
+
         private:
+            std::string _name;
     };
 }
 
