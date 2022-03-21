@@ -22,6 +22,8 @@ int main(void)
     // core.setGame("j");
     // std::cout << core.getGame() << std::endl;
     void *h =  dlopen("./lib/arcade_sdl2.so", RTLD_LAZY);
+    void *h =  dlopen("./lib/arcade_ncurses.so", RTLD_LAZY);
+    std::shared_ptr<arcade::api::Curses> temp;
     if (h == NULL)
         std::cout << dlerror() << std::endl;
     else {
@@ -29,8 +31,12 @@ int main(void)
         if (!ok)
             std::cout << dlerror() << std::endl;
         auto tmp = ok();
+        temp = ok();
         dlclose(h);
         tmp->init();
     }
+    temp->init();
+
+    // test.init();
     return 0;
 }
