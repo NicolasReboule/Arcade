@@ -22,7 +22,7 @@
         std::shared_ptr<arcade::api::Pacman> entryPoint(void)
         {
             std::cout << "Pacman entryPoint" << std::endl;
-            std::shared_ptr<arcade::api::Pacman> module = std::make_shared<arcade::api::Pacman>("Pacman");
-            return module;
+            // std::shared_ptr<arcade::api::Pacman> module = std::make_shared<arcade::api::Pacman>("Pacman");
+            return nullptr;
         }
     }

@@ -10,18 +10,10 @@
 
 int main(void)
 {
-    std::list<std::string> games;
-    std::list<std::string> displays;
-    games.push_back("./lib/arcade_nibbler.so");
-    games.push_back("./lib/arcade_pacman.so");
-    // displays.push_back("./lib/arcade_ncurses.so");
-    // displays.push_back("./lib/arcade_sfml.so");
-    arcade::Core core(games, displays);
-    core.setGame("Nibbler");
-    std::cout << core.getGame() << std::endl;
-    core.setGame("Pacman");
-    std::cout << core.getGame() << std::endl;
-    core.setGame("j");
-    std::cout << core.getGame() << std::endl;
+    // std::list<std::string> games;
+    // std::list<std::string> displays;
+    // games.push_back("./lib/arcade_nibbler.so");
+    // arcade::Core core(games, displays);
+    arcade::DlLoader<arcade::api::IGameModule> load("./lib/arcade_nibbler.so");
     return 0;
 }
