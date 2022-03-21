@@ -34,10 +34,6 @@ extern "C" {
     {
     }
 
-    void arcade::api::Curses::run()
-    {
-    }
-
     const std::string &arcade::api::Curses::getName() const
     {
         return _name;
@@ -75,5 +71,4 @@ extern "C" {
         std::shared_ptr<arcade::api::Curses> module = std::make_shared<arcade::api::Curses>(name);
         return module;
     }
-
 }

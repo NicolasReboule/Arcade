@@ -31,11 +31,6 @@ namespace arcade::api {
         virtual void destroy() = 0;
 
         /**
-         * @brief Run the game
-         */
-        virtual void run() = 0;
-
-        /**
          * @brief Display the game
          */
         virtual void display() = 0;

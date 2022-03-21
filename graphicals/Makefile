@@ -15,7 +15,7 @@ SMFL_FLAGS = -lsfml-window -lsfml-graphics -lsfml-system -l sfml-audio
 
 IFLAGS_NCURSES = -I ../include/ncurses/
 
-IFLAGS_SDL2 = -I ../include/sdl2/
+IFLAGS_SDL2 = -I ../include/sdl2/ -I ../include/api
 
 IFLAGS_SFML = -I ../include/sfml/
 

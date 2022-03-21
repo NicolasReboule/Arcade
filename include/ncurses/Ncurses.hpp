@@ -19,7 +19,6 @@ namespace arcade::api
 
             void init() override;
             void destroy() override;
-            void run() override;
             void display() override;
             void update() override;
             bool isOpen() const override;
