@@ -1,12 +1,12 @@
 /*
 ** EPITECH PROJECT, 2022
-** MouseEvent.hpp
+** AMouseEvent.hpp
 ** File description:
-** MouseEvent.hpp
+** AMouseEvent.hpp
 */
 
-#ifndef ARCADE_MOUSEEVENT_HPP
-#define ARCADE_MOUSEEVENT_HPP
+#ifndef ARCADE_AMOUSEEVENT_HPP
+#define ARCADE_AMOUSEEVENT_HPP
 
 #include "IEvent.hpp"
 #include "api/window/Mouse.hpp"
@@ -16,9 +16,9 @@ namespace arcade::api::event {
     /**
      * @brief Triggered when mouse is pressed/released
      */
-    class MouseEvent : public IEvent {
+    class AMouseEvent : public IEvent {
     public:
-        MouseEvent(window::MouseAction type, window::MouseButton button, Vector<int> pos);
+        AMouseEvent(window::MouseAction type, window::MouseButton button, Vector<int> pos);
 
         /**
          * @brief Get the coordinate
@@ -46,4 +46,4 @@ namespace arcade::api::event {
     };
 }
 
-#endif //ARCADE_MOUSEEVENT_HPP
+#endif //ARCADE_AMOUSEEVENT_HPP

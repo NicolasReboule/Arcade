@@ -23,6 +23,8 @@ int main(void)
     core.setDisplay("SDL2");
     core.run();
 
+    
+
 
 
 

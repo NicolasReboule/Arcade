@@ -6,6 +6,7 @@
 */
 
 #include "Sdl2.hpp"
+#include "SwitchEvent.hpp"
 
 arcade::api::Sdl2::Sdl2(const std::string &name)
 {
@@ -79,7 +80,7 @@ extern "C" {
             switch (event.type) {
                 case SDL_QUIT:_isOpen = false;
                     break;
-                // case SDL_KEYUP: events = arcade::api::event::
+                case SDL_KEYUP: events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT); std::cout << "azertfgdfdfghgfsfg" << "\n"; break;
             }
         }
         return false;

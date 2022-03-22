@@ -1,12 +1,12 @@
 /*
 ** EPITECH PROJECT, 2022
-** KeyEvent.hpp
+** AKeyEvent.hpp
 ** File description:
-** KeyEvent.hpp
+** AKeyEvent.hpp
 */
 
-#ifndef ARCADE_KEYEVENT_HPP
-#define ARCADE_KEYEVENT_HPP
+#ifndef ARCADE_AKEYEVENT_HPP
+#define ARCADE_AKEYEVENT_HPP
 
 #include "IEvent.hpp"
 #include "api/window/Keyboard.hpp"
@@ -15,10 +15,10 @@ namespace arcade::api::event {
     /**
      * @brief Triggered when key is pressed/released
      */
-    class KeyEvent : public IEvent {
+    class AKeyEvent : public IEvent {
         public:
-            KeyEvent(window::Keyboard::Key key);
-            ~KeyEvent() override = default;
+            AKeyEvent(window::Keyboard::Key key);
+            ~AKeyEvent() override = default;
 
             virtual void setCtrl(bool ctrl) = 0;
             virtual void setAlt(bool alt) = 0;
@@ -40,4 +40,4 @@ namespace arcade::api::event {
     };
 }
 
-#endif //ARCADE_KEYEVENT_HPP
+#endif //ARCADE_AKEYEVENT_HPP
