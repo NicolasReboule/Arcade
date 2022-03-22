@@ -28,11 +28,11 @@ namespace arcade::api
             const std::string &getName() const override;
             IDisplayModule *getInstance() override;
             bool pollEvent(event::IEvent &event) override;
-            std::shared_ptr<arcade::api::Sdl2> entryPoint(void);
 
         protected:
             std::string _name;
             SDL_Window *_window;
+            SDL_Renderer *_renderer;
             bool _isOpen;
             std::shared_ptr<IGameModule> _game;
     };

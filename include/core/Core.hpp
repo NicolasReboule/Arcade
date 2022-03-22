@@ -17,7 +17,9 @@ namespace arcade
         public:
             explicit Core(std::list<std::string> games, std::list<std::string> displays) : _manager(games, displays) {};
             ~Core() = default;
+            void run();
             void setGame(const std::string &);
+            void setDisplay(const std::string &);
             std::string getGame(void);
         private:
             DlManager _manager;

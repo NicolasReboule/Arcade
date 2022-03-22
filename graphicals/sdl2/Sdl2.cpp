@@ -13,42 +13,21 @@ arcade::api::Sdl2::Sdl2(const std::string &name)
 }
 
 extern "C" {
-    void loop(SDL_Renderer *renderer)
-    {
-        SDL_Event events;
-        bool is_open = true;
-
-        while (is_open) {
-            while (SDL_PollEvent(&events)) {
-                switch (events.type) {
-                    case SDL_QUIT:is_open = false;
-                        break;
-                }
-            }
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderClear(renderer);
-            SDL_RenderPresent(renderer);
-        }
-    }
 
     void arcade::api::Sdl2::init()
     {
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
+            exit(84);
         }
-        SDL_Window *window = NULL;
-        SDL_Renderer *renderer = NULL;
-        if (SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_SHOWN, &window, &renderer) < 0) {
+        if (SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_SHOWN, &_window, &_renderer) < 0) {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
             SDL_Quit();
         }
-        loop(renderer);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
+        _isOpen = true;
     }
 
-    std::shared_ptr<arcade::api::Sdl2> arcade::api::Sdl2::entryPoint(void)
+    std::shared_ptr<arcade::api::Sdl2> entryPoint(void)
     {
         std::cout << "SDl2 entryPoint" << std::endl;
         std::shared_ptr<arcade::api::Sdl2> module = std::make_shared<arcade::api::Sdl2>("SDL2");
@@ -57,10 +36,14 @@ extern "C" {
 
     void arcade::api::Sdl2::destroy()
     {
+        SDL_DestroyRenderer(_renderer);
+        SDL_DestroyWindow(_window);
+        SDL_Quit();
     }
 
     void arcade::api::Sdl2::display()
     {
+        SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
     }
 
     void arcade::api::Sdl2::update()
@@ -79,6 +62,8 @@ extern "C" {
 
     void arcade::api::Sdl2::clear()
     {
+        SDL_RenderClear(_renderer);
+        SDL_RenderPresent(_renderer);
     }
 
     arcade::api::IDisplayModule *arcade::api::Sdl2::getInstance()
@@ -86,8 +71,17 @@ extern "C" {
         return NULL;
     }
 
-    bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &event)
+    bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &events)
     {
+        SDL_Event event;
+        arcade::api::event::IEvent tmp;
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:_isOpen = false;
+                    break;
+                // case SDL_KEYUP: events = arcade::api::event::
+            }
+        }
         return false;
     }
 }

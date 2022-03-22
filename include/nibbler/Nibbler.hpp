@@ -18,10 +18,10 @@ namespace arcade::api {
             inline void init() override {};
             inline void destroy() override {};
             inline void update() override {};
-            const std::string &getName() const override;
-            IGameModule *getInstance() override;
-            void onEvent(event::IEvent &event) override;
-            void render(IDisplayModule &display) override;
+            inline const std::string &getName() const override {return _name;};
+            inline IGameModule *getInstance() override {return NULL;};
+            inline void onEvent(event::IEvent &event) override {};
+            inline void render(IDisplayModule &display) override {};
 
         private:
         std::string _name;
