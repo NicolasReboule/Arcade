@@ -130,7 +130,7 @@ bool arcade::DlManager::switchDisplay(const SDirection direction)
 
 arcade::api::IGameModule *arcade::DlManager::getGame() const
 {
-    return *(*this->_gameModules);
+    return this->_gameModules.get().getInstance();
 }
 
 arcade::api::IDisplayModule *arcade::DlManager::getDisplay() const
