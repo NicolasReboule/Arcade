@@ -16,7 +16,7 @@ namespace arcade::api
 {
     class Sdl2 : public IDisplayModule {
         public:
-            explicit Sdl2(const std::string &name);
+            Sdl2();
 
             void init() override;
             void destroy() override;
@@ -26,15 +26,15 @@ namespace arcade::api
             void clear() override;
             inline SDL_Window *getWindow() { return this->_window; };
             const std::string &getName() const override;
-            IDisplayModule *getInstance() override;
+            static Sdl2 *getInstance();
             bool pollEvent(event::IEvent &event) override;
 
-        protected:
+        private:
             std::string _name;
             SDL_Window *_window;
             SDL_Renderer *_renderer;
+            static std::unique_ptr<Sdl2> _instance;
             bool _isOpen;
-            std::shared_ptr<IGameModule> _game;
     };
 }
 

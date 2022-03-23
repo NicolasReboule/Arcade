@@ -32,9 +32,6 @@ fclean: clean
 	make fclean -C games
 	make fclean -C graphicals
 
-# doc:
-# 	make -C doc
-
 re: fclean all
 
 api:

@@ -7,82 +7,82 @@
 
 #include "Ncurses.hpp"
 
-extern "C" {
+std::unique_ptr<arcade::api::Curses> arcade::api::Curses::_instance;
 
-    void arcade::api::Curses::init()
+
+void arcade::api::Curses::init()
+{
+    _window = initscr();
+    curs_set(false);
+    nodelay(_window, true);
+    _isOpen = true;
+    subwin(_window, LINES - 5, COLS - 5, 5, 5); // HAUTEUR, LARGEUR, POS Y, POS X
+    box(_window, ACS_VLINE, ACS_HLINE);
+    while (_isOpen)
     {
-        _window = initscr();
-        curs_set(false);
-        nodelay(_window, true);
-        _isOpen = true;
-        subwin(_window, LINES - 5, COLS - 5, 5, 5); // HAUTEUR, LARGEUR, POS Y, POS X
-        box(_window, ACS_VLINE, ACS_HLINE);
-        while (_isOpen) {
-            if (getch() == 'a') {
-                destroy();
-            }
-            wrefresh(_window);
-            mvwprintw(_window, 2, 5, "ALLO");
-            // wclear(sub);
-            // clear();
-
-            // update();
-
+        if (getch() == 'a')
+        {
+            destroy();
         }
-    }
-
-    void arcade::api::Curses::destroy()
-    {
-        wclear(_window);
-        endwin();
-        _isOpen = false;
-    }
-
-    void arcade::api::Curses::display()
-    {
-    }
-
-    void arcade::api::Curses::update()
-    {
         wrefresh(_window);
-    }
+        mvwprintw(_window, 2, 5, "ALLO");
+        // wclear(sub);
+        // clear();
 
-    const std::string &arcade::api::Curses::getName() const
-    {
-        return _name;
+        // update();
     }
+}
 
-    bool arcade::api::Curses::isOpen() const
-    {
-        return this->_isOpen;
-    }
+void arcade::api::Curses::destroy()
+{
+    wclear(_window);
+    endwin();
+    _isOpen = false;
+}
 
-    void arcade::api::Curses::clear()
-    {
-        wclear(_window);
-        wrefresh(_window);
-    }
+void arcade::api::Curses::display()
+{
+}
 
-    arcade::api::IDisplayModule *arcade::api::Curses::getInstance()
-    {
-        return NULL;
-    }
+void arcade::api::Curses::update()
+{
+    wrefresh(_window);
+}
 
-    bool arcade::api::Curses::pollEvent(arcade::api::event::IEvent &event)
-    {
-        return false;
-    }
+const std::string &arcade::api::Curses::getName() const
+{
+    return _name;
+}
 
-    arcade::api::Curses::Curses(const std::string &name)
-    {
-        _name = name;
-    }
+bool arcade::api::Curses::isOpen() const
+{
+    return this->_isOpen;
+}
 
-    std::shared_ptr<arcade::api::Curses> arcade::api::Curses::entryPoint(void)
-    {
-        // std::cout << "Curses entryPoint" << std::endl;
-        std::string name = "Curses";
-        std::shared_ptr<arcade::api::Curses> module = std::make_shared<arcade::api::Curses>(name);
-        return module;
-    }
+void arcade::api::Curses::clear()
+{
+    wclear(_window);
+    wrefresh(_window);
+}
+
+arcade::api::Curses *arcade::api::Curses::getInstance()
+{
+    if (_instance == nullptr)
+        _instance = std::make_unique<Curses>();
+    return _instance.get();
+}
+
+bool arcade::api::Curses::pollEvent(arcade::api::event::IEvent &event)
+{
+    return false;
+}
+
+arcade::api::Curses::Curses()
+{
+    _name = "NCurses";
+}
+
+extern "C" arcade::api::Curses *entryPoint()
+{
+    return arcade::api::Curses::getInstance();
 }

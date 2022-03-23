@@ -9,26 +9,45 @@
 #define DLMANAGER_HPP_
 
 #include "DlLoader.hpp"
-#include "api/IGameModule.hpp"
-#include "api/IDisplayModule.hpp"
-#include <iostream>
-#include <list>
+#include "api/library/IDLManager.hpp"
+#include "api/CircularVector.hpp"
 
 namespace arcade {
-    class DlManager
-    {
-        public:
-            explicit DlManager(std::list<std::string>, std::list<std::string>);
-            ~DlManager();
-            void setGameLoader(const std::string &);
-            void setDisplayLoader(const std::string &);
-            inline DlLoader<api::IGameModule> *getGameLoader() const {return _gameLoader;};
-            inline DlLoader<api::IDisplayModule> *getDisplayLoader() const {return _displayLoader;};
-        private:
-            std::list<std::unique_ptr<DlLoader<api::IGameModule>>> _gameLoaders;
-            std::list<std::unique_ptr<DlLoader<api::IDisplayModule>>> _displayLoaders;
-            DlLoader<api::IGameModule> *_gameLoader;
-            DlLoader<api::IDisplayModule> *_displayLoader;
+    class DlManager : public api::library::IDLManager {
+    public:
+        DlManager();
+
+        void loadLibrairies(const std::string &dirPath) override;
+
+        bool isGameLibrary(const std::string &path) const override;
+
+        bool isDisplayLibrary(const std::string &path) const override;
+
+        void loadArgumentLibrary(const std::string &path) override;
+
+        void loadGameLibrary(const std::string &path) override;
+
+        void loadDisplayLibrary(const std::string &path) override;
+
+        bool switchGame(const SDirection direction) override;
+
+        bool switchDisplay(const SDirection direction) override;
+
+        api::IGameModule *getGame() const override;
+
+        api::IDisplayModule *getDisplay() const override;
+
+        std::size_t totalCount() const override;
+
+        std::size_t gameCount() const override;
+
+        std::size_t displayCount() const override;
+
+    private:
+        std::string _path;
+        std::size_t _count;
+        CircularVector<DlLoader<api::IDisplayModule>> _displayModules;
+        CircularVector<DlLoader<api::IGameModule>> _gameModules;
     };
 }
 

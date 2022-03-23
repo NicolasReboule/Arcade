@@ -10,7 +10,7 @@
 
 extern "C"
 {
-    SFML::SFML(const std::string &name) : _name(name)
+    SFML::SFML()
     {
         // init();
     }
@@ -22,8 +22,6 @@ extern "C"
 
     SFML *entryPoint(void)
     {
-        SFML *module = new SFML("SFML");
-        printf("SFML entryPoint\n");
-        return module;
+        return nullptr;
     }
 }

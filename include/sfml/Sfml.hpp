@@ -20,7 +20,7 @@ class SFML
 private:
     const std::string _name;
 public:
-    explicit SFML(const std::string &name);
+    SFML();
     virtual ~SFML();
     // virtual void init();
     // virtual void stop();

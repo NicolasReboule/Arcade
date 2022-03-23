@@ -15,7 +15,7 @@ namespace arcade::api
 {
     class Curses : public IDisplayModule {
         public:
-            explicit Curses(const std::string &name);
+            Curses();
 
             void init() override;
             void destroy() override;
@@ -25,14 +25,15 @@ namespace arcade::api
             void clear() override;
             inline WINDOW *getWindow() { return this->_window; };
             const std::string &getName() const override;
-            IDisplayModule *getInstance() override;
+            static Curses *getInstance();
             bool pollEvent(event::IEvent &event) override;
             std::shared_ptr<arcade::api::Curses> entryPoint(void);
 
-        protected:
+        private:
             std::string _name;
             WINDOW *_window;
             bool _isOpen;
+            static std::unique_ptr<Curses> _instance;
             std::shared_ptr<IGameModule> _game;
     };
 }

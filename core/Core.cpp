@@ -5,35 +5,29 @@
 ** Core
 */
 
-#include "Core.hpp"
-#include "Sdl2.hpp"
-#include "IDisplayModule.hpp"
+#include "core/Core.hpp"
+#include "api/IDisplayModule.hpp"
+
+arcade::Core::Core() {
+    this->isRunning = true; //TODO: remove this 🤷‍
+}
+
+void arcade::Core::init() {
+
+}
 
 void arcade::Core::run()
 {
-    arcade::api::event::IEvent events;
-    // arcade::DlLoader<arcade::api::IDisplayModule> display("./lib/arcade_sdl2.so");
-    auto display = this->_manager.getDisplayLoader()->getInstance();
+    arcade::api::event::IEvent event;
+    auto display = this->_manager.getDisplay();
+    auto game = this->_manager.getGame();
     display->init();
     while (display->isOpen()) {
-        display->pollEvent(events);
+        if (display->pollEvent(event)) {
+            game->onEvent(event);
+        }
         display->clear();
         display->display();
     }
     display->destroy();
-}
-
-void arcade::Core::setGame(const std::string &name)
-{
-    _manager.setGameLoader(name);
-}
-
-std::string arcade::Core::getGame(void)
-{
-    return _manager.getGameLoader()->getInstance()->getName();
-}
-
-void arcade::Core::setDisplay(const std::string &name)
-{
-    _manager.setDisplayLoader(name);
 }

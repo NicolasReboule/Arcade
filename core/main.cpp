@@ -5,22 +5,11 @@
 ** main
 */
 
-#include "DlLoader.hpp"
-#include "Core.hpp"
-#include "Sdl2.hpp"
+#include "core/Core.hpp"
 
 int main(void)
 {
-    std::list<std::string> games;
-    std::list<std::string> displays;
-    games.push_back("./lib/arcade_nibbler.so");
-    displays.push_back("./lib/arcade_sdl2.so");
-    arcade::Core core(games, displays);
-    core.setGame("Nibbler");
-    std::cout << core.getGame() << std::endl;
-    core.setGame("Pacman");
-    std::cout << core.getGame() << std::endl;
-    core.setDisplay("SDL2");
+    arcade::Core core;
     core.run();
 
     

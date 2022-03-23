@@ -8,81 +8,89 @@
 #include "Sdl2.hpp"
 #include "SwitchEvent.hpp"
 
-arcade::api::Sdl2::Sdl2(const std::string &name)
+std::unique_ptr<arcade::api::Sdl2> arcade::api::Sdl2::_instance;
+
+arcade::api::Sdl2::Sdl2()
 {
-    _name = name;
+    _name = "Sdl2";
 }
 
-extern "C" {
-
-    void arcade::api::Sdl2::init()
+void arcade::api::Sdl2::init()
+{
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
-            exit(84);
-        }
-        if (SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_SHOWN, &_window, &_renderer) < 0) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
-            SDL_Quit();
-        }
-        _isOpen = true;
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
+        exit(84);
     }
-
-    std::shared_ptr<arcade::api::Sdl2> entryPoint(void)
+    if (SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_SHOWN, &_window, &_renderer) < 0)
     {
-        std::cout << "SDl2 entryPoint" << std::endl;
-        std::shared_ptr<arcade::api::Sdl2> module = std::make_shared<arcade::api::Sdl2>("SDL2");
-        return module;
-    }
-
-    void arcade::api::Sdl2::destroy()
-    {
-        SDL_DestroyRenderer(_renderer);
-        SDL_DestroyWindow(_window);
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
         SDL_Quit();
     }
+    _isOpen = true;
+}
 
-    void arcade::api::Sdl2::display()
-    {
-        SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
-    }
+extern "C" arcade::api::Sdl2 *entryPoint()
+{
+    return arcade::api::Sdl2::getInstance();
+}
 
-    void arcade::api::Sdl2::update()
-    {
-    }
+void arcade::api::Sdl2::destroy()
+{
+    SDL_DestroyRenderer(_renderer);
+    SDL_DestroyWindow(_window);
+    SDL_Quit();
+}
 
-    const std::string &arcade::api::Sdl2::getName() const
-    {
-        return _name;
-    }
+void arcade::api::Sdl2::display()
+{
+    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+}
 
-    bool arcade::api::Sdl2::isOpen() const
-    {
-        return this->_isOpen;
-    }
+void arcade::api::Sdl2::update()
+{
+}
 
-    void arcade::api::Sdl2::clear()
-    {
-        SDL_RenderClear(_renderer);
-        SDL_RenderPresent(_renderer);
-    }
+const std::string &arcade::api::Sdl2::getName() const
+{
+    return _name;
+}
 
-    arcade::api::IDisplayModule *arcade::api::Sdl2::getInstance()
-    {
-        return NULL;
-    }
+bool arcade::api::Sdl2::isOpen() const
+{
+    return this->_isOpen;
+}
 
-    bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &events)
+void arcade::api::Sdl2::clear()
+{
+    SDL_RenderClear(_renderer);
+    SDL_RenderPresent(_renderer);
+}
+
+arcade::api::Sdl2 *arcade::api::Sdl2::getInstance()
+{
+    if (_instance == nullptr)
+        _instance = std::make_unique<Sdl2>();
+    return _instance.get();
+}
+
+bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &events)
+{
+    SDL_Event event;
+    arcade::api::event::IEvent tmp;
+    while (SDL_PollEvent(&event))
     {
-        SDL_Event event;
-        arcade::api::event::IEvent tmp;
-        while (SDL_PollEvent(&event)) {
-            switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:_isOpen = false;
-                    break;
-                case SDLK_UP: events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT); std::cout << "azertfgdfdfghgfsfg" << "\n"; break;
-            }
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_ESCAPE:
+            _isOpen = false;
+            break;
+        case SDLK_UP:
+            events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+            std::cout << "azertfgdfdfghgfsfg"
+                      << "\n";
+            break;
         }
-        return false;
     }
+    return false;
 }
