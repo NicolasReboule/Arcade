@@ -9,11 +9,18 @@
 #define ARCADE_MOUSE_HPP
 
 namespace arcade::api::window {
+    /**
+     * @brief The mouse button @see arcade::api::event::MouseEvent
+     */
     enum MouseButton {
         LEFT,
         RIGHT,
         MIDDLE
     };
+
+    /**
+     * @brief The mouse action @see arcade::api::event::MouseEvent
+     */
     enum MouseAction {
         PRESSED,
         RELEASED

@@ -5,17 +5,19 @@
 ** LaunchMenuEvent.hpp
 */
 
-#ifndef LAUNCHMENUEVENT_HPP_
-#define LAUNCHMENUEVENT_HPP_
+#ifndef ARCADE_LAUNCHMENUEVENT_HPP
+#define ARCADE_LAUNCHMENUEVENT_HPP
 
 #include "IEvent.hpp"
 
 namespace arcade::api::event {
+    /**
+     * @brief Triggered when the need to go to the menu
+     */
     class LaunchMenuEvent : public IEvent {
-        public:
-            LaunchMenuEvent() = default;
-            ~LaunchMenuEvent() = default;
+    public:
+        LaunchMenuEvent() = default;
     };
 }
 
-#endif /* !LAUNCHMENUEVENT_HPP_ */
+#endif //ARCADE_LAUNCHMENUEVENT_HPP

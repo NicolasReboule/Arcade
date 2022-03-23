@@ -5,33 +5,60 @@
 ** SwitchEvent.hpp
 */
 
-#ifndef SWITCHEVENT_HPP_
-#define SWITCHEVENT_HPP_
+#ifndef ARCADE_SWITCHEVENT_HPP
+#define ARCADE_SWITCHEVENT_HPP
 
 #include "IEvent.hpp"
 
 namespace arcade::api::event {
+    /**
+     * @brief Triggered when game/display is switched
+     */
     class SwitchEvent : public IEvent {
-        public:
-            enum SwitchType {
-                GAME,
-                DISPLAY
-            };
+    public:
+        enum SwitchType {
+            GAME,
+            DISPLAY
+        };
 
-            enum SwitchDirection {
-                PREV,
-                NEXT
-            };
+        enum SwitchDirection {
+            PREV,
+            NEXT
+        };
 
-            SwitchEvent(SwitchType type, SwitchDirection direction): _type(type), _direction(direction) {};
-            ~SwitchEvent() = default;
-            inline SwitchType getType() const {return _type;};
-            inline SwitchDirection getDirection() const {return _direction;};
+        /**
+         * Constructor of SwitchEvent
+         * @param type the type of switch
+         * @param direction the direction of switch
+         */
+        explicit SwitchEvent(SwitchType type, SwitchDirection direction)
+        {
+            this->_type = type;
+            this->_direction = direction;
+        }
 
-        private:
-            SwitchType _type;
-            SwitchDirection _direction;
+        /**
+         * Get the type of the switch
+         * @return the type of the switch
+         */
+        inline SwitchType getType()
+        {
+            return this->_type;
+        }
+
+        /**
+         * Get the direction of the switch
+         * @return the direction of the switch
+         */
+        inline SwitchDirection getDirection()
+        {
+            return this->_direction;
+        }
+
+    private:
+        SwitchType _type; /**< The switch type */
+        SwitchDirection _direction; /**< The direction */
     };
 }
 
-#endif /* !SWITCHEVENT_HPP_ */
+#endif //ARCADE_SWITCHEVENT_HPP

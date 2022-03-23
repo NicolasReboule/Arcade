@@ -77,10 +77,10 @@ extern "C" {
         SDL_Event event;
         arcade::api::event::IEvent tmp;
         while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:_isOpen = false;
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:_isOpen = false;
                     break;
-                case SDL_KEYUP: events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT); std::cout << "azertfgdfdfghgfsfg" << "\n"; break;
+                case SDLK_UP: events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT); std::cout << "azertfgdfdfghgfsfg" << "\n"; break;
             }
         }
         return false;

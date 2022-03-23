@@ -5,17 +5,19 @@
 ** CloseEvent.hpp
 */
 
-#ifndef CLOSEEVENT_HPP_
-#define CLOSEEVENT_HPP_
+#ifndef ARCADE_CLOSEEVENT_HPP
+#define ARCADE_CLOSEEVENT_HPP
 
 #include "IEvent.hpp"
 
 namespace arcade::api::event {
+    /**
+     * @brief Triggered when the program need to exit
+     */
     class CloseEvent : public IEvent {
-        public:
-            CloseEvent() = default;
-            ~CloseEvent() = default;
+    public:
+        CloseEvent() = default;
     };
 }
 
-#endif /* !CLOSEEVENT_HPP_ */
+#endif //ARCADE_CLOSEEVENT_HPP

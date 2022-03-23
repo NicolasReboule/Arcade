@@ -8,7 +8,7 @@
 #ifndef ARCADE_IDLLOADER_HPP
 #define ARCADE_IDLLOADER_HPP
 
-#include "api/ex/IArcadeException.hpp"
+#include "api/ex/Exceptions.hpp"
 #include <string>
 
 namespace arcade::api::library {
@@ -24,14 +24,14 @@ namespace arcade::api::library {
         /**
          * @brief Load a library
          * The handle will be stored in the class
-         * @param the path to the library
+         * @param path the path to the library
          * @throws arcade::api::ex::LibraryNotFound
          */
-        virtual void load(std::string &path) = 0;
+        virtual void load(const std::string &path) = 0;
 
         /**
          * @brief Unload the library
-         * Should call @see dlclose
+         * Should call @code dlclose @endcode
          * Could throw @see arcade::api::ex::LibraryInvalidHandle
          */
         virtual void unload() = 0;
@@ -41,8 +41,9 @@ namespace arcade::api::library {
          * @tparam T the type of the instance
          * @throws arcade::api::ex::LibraryNotLoaded
          * @throws arcade::api::ex::LibraryEntryPointNotFound
+         * @attention Should use the define @code ILibrary#ENTRY_POINT_NAME @endcode
          */
-        virtual void loadInstance() const = 0;
+        virtual void loadInstance() = 0;
 
         /**
          * @brief Get the instance of the library
@@ -51,6 +52,22 @@ namespace arcade::api::library {
          * @return the instance of T
          */
         virtual T *operator->() const = 0;
+
+        /**
+         * @brief Get the instance of the library
+         * Call this only if the library is loaded and loadInstance has been called
+         * @tparam T the type of the instance
+         * @return the instance of T
+         */
+        virtual T *operator*() const = 0;
+
+        /**
+         * @brief Get the instance of the library
+         * Call this only if the library is loaded and loadInstance has been called
+         * @tparam T the type of the instance
+         * @return the instance of T
+         */
+        virtual T *getInstance() const = 0;
 
         /**
          * @brief Get the path of the library

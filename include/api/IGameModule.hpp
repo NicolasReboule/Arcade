@@ -37,14 +37,8 @@ namespace arcade::api {
         const std::string &getName() const override = 0;
 
         /**
-         * @brief Get the instance of the game
-         * @return the instance of the game
-         */
-        IGameModule *getInstance() override = 0; //TODO: check if the polymorphism works like that
-
-        /**
          * @brief Handle the event of the game
-         * @see arcade::api::event::KeyEvent and arcade::api::event::MouseEvent
+         * @see api/event/Events.hpp
          * @return the event of the game
          */
         virtual void onEvent(event::IEvent &event) = 0;

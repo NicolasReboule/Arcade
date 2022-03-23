@@ -9,8 +9,19 @@
 #define ARCADE_KEYBOARD_HPP
 
 namespace arcade::api::window {
+    /**
+     * @brief Class containing the keyboard keys & actions
+     */
     class Keyboard {
     public:
+        /**
+         * @brief KeyAction
+         */
+        enum KeyAction {
+            PRESSED, /**< Key is pressed */
+            RELEASED /**< Key is released */
+        };
+
         /**
          * @brief KeyCode
          */

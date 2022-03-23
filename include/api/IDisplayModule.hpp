@@ -49,12 +49,6 @@ namespace arcade::api {
         const std::string &getName() const override = 0;
 
         /**
-         * Get the instance of the display
-         * @return the instance of the display
-         */
-        IDisplayModule *getInstance() override = 0;
-
-        /**
          * @brief Update the display
          */
         virtual void update() = 0;

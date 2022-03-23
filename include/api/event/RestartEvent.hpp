@@ -5,17 +5,19 @@
 ** RestartEvent.hpp
 */
 
-#ifndef RESTARTEVENT_HPP_
-#define RESTARTEVENT_HPP_
+#ifndef ARCADE_RESTARTEVENT_HPP
+#define ARCADE_RESTARTEVENT_HPP
 
 #include "IEvent.hpp"
 
 namespace arcade::api::event {
+    /**
+     * @brief Triggered when the game is restarted
+     */
     class RestartEvent : public IEvent {
-        public:
-            RestartEvent() = default;
-            ~RestartEvent() = default;
+    public:
+        RestartEvent() = default;
     };
 }
 
-#endif /* !RESTARTEVENT_HPP_ */
+#endif //ARCADE_RESTARTEVENT_HPP

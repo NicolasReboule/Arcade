@@ -16,8 +16,9 @@ namespace arcade::api::event {
      */
     class IEvent {
     public:
-        IEvent() = default;
+        explicit IEvent(std::string name = ""): _name(name){};
         virtual ~IEvent() = default;
+        std::string _name;
     };
 }
 

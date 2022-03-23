@@ -38,13 +38,15 @@ fclean: clean
 re: fclean all
 
 api:
-	make api -C doc/ #Call the api rule
+	make api -C doc
 
 force_api:
-	FORCE=1 make api -C doc/ #Call the force api rule
+	FORCE=1 make api -C doc
 
 doc:
-	make doc -C doc/ #Call the doc rule
+	make doc -C doc
 
+copy_api:
+	FORCE=1 make copy -C doc
 
 .PHONY: all core games graphicals clean fclean doc re api force_api
