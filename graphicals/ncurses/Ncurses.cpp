@@ -6,9 +6,10 @@
 */
 
 #include "Ncurses.hpp"
+#include "api/event/Events.hpp"
+#include "api/library/ILibrary.hpp"
 
 std::unique_ptr<arcade::api::Curses> arcade::api::Curses::_instance;
-
 
 void arcade::api::Curses::init()
 {
@@ -26,10 +27,6 @@ void arcade::api::Curses::init()
         }
         wrefresh(_window);
         mvwprintw(_window, 2, 5, "ALLO");
-        // wclear(sub);
-        // clear();
-
-        // update();
     }
 }
 
@@ -74,7 +71,41 @@ arcade::api::Curses *arcade::api::Curses::getInstance()
 
 bool arcade::api::Curses::pollEvent(arcade::api::event::IEvent &event)
 {
-    return false;
+    int ch = getch();
+    while (Curses::pollEvent(event)) {
+        switch (ch) {
+            case KEY_UP:
+                event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+                break;
+            case KEY_DOWN:
+                event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+                break;
+            case KEY_RIGHT:
+                event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+                break;
+            case KEY_LEFT:
+                event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
+                break;
+            case 'z':
+                event = event::KeyEvent(api::system::Keyboard::Z, api::system::Keyboard::KeyAction::PRESSED);
+                break;
+            case 'q':
+                event = event::KeyEvent(api::system::Keyboard::Q, api::system::Keyboard::KeyAction::PRESSED);
+                break;
+            case 's':
+                event = event::KeyEvent(api::system::Keyboard::S, api::system::Keyboard::KeyAction::PRESSED);
+                break;
+            case 'd':
+                event = event::KeyEvent(api::system::Keyboard::D, api::system::Keyboard::KeyAction::PRESSED);
+                break;
+            case KEY_EXIT:
+                event = event::KeyEvent(api::system::Keyboard::Escape, api::system::Keyboard::KeyAction::PRESSED);
+                break;
+            default:
+                break;
+        }
+    }
+    return true;
 }
 
 arcade::api::Curses::Curses()

@@ -16,7 +16,7 @@ namespace arcade::api {
     /**
      * @brief Interface for all the display
      */
-    class IDisplayModule : library::ILibrary {
+    class IDisplayModule : public library::ILibrary {
     public:
         virtual ~IDisplayModule() = default;
 
@@ -49,18 +49,25 @@ namespace arcade::api {
         const std::string &getName() const override = 0;
 
         /**
+         * @brief Get the type of the library
+         * @attention Should always return LibraryType::DISPLAY
+         * @return the type of the library
+         */
+        LibraryType getType() const override = 0;
+
+        /**
          * @brief Update the display
          */
         virtual void update() = 0;
 
         /**
-         * @brief Check if the window is open
-         * @return if the window is open
+         * @brief Check if the system is open
+         * @return if the system is open
          */
         virtual bool isOpen() const = 0;
 
         /**
-         * @brief Clear the window, should always clear the screen to black
+         * @brief Clear the system, should always clear the screen to black
          */
         virtual void clear() = 0;
     };

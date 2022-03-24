@@ -8,7 +8,7 @@
 #ifndef ARCADE_MOUSE_HPP
 #define ARCADE_MOUSE_HPP
 
-namespace arcade::api::window {
+namespace arcade::api::system {
     /**
      * @brief The mouse button @see arcade::api::event::MouseEvent
      */

@@ -16,6 +16,7 @@
 #include "ArcadeException.hpp"
 #include "LibraryAlreadyLoaded.hpp"
 #include "LibraryEntryPointNotFound.hpp"
+#include "LibraryInvalidEntryPoint.hpp"
 #include "LibraryInvalidHandle.hpp"
 #include "LibraryNotFound.hpp"
 #include "LibraryNotLoaded.hpp"

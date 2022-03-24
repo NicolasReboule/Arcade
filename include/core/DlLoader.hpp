@@ -28,8 +28,6 @@ namespace arcade {
                 this->_instance = nullptr;
             }
 
-            ~DlLoader() = default;
-
             inline void load(const std::string &path) override
             {
                 this->_handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -48,10 +46,13 @@ namespace arcade {
             {
                 if (!this->_handle)
                     throw arcade::api::ex::LibraryNotFound(dlerror());
-                void *sym = dlsym(_handle, ENTRY_POINT_NAME);
+                void *sym =  dlsym(_handle, ENTRY_POINT_NAME);
                 if (!sym)
                     throw arcade::api::ex::LibraryEntryPointNotFound(dlerror());
-                this->_instance = reinterpret_cast<T *(*)()>(sym)();
+                auto tmp = reinterpret_cast<T *(*)()>(sym)();
+                if (!dynamic_cast<T *>(tmp))
+                    throw arcade::api::ex::LibraryInvalidEntryPoint("Invalid type return by the entrypoint");
+                this->_instance = tmp;
             }
 
             inline T *operator->() const override

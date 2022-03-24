@@ -8,3 +8,9 @@ arcade
 *.o
 .vscode/
 cmake*/
+.idea/
+
+
+
+
+

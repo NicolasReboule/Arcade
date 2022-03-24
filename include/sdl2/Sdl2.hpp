@@ -9,8 +9,8 @@
 #define SDL2_HPP_
 
 #include <SDL2/SDL.h>
-#include "IDisplayModule.hpp"
-#include "IGameModule.hpp"
+#include "api/IDisplayModule.hpp"
+#include "api/IGameModule.hpp"
 
 namespace arcade::api
 {
@@ -24,12 +24,13 @@ namespace arcade::api
             void update() override;
             bool isOpen() const override;
             void clear() override;
-            inline SDL_Window *getWindow() { return this->_window; };
             const std::string &getName() const override;
+            inline LibraryType getType() const override { return DISPLAY;};
             static Sdl2 *getInstance();
             bool pollEvent(event::IEvent &event) override;
 
         private:
+            library::ILibrary::LibraryType _type;
             std::string _name;
             SDL_Window *_window;
             SDL_Renderer *_renderer;

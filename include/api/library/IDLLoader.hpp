@@ -41,6 +41,7 @@ namespace arcade::api::library {
          * @tparam T the type of the instance
          * @throws arcade::api::ex::LibraryNotLoaded
          * @throws arcade::api::ex::LibraryEntryPointNotFound
+         * @throws arcade::api::ex::LibraryInvalidEntryPoint
          * @attention Should use the define @code ILibrary#ENTRY_POINT_NAME @endcode
          */
         virtual void loadInstance() = 0;

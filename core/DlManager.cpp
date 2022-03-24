@@ -19,20 +19,20 @@ void arcade::DlManager::loadLibrairies(const std::string &dirPath)
         try {
             if (isDisplayLibrary(it.path().string())) {
                 loadDisplayLibrary(it.path().string());
-            } else if (isGameLibrary(it.path().string()))
+            } else if (isGameLibrary(it.path().string())) {
                 loadGameLibrary(it.path().string());
-            else
-                std::cerr << "Error" << std::endl;
+            } else
+                std::cerr << "Erroraze" << std::endl;
         } catch (arcade::api::ex::LibraryAlreadyLoaded &e) {
             std::cerr << e.what() << std::endl;
         }
     }
-    if (_count)
-        throw api::ex::ArcadeException("Error");
+    if (_count == 0)
+        throw api::ex::ArcadeException("Empty librarires");
     if (_gameModules.empty())
-        throw api::ex::ArcadeException("Error");
+        throw api::ex::ArcadeException("no games");
     if (_displayModules.empty())
-        throw api::ex::ArcadeException("Error");
+        throw api::ex::ArcadeException("no display");
 }
 
 bool arcade::DlManager::isGameLibrary(const std::string &path) const
@@ -45,6 +45,8 @@ bool arcade::DlManager::isGameLibrary(const std::string &path) const
     } catch (api::ex::LibraryNotFound &e) {
         return false;
     } catch (api::ex::LibraryEntryPointNotFound &e) {
+        return false;
+    } catch (api::ex::LibraryInvalidEntryPoint &e) {
         return false;
     }
     return true;
@@ -61,6 +63,8 @@ bool arcade::DlManager::isDisplayLibrary(const std::string &path) const
         return false;
     } catch (api::ex::LibraryEntryPointNotFound &e) {
         return false;
+    } catch (api::ex::LibraryInvalidEntryPoint &e) {
+        return false;
     }
     return true;
 }
@@ -69,13 +73,14 @@ void arcade::DlManager::loadArgumentLibrary(const std::string &path)
 {
     if (!isDisplayLibrary(path))
         throw arcade::api::ex::ArcadeException("Error");
+    loadDisplayLibrary(path);
 }
 
 void arcade::DlManager::loadGameLibrary(const std::string &path)
 {
     std::for_each(_gameModules.getVector().begin(), _gameModules.getVector().end(), [&path](DlLoader<api::IGameModule> &loader){
         if (loader.getPath() == path)
-            throw arcade::api::ex::LibraryAlreadyLoaded("Error");
+            throw arcade::api::ex::LibraryAlreadyLoaded("Already loaded 1");
     });
     arcade::DlLoader<api::IGameModule> loader;
     loader.load(path);
@@ -83,7 +88,7 @@ void arcade::DlManager::loadGameLibrary(const std::string &path)
     std::for_each(_gameModules.getVector().begin(), _gameModules.getVector().end(), [&loader](DlLoader<api::IGameModule> &ld){
         if (*ld == *loader) {
             loader.unload();
-            throw arcade::api::ex::LibraryAlreadyLoaded("Error");
+            throw arcade::api::ex::LibraryAlreadyLoaded("Already loaded 2");
         }
     });
     _gameModules.push(loader);
@@ -95,7 +100,7 @@ void arcade::DlManager::loadDisplayLibrary(const std::string &path)
     arcade::DlLoader<api::IDisplayModule> loader;
     std::for_each(_displayModules.getVector().begin(), _displayModules.getVector().end(), [&path](DlLoader<api::IDisplayModule> &loader){
         if (loader.getPath() == path)
-            throw arcade::api::ex::LibraryAlreadyLoaded("Error");
+            throw arcade::api::ex::LibraryAlreadyLoaded("Already loaded 3");
     });
 
     loader.load(path);
@@ -103,7 +108,7 @@ void arcade::DlManager::loadDisplayLibrary(const std::string &path)
     std::for_each(_displayModules.getVector().begin(), _displayModules.getVector().end(), [&loader](DlLoader<api::IDisplayModule> &ld){
         if (*ld == *loader) {
             loader.unload();
-            throw arcade::api::ex::LibraryAlreadyLoaded("Error");
+            throw arcade::api::ex::LibraryAlreadyLoaded("Already loaded 4");
         }
     });
     _count++;

@@ -5,25 +5,28 @@
 ** Pacman
 */
 
-#include "Pacman.hpp"
+#include "pacman/Pacman.hpp"
 
-    extern "C"
-    {
-        arcade::api::Pacman::Pacman(const std::string &name)
-        {
-            _name = name;
-            std::cout << "Pacman : hey" << std::endl;
-        }
+std::unique_ptr<arcade::api::Pacman> arcade::api::Pacman::_instance;
 
-        arcade::api::Pacman::~Pacman()
-        {
-            std::cout << "Pacman : bye" << std::endl;
-        }
+arcade::api::Pacman::Pacman()
+{
+    _name = "Pacman";
+}
 
-        std::shared_ptr<arcade::api::Pacman> entryPoint(void)
-        {
-            std::cout << "Pacman entryPoint" << std::endl;
-            // std::shared_ptr<arcade::api::Pacman> module = std::make_shared<arcade::api::Pacman>("Pacman");
-            return nullptr;
-        }
-    }
+arcade::api::Pacman::~Pacman()
+{
+    std::cout << "Pacman : bye" << std::endl;
+}
+
+extern "C" arcade::api::Pacman *entryPoint()
+{
+    return arcade::api::Pacman::getInstance();
+}
+
+arcade::api::Pacman *arcade::api::Pacman::getInstance()
+{
+    if (_instance == nullptr)
+        _instance = std::make_unique<Pacman>();
+    return _instance.get();
+}

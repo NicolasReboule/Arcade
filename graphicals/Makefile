@@ -13,11 +13,11 @@ IFLAGS_API = -I ../include/api
 
 SMFL_FLAGS = -lsfml-window -lsfml-graphics -lsfml-system -l sfml-audio
 
-IFLAGS_NCURSES = -I ../include/ncurses/
+IFLAGS_NCURSES = -I ../include/ncurses/ -I ../include
 
-IFLAGS_SDL2 = -I ../include/sdl2/ -I ../include/api -I ../include/api/event
+IFLAGS_SDL2 = -I ../include/sdl2/ -I ../include
 
-IFLAGS_SFML = -I ../include/sfml/
+IFLAGS_SFML = -I ../include/sfml/ -I ../include
 
 NAME_NCURSES = arcade_ncurses.so
 

@@ -13,7 +13,7 @@ SRC_CORE = $(wildcard ./*.cpp)
 
 OBJ_CORE = $(SRC_CORE:.cpp $(IFLAGS_CORE)=.o)
 
-CPP_FLAGS = -Wall -Wextra -Werror -std=c++20
+CPP_FLAGS = -Wall -Wextra -std=c++20
 
 PROC ?= 1
 

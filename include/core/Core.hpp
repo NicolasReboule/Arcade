@@ -17,7 +17,7 @@ namespace arcade
         public:
             explicit Core();
             ~Core() = default;
-            void init();
+            void init(std::string &);
             void run();
         private:
             DlManager _manager;

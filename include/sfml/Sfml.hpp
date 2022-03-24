@@ -2,29 +2,39 @@
 ** EPITECH PROJECT, 2022
 ** B-OOP-400-RUN-4-1-arcade-nicolas.reboule
 ** File description:
-** SFML
+** Sfml
 */
 
 #ifndef SFML_HPP_
 #define SFML_HPP_
 
-#include <SFML/Window.hpp>
+#include "api/IDisplayModule.hpp"
+#include "api/event/Events.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
 
-#include <iostream>
-
-class SFML
+namespace arcade::api
 {
-private:
-    const std::string _name;
-public:
-    SFML();
-    virtual ~SFML();
-    // virtual void init();
-    // virtual void stop();
-    inline virtual const std::string &getName() const {return _name;};
-};
+    class Sfml : public IDisplayModule {
+        public:
+            Sfml();
+
+            void init() override;
+            void destroy() override;
+            void display() override;
+            void update() override;
+            bool isOpen() const override;
+            void clear() override;
+            const std::string &getName() const override;
+            inline LibraryType getType() const override { return LibraryType::DISPLAY;};
+            static Sfml *getInstance();
+            bool pollEvent(event::IEvent &event) override;
+
+        private:
+            std::string _name;
+            sf::RenderWindow *_window;
+            static std::unique_ptr<Sfml> _instance;
+            bool _isOpen;
+    };
+}
 
 #endif /* !SFML_HPP_ */

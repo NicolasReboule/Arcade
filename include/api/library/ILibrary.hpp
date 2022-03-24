@@ -10,6 +10,7 @@
 
 #include <string>
 #include <memory>
+#include "api/NonCopyable.hpp"
 
 #define ENTRY_POINT_NAME "entryPoint"
 
@@ -25,7 +26,7 @@ namespace arcade::api::library {
      * Basic implementation of ILibrary
      * @code
      * // Library.hpp
-     * class Library : public ILibrary {
+     * class Library : public arcade::api::library::ILibrary {
      * public:
      *      Library();
      *
@@ -48,6 +49,11 @@ namespace arcade::api::library {
      *     return this->_name;
      * }
      *
+     * LibraryType Library::getType()
+     * {
+     *      return LibraryType::GAME; //or LibraryType::DISPLAY
+     * }
+     *
      * Library::Library *getInstance()
      * {
      *      if (_instance == nullptr)
@@ -61,8 +67,17 @@ namespace arcade::api::library {
      * }
      * @endcode
      */
-    class ILibrary {
+    class ILibrary : public NonCopyable {
     public:
+        /**
+        * @brief Type of library
+        */
+        enum LibraryType {
+            UNKNOWN = -1,
+            DISPLAY = 0,
+            GAME = 1
+        };
+
         /**
          * @brief Default constructor
          * @attention Don't remove this, this is used to not interfer with deleted copy constructor
@@ -82,16 +97,14 @@ namespace arcade::api::library {
         virtual const std::string &getName() const = 0;
 
         /**
-         * @brief Remove the copy constructor
+         * @brief Get the type of the library, @see arcade::api::library::IDLLoader
+         * @return the type of the library
          */
-        ILibrary(const ILibrary &) = delete;
+        virtual LibraryType getType() const = 0;
 
-        /**
-         * @Brief Remove the copy constructor
-         * @return nothing
-         */
-        ILibrary& operator=(const ILibrary &) = delete;
     };
 }
+
+using LibraryType = arcade::api::library::ILibrary::LibraryType;
 
 #endif //ARCADE_ILIBRARY_HPP

@@ -10,6 +10,7 @@
     #include "IDisplayModule.hpp"
     #include "IGameModule.hpp"
     #include "ncurses.h"
+    #include "curses.h"
 
 namespace arcade::api
 {
@@ -23,11 +24,11 @@ namespace arcade::api
             void update() override;
             bool isOpen() const override;
             void clear() override;
-            inline WINDOW *getWindow() { return this->_window; };
             const std::string &getName() const override;
             static Curses *getInstance();
             bool pollEvent(event::IEvent &event) override;
             std::shared_ptr<arcade::api::Curses> entryPoint(void);
+            inline LibraryType getType() const { return DISPLAY; }
 
         private:
             std::string _name;

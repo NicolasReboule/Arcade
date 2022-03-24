@@ -5,18 +5,21 @@
 ** Sdl2
 */
 
-#include "Sdl2.hpp"
-#include "SwitchEvent.hpp"
+#include "sdl2/Sdl2.hpp"
+#include "api/event/SwitchEvent.hpp"
+#include "api/library/ILibrary.hpp"
 
 std::unique_ptr<arcade::api::Sdl2> arcade::api::Sdl2::_instance;
 
 arcade::api::Sdl2::Sdl2()
 {
     _name = "Sdl2";
+    _type = LibraryType::DISPLAY;
 }
 
 void arcade::api::Sdl2::init()
 {
+    std::cout << "sertdfghjklmùplojhgfdsfgthujiol" << std::endl;
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
@@ -87,8 +90,15 @@ bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &events)
             break;
         case SDLK_UP:
             events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
-            std::cout << "azertfgdfdfghgfsfg"
-                      << "\n";
+            break;
+        case SDLK_DOWN:
+            events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+            break;
+        case SDLK_RIGHT:
+            events = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+            break;
+        case SDLK_LEFT:
+            events = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
             break;
         }
     }

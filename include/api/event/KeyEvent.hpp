@@ -9,7 +9,7 @@
 #define ARCADE_KEYEVENT_HPP
 
 #include "IEvent.hpp"
-#include "api/window/Keyboard.hpp"
+#include "api/system/Keyboard.hpp"
 
 namespace arcade::api::event {
     /**
@@ -22,7 +22,7 @@ namespace arcade::api::event {
          * @param key the key triggered
          * @param action the action of the key @see KeyAction
          */
-        explicit KeyEvent(window::Keyboard::Key key, window::Keyboard::KeyAction action)
+        explicit KeyEvent(system::Keyboard::Key key, system::Keyboard::KeyAction action)
         {
             this->_key = key;
             this->_action = action;
@@ -104,7 +104,7 @@ namespace arcade::api::event {
          * Get the key triggered
          * @return the key
          */
-        inline window::Keyboard::Key getKey() const
+        inline system::Keyboard::Key getKey() const
         {
             return this->_key;
         }
@@ -113,7 +113,7 @@ namespace arcade::api::event {
          * Get the action the key
          * @return the action of the key
          */
-        inline window::Keyboard::KeyAction getAction() const
+        inline system::Keyboard::KeyAction getAction() const
         {
             return this->_action;
         }
@@ -124,7 +124,7 @@ namespace arcade::api::event {
          */
         inline bool isPressed() const
         {
-            return this->_action == window::Keyboard::KeyAction::PRESSED;
+            return this->_action == system::Keyboard::KeyAction::PRESSED;
         }
 
         /**
@@ -133,12 +133,12 @@ namespace arcade::api::event {
          */
         inline bool isReleased() const
         {
-            return this->_action == window::Keyboard::KeyAction::RELEASED;
+            return this->_action == system::Keyboard::KeyAction::RELEASED;
         }
 
     private:
-        window::Keyboard::Key _key; /**< The key triggered */
-        window::Keyboard::KeyAction _action /**< The action of the key */;
+        system::Keyboard::Key _key; /**< The key triggered */
+        system::Keyboard::KeyAction _action /**< The action of the key */;
         bool _ctrl; /**< If ctrl key is pressed */
         bool _alt; /**< If alt key is pressed */
         bool _shift; /**< If shift key is pressed */

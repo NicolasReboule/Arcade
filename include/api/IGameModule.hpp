@@ -16,7 +16,7 @@ namespace arcade::api {
     /**
      * @brief Interface for all the games
      */
-    class IGameModule : library::ILibrary {
+    class IGameModule : public library::ILibrary {
     public:
         virtual ~IGameModule() = default;
 
@@ -35,6 +35,13 @@ namespace arcade::api {
          * @return the name of the library
          */
         const std::string &getName() const override = 0;
+
+        /**
+         * @brief Get the type of the library
+         * @attention Should always return LibraryType::GAME
+         * @return the type of the library
+         */
+        LibraryType getType() const override = 0;
 
         /**
          * @brief Handle the event of the game

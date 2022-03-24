@@ -8,7 +8,7 @@
 #ifndef ARCADE_KEYBOARD_HPP
 #define ARCADE_KEYBOARD_HPP
 
-namespace arcade::api::window {
+namespace arcade::api::system {
     /**
      * @brief Class containing the keyboard keys & actions
      */
@@ -133,5 +133,8 @@ namespace arcade::api::window {
         };
     };
 }
+
+using KeyCode = arcade::api::system::Keyboard::Key;
+using KeyAction = arcade::api::system::Keyboard::KeyAction;
 
 #endif //ARCADE_KEYBOARD_HPP

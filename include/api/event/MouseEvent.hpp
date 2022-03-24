@@ -9,7 +9,7 @@
 #define ARCADE_MOUSEEVENT_HPP
 
 #include "IEvent.hpp"
-#include "api/window/Mouse.hpp"
+#include "api/system/Mouse.hpp"
 #include "api/Vector.hpp"
 
 namespace arcade::api::event {
@@ -24,7 +24,7 @@ namespace arcade::api::event {
          * @param button the mouse button
          * @param pos the position of the mouse
          */
-        explicit MouseEvent(window::MouseAction action, window::MouseButton button, Vector2i pos)
+        explicit MouseEvent(system::MouseAction action, system::MouseButton button, Vector2i pos)
         {
             this->_action = action;
             this->_button = button;
@@ -44,7 +44,7 @@ namespace arcade::api::event {
          * @brief Get the button used
          * @return the mouse button
          */
-        inline window::MouseButton getButton() const
+        inline system::MouseButton getButton() const
         {
             return this->_button;
         }
@@ -53,7 +53,7 @@ namespace arcade::api::event {
          * @brief Get the action
          * @return the mouse action
          */
-        inline window::MouseAction getAction() const
+        inline system::MouseAction getAction() const
         {
             return this->_action;
         }
@@ -64,7 +64,7 @@ namespace arcade::api::event {
          */
         inline bool isPressed() const
         {
-            return this->_action == window::MouseAction::PRESSED;
+            return this->_action == system::MouseAction::PRESSED;
         }
 
         /**
@@ -73,13 +73,13 @@ namespace arcade::api::event {
          */
         inline bool isReleased() const
         {
-            return this->_action == window::MouseAction::RELEASED;
+            return this->_action == system::MouseAction::RELEASED;
         }
 
     protected:
         Vector2i _pos /**< The coordinate */;
-        window::MouseButton _button; /**< The mouse button */
-        window::MouseAction _action; /**< The mouse action */
+        system::MouseButton _button; /**< The mouse button */
+        system::MouseAction _action; /**< The mouse action */
     };
 }
 
