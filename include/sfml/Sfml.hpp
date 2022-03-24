@@ -22,16 +22,16 @@ namespace arcade::api
             void destroy() override;
             void display() override;
             void update() override;
-            bool isOpen() const override;
+            inline bool isOpen() const override {return _isOpen;};
             void clear() override;
-            const std::string &getName() const override;
+            inline const std::string &getName() const override {return _name;};
             inline LibraryType getType() const override { return LibraryType::DISPLAY;};
             static Sfml *getInstance();
             bool pollEvent(event::IEvent &event) override;
 
         private:
             std::string _name;
-            sf::RenderWindow *_window;
+            sf::RenderWindow _window;
             static std::unique_ptr<Sfml> _instance;
             bool _isOpen;
     };

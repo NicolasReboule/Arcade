@@ -50,8 +50,6 @@ namespace arcade {
                 if (!sym)
                     throw arcade::api::ex::LibraryEntryPointNotFound(dlerror());
                 auto tmp = reinterpret_cast<T *(*)()>(sym)();
-                if (!dynamic_cast<T *>(tmp))
-                    throw arcade::api::ex::LibraryInvalidEntryPoint("Invalid type return by the entrypoint");
                 this->_instance = tmp;
             }
 

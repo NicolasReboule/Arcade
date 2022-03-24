@@ -19,9 +19,15 @@ arcade::api::Sfml::Sfml()
 
 void arcade::api::Sfml::init()
 {
-    sf::Window _window(sf::VideoMode(800, 600), "Arcade Menu");
+    _window.create(sf::VideoMode(800, 600), "Arcade Menu");
     _window.setFramerateLimit(60);
     _isOpen = true;
+}
+
+void arcade::api::Sfml::clear()
+{
+    _window.clear();
+    _window.display();
 }
 
 extern "C" arcade::api::Sfml *entryPoint(void)
@@ -38,7 +44,7 @@ arcade::api::Sfml *arcade::api::Sfml::getInstance()
 
 void arcade::api::Sfml::destroy()
 {
-    _window->close();
+    _window.close();
 }
 
 void arcade::api::Sfml::display()
@@ -47,4 +53,27 @@ void arcade::api::Sfml::display()
 
 void arcade::api::Sfml::update()
 {
+}
+
+bool arcade::api::Sfml::pollEvent(event::IEvent &event)
+{
+    sf::Event sfEvent;
+    while (_window.pollEvent(sfEvent)) {
+        if (sfEvent.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            _isOpen = false;
+        }
+        if (sfEvent.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+        }
+        if (sfEvent.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+        }
+        if (sfEvent.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+        }
+        if (sfEvent.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
+        }
+    }
+    return false;
 }

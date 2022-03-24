@@ -41,12 +41,19 @@ bool arcade::DlManager::isGameLibrary(const std::string &path) const
     try {
         loader.load(path);
         loader.loadInstance();
+        if (loader->getType() != LibraryType::GAME) {
+            loader.unload();
+            throw api::ex::LibraryInvalidEntryPoint("Invalid instance type of entry point");
+        }
         loader.unload();
     } catch (api::ex::LibraryNotFound &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     } catch (api::ex::LibraryEntryPointNotFound &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     } catch (api::ex::LibraryInvalidEntryPoint &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     }
     return true;
@@ -58,12 +65,19 @@ bool arcade::DlManager::isDisplayLibrary(const std::string &path) const
     try {
         loader.load(path);
         loader.loadInstance();
+        if (loader->getType() != LibraryType::DISPLAY) {
+            loader.unload();
+            throw api::ex::LibraryInvalidEntryPoint("Invalid instance type of entry point");
+        }
         loader.unload();
-    } catch (api::ex::LibraryNotFound &e){
+    } catch (api::ex::LibraryNotFound &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     } catch (api::ex::LibraryEntryPointNotFound &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     } catch (api::ex::LibraryInvalidEntryPoint &e) {
+        std::cerr << e.what() << std::endl;
         return false;
     }
     return true;
