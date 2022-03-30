@@ -20,4 +20,11 @@ namespace arcade::api::event {
     };
 }
 
+inline std::ostream &operator<<(std::ostream &os, const arcade::api::event::RestartEvent &restartEvent)
+{
+    (void) restartEvent;
+    return os << "RestartEvent";
+}
+
+
 #endif //ARCADE_RESTARTEVENT_HPP

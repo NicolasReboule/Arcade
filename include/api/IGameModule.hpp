@@ -28,7 +28,7 @@ namespace arcade::api {
         /**
          * @brief Update the game
          */
-        virtual void update() = 0;
+        virtual void update(std::size_t tick) = 0;
 
         /**
          * @brief Get the name of the library
@@ -60,6 +60,11 @@ namespace arcade::api {
          * @brief Destroy the game
          */
         virtual void destroy() = 0;
+
+        /**
+         * @brief Restart the game
+         */
+        virtual void restart() = 0;
     };
 }
 

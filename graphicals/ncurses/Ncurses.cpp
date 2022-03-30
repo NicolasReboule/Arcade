@@ -5,115 +5,122 @@
 ** Ncurses
 */
 
-#include "Ncurses.hpp"
-#include "api/event/Events.hpp"
-#include "api/library/ILibrary.hpp"
+#include "ncurses/Ncurses.hpp"
 
-std::unique_ptr<arcade::api::Curses> arcade::api::Curses::_instance;
+std::unique_ptr<arcade::api::NCurses> arcade::api::NCurses::_instance;
 
-void arcade::api::Curses::init()
+void arcade::api::NCurses::init()
 {
-    _window = initscr();
-    curs_set(false);
-    nodelay(_window, true);
-    _isOpen = true;
-    subwin(_window, LINES - 5, COLS - 5, 5, 5); // HAUTEUR, LARGEUR, POS Y, POS X
-    box(_window, ACS_VLINE, ACS_HLINE);
-    while (_isOpen)
-    {
-        if (getch() == 'a')
-        {
-            destroy();
-        }
-        wrefresh(_window);
-        mvwprintw(_window, 2, 5, "ALLO");
-    }
+    this->createWindow({800, 600}, "Arcade | Ncurse");
+    _isOpen = TRUE;
 }
 
-void arcade::api::Curses::destroy()
+void arcade::api::NCurses::destroy()
 {
     wclear(_window);
-    endwin();
+    close();
+}
+
+void arcade::api::NCurses::close()
+{
     _isOpen = false;
+    endwin();
 }
 
-void arcade::api::Curses::display()
+void arcade::api::NCurses::clear(const arcade::api::renderer::Color &color)
+{
+    wclear(_window);
+}
+
+void arcade::api::NCurses::draw(const arcade::api::renderer::IDrawable &drawable)
 {
 }
 
-void arcade::api::Curses::update()
+void arcade::api::NCurses::createWindow(Vector2u size, const std::string &title)
 {
-    wrefresh(_window);
+    this->_size = {size.x/16, size.y/16};
+    this->_title = title;
+    initscr();
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+    timeout(100);
+    curs_set(0);
+    nodelay(stdscr, TRUE);
+    wclear(stdscr);
 }
 
-const std::string &arcade::api::Curses::getName() const
+bool arcade::api::NCurses::pollEvent(std::unique_ptr<event::IEvent> &event)
 {
-    return _name;
+    int ch = getch();
+    bool ev = false;
+    switch (ch) {
+        case 27:
+            ev = true;
+            event = std::make_unique<event::CloseEvent>();
+            break;
+        case KEY_UP:
+            ev = true;
+            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+            break;
+        case KEY_DOWN:
+            ev = true;
+            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+            break;
+        case KEY_RIGHT:
+            ev = true;
+            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+            break;
+        case KEY_LEFT:
+            ev = true;
+            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
+            break;
+        default:
+            break;
+    }
+    return ev;
 }
 
-bool arcade::api::Curses::isOpen() const
+void arcade::api::NCurses::setSize(Vector2u size)
+{
+}
+
+void arcade::api::NCurses::setTitle(const std::string &title)
+{
+}
+
+void arcade::api::NCurses::setIcon(const std::string &path)
+{
+}
+
+void arcade::api::NCurses::setFramerateLimit(uint limit)
+{
+}
+
+void arcade::api::NCurses::display()
+{
+    refresh();
+    timeout(100);
+}
+
+bool arcade::api::NCurses::isOpen() const
 {
     return this->_isOpen;
 }
 
-void arcade::api::Curses::clear()
-{
-    wclear(_window);
-    wrefresh(_window);
-}
-
-arcade::api::Curses *arcade::api::Curses::getInstance()
+arcade::api::NCurses *arcade::api::NCurses::getInstance()
 {
     if (_instance == nullptr)
-        _instance = std::make_unique<Curses>();
+        _instance = std::make_unique<NCurses>();
     return _instance.get();
 }
 
-bool arcade::api::Curses::pollEvent(arcade::api::event::IEvent &event)
+arcade::api::NCurses::NCurses() : AbstractDisplayModule("Ncurse")
 {
-    int ch = getch();
-    while (Curses::pollEvent(event)) {
-        switch (ch) {
-            case KEY_UP:
-                event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
-                break;
-            case KEY_DOWN:
-                event = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
-                break;
-            case KEY_RIGHT:
-                event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
-                break;
-            case KEY_LEFT:
-                event = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
-                break;
-            case 'z':
-                event = event::KeyEvent(api::system::Keyboard::Z, api::system::Keyboard::KeyAction::PRESSED);
-                break;
-            case 'q':
-                event = event::KeyEvent(api::system::Keyboard::Q, api::system::Keyboard::KeyAction::PRESSED);
-                break;
-            case 's':
-                event = event::KeyEvent(api::system::Keyboard::S, api::system::Keyboard::KeyAction::PRESSED);
-                break;
-            case 'd':
-                event = event::KeyEvent(api::system::Keyboard::D, api::system::Keyboard::KeyAction::PRESSED);
-                break;
-            case KEY_EXIT:
-                event = event::KeyEvent(api::system::Keyboard::Escape, api::system::Keyboard::KeyAction::PRESSED);
-                break;
-            default:
-                break;
-        }
-    }
-    return true;
+    _window = nullptr;
 }
 
-arcade::api::Curses::Curses()
+extern "C" arcade::api::NCurses *entryPoint()
 {
-    _name = "NCurses";
-}
-
-extern "C" arcade::api::Curses *entryPoint()
-{
-    return arcade::api::Curses::getInstance();
+    return arcade::api::NCurses::getInstance();
 }

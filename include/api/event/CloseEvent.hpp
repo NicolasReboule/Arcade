@@ -20,4 +20,11 @@ namespace arcade::api::event {
     };
 }
 
+inline std::ostream &operator<<(std::ostream &os, const arcade::api::event::CloseEvent &closeEvent)
+{
+    (void) closeEvent;
+    os << "CloseEvent";
+    return os;
+}
+
 #endif //ARCADE_CLOSEEVENT_HPP

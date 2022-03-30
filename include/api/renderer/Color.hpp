@@ -62,6 +62,30 @@ namespace arcade::api::renderer {
             return (this->red << 24) | (this->green << 16) | (this->blue << 8) | this->alpha;
         }
 
+        /**
+        * @brief Retrieve the red component
+        * @return Red component
+        */
+        std::uint8_t getRed() const { return this->red; }
+
+        /**
+         * @brief Retrieve the green component
+         * @return Green component
+         */
+        std::uint8_t getGreen() const { return this->green; }
+
+        /**
+         * @brief Retrieve the blue component
+         * @return Blue component
+         */
+        std::uint8_t getBlue() const { return this->blue; }
+
+        /**
+         * @brief Retrieve the alpha component
+         * @return Alpha component
+         */
+        std::uint8_t getAlpha() const { return this->alpha; }
+
         static const Color Black;       /**< Black predefined color */
         static const Color White;       /**< White predefined color */
         static const Color Red;         /**< Red predefined color */
@@ -79,15 +103,17 @@ namespace arcade::api::renderer {
         std::uint8_t alpha;
     };
 
-    const Color Color::Black = Color(0, 0, 0);
-    const Color Color::White = Color(255, 255, 255);
-    const Color Color::Red = Color(255, 0, 0);
-    const Color Color::Green = Color(0, 255, 0);
-    const Color Color::Blue = Color(0, 0, 255);
-    const Color Color::Yellow = Color(255, 255, 0);
-    const Color Color::Magenta = Color(255, 0, 255);
-    const Color Color::Cyan = Color(0, 255, 255);
-    const Color Color::Transparent = Color(0, 0, 0, 0);
+    inline const Color Color::Black = Color(0, 0, 0);
+    inline const Color Color::White = Color(255, 255, 255);
+    inline const Color Color::Red = Color(255, 0, 0);
+    inline const Color Color::Green = Color(0, 255, 0);
+    inline const Color Color::Blue = Color(0, 0, 255);
+    inline const Color Color::Yellow = Color(255, 255, 0);
+    inline const Color Color::Magenta = Color(255, 0, 255);
+    inline const Color Color::Cyan = Color(0, 255, 255);
+    inline const Color Color::Transparent = Color(0, 0, 0, 0);
 }
+
+using ArcadeColor = arcade::api::renderer::Color; /**< typedef because it's too long */
 
 #endif //ARCADE_COLOR_HPP

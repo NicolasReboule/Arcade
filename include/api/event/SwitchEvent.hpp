@@ -41,7 +41,7 @@ namespace arcade::api::event {
          * Get the type of the switch
          * @return the type of the switch
          */
-        inline SwitchType getType()
+        inline SwitchType getType() const noexcept
         {
             return this->_type;
         }
@@ -50,7 +50,7 @@ namespace arcade::api::event {
          * Get the direction of the switch
          * @return the direction of the switch
          */
-        inline SwitchDirection getDirection()
+        inline SwitchDirection getDirection() const noexcept
         {
             return this->_direction;
         }
@@ -59,6 +59,36 @@ namespace arcade::api::event {
         SwitchType _type; /**< The switch type */
         SwitchDirection _direction; /**< The direction */
     };
+}
+
+using SwitchEvent = arcade::api::event::SwitchEvent;
+using SwitchType = arcade::api::event::SwitchEvent::SwitchType;
+using SwitchDirection = arcade::api::event::SwitchEvent::SwitchDirection;
+
+inline std::ostream &operator<<(std::ostream &os, const SwitchType &type)
+{
+    os << "SwitchType: ";
+    if (type == SwitchType::DISPLAY)
+        os << "DISPLAY";
+    else
+        os << "GAME";
+    return os;
+}
+
+inline std::ostream &operator<<(std::ostream &os, const SwitchDirection &direction)
+{
+    os << "SwitchDirection: ";
+    if (direction == SwitchEvent::SwitchDirection::PREV)
+        os << "PREV";
+    else
+        os << "NEXT";
+    return os;
+}
+
+inline std::ostream &operator<<(std::ostream &os, const SwitchEvent &event)
+{
+    os << "SwitchEvent: " << event.getType() << " " << event.getDirection();
+    return os;
 }
 
 #endif //ARCADE_SWITCHEVENT_HPP

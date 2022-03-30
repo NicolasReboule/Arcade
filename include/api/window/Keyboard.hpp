@@ -8,7 +8,9 @@
 #ifndef ARCADE_KEYBOARD_HPP
 #define ARCADE_KEYBOARD_HPP
 
-namespace arcade::api::system {
+#include <iostream>
+
+namespace arcade::api::window {
     /**
      * @brief Class containing the keyboard keys & actions
      */
@@ -134,7 +136,76 @@ namespace arcade::api::system {
     };
 }
 
-using KeyCode = arcade::api::system::Keyboard::Key;
-using KeyAction = arcade::api::system::Keyboard::KeyAction;
+using KeyCode = arcade::api::window::Keyboard::Key; /**< typedef because it's too long */
+using KeyAction = arcade::api::window::Keyboard::KeyAction; /**< typedef because it's too long */
+
+inline std::ostream &operator<<(std::ostream &os, const KeyCode code)
+{
+    if (code == KeyCode::Unknown)
+        os << "Unknown";
+    else if (code >= KeyCode::A && code <= KeyCode::Z)
+        os << static_cast<char>('A' + code);
+    else if (code >= KeyCode::Num0 && code <= KeyCode::Num9)
+        os << static_cast<char>('0' + (code - KeyCode::Num0));
+    else if (code >= KeyCode::Numpad0 && code <= KeyCode::Numpad9)
+        os << "NumPad" << static_cast<char>('0' + (code - KeyCode::Numpad0));
+    else if (code >= KeyCode::F1 && code <= KeyCode::F9)
+        os << "F" << static_cast<char>('0' + (code - KeyCode::F1 + 1));
+    else if (code >= KeyCode::F10 && code <= KeyCode::F15)
+        os << "F1" << static_cast<char>('0' + (code - KeyCode::F10));
+    switch (code) {
+        case KeyCode::Escape: os << "Escape"; break;
+        case KeyCode::LControl: os << "LControl"; break;
+        case KeyCode::LShift: os << "LShift"; break;
+        case KeyCode::LAlt: os << "LAlt"; break;
+        case KeyCode::LSystem: os << "LSystem"; break;
+        case KeyCode::RControl: os << "RControl"; break;
+        case KeyCode::RShift: os << "RShift"; break;
+        case KeyCode::RAlt: os << "RAlt"; break;
+        case KeyCode::RSystem: os << "RSystem"; break;
+        case KeyCode::Menu: os << "Menu"; break;
+        case KeyCode::LBracket: os << "]"; break;
+        case KeyCode::RBracket: os << "["; break;
+        case KeyCode::Semicolon: os << ";"; break;
+        case KeyCode::Comma: os << ","; break;
+        case KeyCode::Period: os << "."; break;
+        case KeyCode::Quote: os << "'"; break;
+        case KeyCode::Slash: os << "/"; break;
+        case KeyCode::Backslash: os << "\\"; break;
+        case KeyCode::Tilde: os << "~"; break;
+        case KeyCode::Equal: os << "="; break;
+        case KeyCode::Hyphen: os << "-"; break;
+        case KeyCode::Space: os << "Space"; break;
+        case KeyCode::Enter: os << "Enter"; break;
+        case KeyCode::Backspace: os << "Backspace"; break;
+        case KeyCode::Tab: os << "Tab"; break;
+        case KeyCode::PageUp: os << "PageUp"; break;
+        case KeyCode::PageDown: os << "PageDown"; break;
+        case KeyCode::End: os << "End"; break;
+        case KeyCode::Home: os << "Home"; break;
+        case KeyCode::Insert: os << "Insert"; break;
+        case KeyCode::Delete: os << "Delete"; break;
+        case KeyCode::Add: os << "+"; break;
+        case KeyCode::Subtract: os << "-"; break;
+        case KeyCode::Multiply: os << "*"; break;
+        case KeyCode::Divide: os << "/"; break;
+        case KeyCode::Left: os << "Left"; break;
+        case KeyCode::Right: os << "Right"; break;
+        case KeyCode::Up: os << "Up"; break;
+        case KeyCode::Down: os << "Down"; break;
+        case KeyCode::Pause : os << "Pause"; break;
+        default: break;
+    }
+    return os;
+}
+
+inline std::ostream &operator<<(std::ostream &os, const KeyAction action)
+{
+    if (action == KeyAction::PRESSED)
+        os << "Pressed";
+    else if (action == KeyAction::RELEASED)
+        os << "Released";
+    return os;
+}
 
 #endif //ARCADE_KEYBOARD_HPP

@@ -8,9 +8,8 @@
 #ifndef ARCADE_IDRAWABLE_HPP
 #define ARCADE_IDRAWABLE_HPP
 
-#include "IRenderTarget.hpp"
-
 namespace arcade::api::renderer {
+    class IRenderTarget;
     /**
      * @brief base class for objects that can be drawn to a render target
      */

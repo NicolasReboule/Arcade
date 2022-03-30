@@ -20,4 +20,10 @@ namespace arcade::api::event {
     };
 }
 
+inline std::ostream &operator<<(std::ostream &os, const arcade::api::event::LaunchMenuEvent &launchMenuEvent)
+{
+    (void) launchMenuEvent;
+    return os << "LaunchMenuEvent";
+}
+
 #endif //ARCADE_LAUNCHMENUEVENT_HPP

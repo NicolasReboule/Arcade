@@ -9,7 +9,7 @@
 #define ARCADE_KEYEVENT_HPP
 
 #include "IEvent.hpp"
-#include "api/system/Keyboard.hpp"
+#include "api/window/Keyboard.hpp"
 
 namespace arcade::api::event {
     /**
@@ -22,10 +22,11 @@ namespace arcade::api::event {
          * @param key the key triggered
          * @param action the action of the key @see KeyAction
          */
-        explicit KeyEvent(system::Keyboard::Key key, system::Keyboard::KeyAction action)
+        explicit KeyEvent(window::Keyboard::Key key, window::Keyboard::KeyAction action)
         {
             this->_key = key;
             this->_action = action;
+            this->_ctrl = this->_alt = this->_shift = this->_system = false;
         }
 
         /**
@@ -104,7 +105,7 @@ namespace arcade::api::event {
          * Get the key triggered
          * @return the key
          */
-        inline system::Keyboard::Key getKey() const
+        inline window::Keyboard::Key getKey() const
         {
             return this->_key;
         }
@@ -113,7 +114,7 @@ namespace arcade::api::event {
          * Get the action the key
          * @return the action of the key
          */
-        inline system::Keyboard::KeyAction getAction() const
+        inline window::Keyboard::KeyAction getAction() const
         {
             return this->_action;
         }
@@ -124,7 +125,7 @@ namespace arcade::api::event {
          */
         inline bool isPressed() const
         {
-            return this->_action == system::Keyboard::KeyAction::PRESSED;
+            return this->_action == window::Keyboard::KeyAction::PRESSED;
         }
 
         /**
@@ -133,17 +134,27 @@ namespace arcade::api::event {
          */
         inline bool isReleased() const
         {
-            return this->_action == system::Keyboard::KeyAction::RELEASED;
+            return this->_action == window::Keyboard::KeyAction::RELEASED;
         }
 
     private:
-        system::Keyboard::Key _key; /**< The key triggered */
-        system::Keyboard::KeyAction _action /**< The action of the key */;
+        window::Keyboard::Key _key; /**< The key triggered */
+        window::Keyboard::KeyAction _action /**< The action of the key */;
         bool _ctrl; /**< If ctrl key is pressed */
         bool _alt; /**< If alt key is pressed */
         bool _shift; /**< If shift key is pressed */
         bool _system; /**< If system key is pressed */
     };
+}
+
+inline std::ostream &operator<<(std::ostream &os, const arcade::api::event::KeyEvent &keyEvent)
+{
+    os << "KeyEvent: Key [" << keyEvent.getKey() << "] Action [" << keyEvent.getAction() << "]";
+    os << " Ctrl [" << std::boolalpha << keyEvent.isCtrl() << "]";
+    os << " Alt [" << std::boolalpha << keyEvent.isAlt() << "]";
+    os << " Shift [" << std::boolalpha << keyEvent.isShift() << "]";
+    os << " System [" << std::boolalpha << keyEvent.isSystem() << "]";
+    return os;
 }
 
 #endif //ARCADE_KEYEVENT_HPP

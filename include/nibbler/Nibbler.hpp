@@ -17,14 +17,17 @@ namespace arcade::api {
             ~Nibbler();
             inline void init() override {};
             inline void destroy() override {};
-            inline void update() override {};
             inline const std::string &getName() const override {return _name;};
             static Nibbler *getInstance();
-            inline void onEvent(event::IEvent &event) override {};
+            void onEvent(event::IEvent &event) override;
             inline void render(IDisplayModule &display) override {};
             inline LibraryType getType() const { return GAME; }
 
-        private:
+        void update(std::size_t tick) override;
+
+        void restart() override;
+
+    private:
         static std::unique_ptr<Nibbler> _instance;
         std::string _name;
     };

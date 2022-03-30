@@ -9,33 +9,46 @@
 #define SDL2_HPP_
 
 #include <SDL2/SDL.h>
-#include "api/IDisplayModule.hpp"
+#include "api/AbstractDisplayModule.hpp"
 #include "api/IGameModule.hpp"
 
-namespace arcade::api
-{
-    class Sdl2 : public IDisplayModule {
-        public:
-            Sdl2();
+namespace arcade::api {
+    class Sdl2 : public AbstractDisplayModule {
+    public:
+        Sdl2();
 
-            void init() override;
-            void destroy() override;
-            void display() override;
-            void update() override;
-            bool isOpen() const override;
-            void clear() override;
-            const std::string &getName() const override;
-            inline LibraryType getType() const override { return DISPLAY;};
-            static Sdl2 *getInstance();
-            bool pollEvent(event::IEvent &event) override;
+        static Sdl2 *getInstance();
 
-        private:
-            library::ILibrary::LibraryType _type;
-            std::string _name;
-            SDL_Window *_window;
-            SDL_Renderer *_renderer;
-            static std::unique_ptr<Sdl2> _instance;
-            bool _isOpen;
+        void init() override;
+
+        void destroy() override;
+
+        void close() override;
+
+        void clear(const renderer::Color &color) override;
+
+        void draw(const renderer::IDrawable &drawable) override;
+
+        void createWindow(Vector2u size, const std::string &title) override;
+
+        bool isOpen() const override;
+
+        bool pollEvent(std::unique_ptr<ArcadeEvent> &event) override;
+
+        void setSize(Vector2u size) override;
+
+        void setTitle(const std::string &title) override;
+
+        void setIcon(const std::string &path) override;
+
+        void setFramerateLimit(uint limit) override;
+
+        void display() override;
+
+    private:
+        SDL_Window *_window;
+        SDL_Renderer *_renderer;
+        static std::unique_ptr<Sdl2> _instance;
     };
 }
 

@@ -6,36 +6,47 @@
 */
 
 #ifndef NCURSES_HPP_
-    #define NCURSES_HPP_
-    #include "IDisplayModule.hpp"
-    #include "IGameModule.hpp"
-    #include "ncurses.h"
-    #include "curses.h"
+#define NCURSES_HPP_
 
-namespace arcade::api
-{
-    class Curses : public IDisplayModule {
-        public:
-            Curses();
+#include "api/AbstractDisplayModule.hpp"
+#include "ncurses.h"
 
-            void init() override;
-            void destroy() override;
-            void display() override;
-            void update() override;
-            bool isOpen() const override;
-            void clear() override;
-            const std::string &getName() const override;
-            static Curses *getInstance();
-            bool pollEvent(event::IEvent &event) override;
-            std::shared_ptr<arcade::api::Curses> entryPoint(void);
-            inline LibraryType getType() const { return DISPLAY; }
+namespace arcade::api {
+    class NCurses : public AbstractDisplayModule {
+    public:
+        NCurses();
 
-        private:
-            std::string _name;
-            WINDOW *_window;
-            bool _isOpen;
-            static std::unique_ptr<Curses> _instance;
-            std::shared_ptr<IGameModule> _game;
+        static NCurses *getInstance();
+
+        void init() override;
+
+        void destroy() override;
+
+        void close() override;
+
+        void clear(const renderer::Color &color) override;
+
+        void draw(const renderer::IDrawable &drawable) override;
+
+        void createWindow(Vector2u size, const std::string &title) override;
+
+        bool isOpen() const override;
+
+        bool pollEvent(std::unique_ptr<event::IEvent> &event) override;
+
+        void setSize(Vector2u size) override;
+
+        void setTitle(const std::string &title) override;
+
+        void setIcon(const std::string &path) override;
+
+        void setFramerateLimit(uint limit) override;
+
+        void display() override;
+
+    private:
+        WINDOW *_window;
+        static std::unique_ptr <NCurses> _instance;
     };
 }
 #endif /* !NCURSES_HPP_ */

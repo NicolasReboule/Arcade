@@ -12,7 +12,7 @@
 #include <iostream>
 #include <functional>
 
-namespace arcade::api {
+namespace arcade::api::utils {
     /**
      * @brief A vector that can be used to store elements in a circular way.
      * @tparam T the type of the vector
@@ -172,6 +172,6 @@ namespace arcade::api {
 }
 
 template<typename T>
-using CircularVector = arcade::api::CircularVector<T>;
+using CircularVector = arcade::api::utils::CircularVector<T>;
 
 #endif //ARCADE_CIRCULARVECTOR_HPP

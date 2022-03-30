@@ -12,6 +12,14 @@ arcade::DlManager::DlManager()
     this->_count = 0;
 }
 
+void arcade::DlManager::unloadAll()
+{
+    for (auto &item : this->_gameModules.getVector())
+        item.unload();
+    for (auto &item : this->_displayModules.getVector())
+        item.unload();
+}
+
 void arcade::DlManager::loadLibrairies(const std::string &dirPath)
 {
     _path = dirPath;
@@ -129,18 +137,18 @@ void arcade::DlManager::loadDisplayLibrary(const std::string &path)
     _displayModules.push(loader);
 }
 
-bool arcade::DlManager::switchGame(const SDirection direction)
+bool arcade::DlManager::switchGame(const SwitchDirection &direction)
 {
-    if (direction == SDirection::NEXT)
+    if (direction == SwitchDirection::NEXT)
         this->_gameModules++;
     else
         this->_gameModules--;
     return true;
 }
 
-bool arcade::DlManager::switchDisplay(const SDirection direction)
+bool arcade::DlManager::switchDisplay(const SwitchDirection &direction)
 {
-    if (direction == SDirection::NEXT)
+    if (direction == SwitchDirection::NEXT)
         this->_displayModules++;
     else
         this->_displayModules--;

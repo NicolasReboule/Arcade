@@ -17,6 +17,8 @@ void update(std::size_t tick)
 
 int main(int ac, char **av)
 {
+    if (ac != 2)
+        return 84;
     auto time = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
     std::cout << time << std::endl;
     std::string argPath(av[1]);
@@ -32,6 +34,11 @@ int main(int ac, char **av)
         core.run();
     } catch (std::exception &e) {
         std::cerr << "fbour hugo & chatdo:" << e.what() << std::endl;
+    }
+    try {
+        core.stop();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
     return 0;
 }

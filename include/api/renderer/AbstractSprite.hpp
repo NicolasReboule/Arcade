@@ -8,22 +8,23 @@
 #ifndef ARCADE_ABSTRACTSPRITE_HPP
 #define ARCADE_ABSTRACTSPRITE_HPP
 
-#include "IDrawable.hpp"
+#include "AbstractDrawable.hpp"
 #include "ITransformable.hpp"
+#include "Color.hpp"
 #include <string>
 
 namespace arcade::api::renderer {
     /**
      * @brief Base sprite class (will need to be recreate for each library)
      */
-    class AbstractSprite : public IDrawable, public ITransformable {
+    class AbstractSprite : public AbstractDrawable, public ITransformable {
     public:
         /**
          * @brief Constructor
          * @param texturePath the path of the texture
          * @param symbol the symbol (ncurses)
          */
-        explicit AbstractSprite(const std::string &texturePath, const char symbol)
+        explicit AbstractSprite(const std::string &texturePath, const char symbol) : AbstractDrawable()
         {
             this->_texturePath = texturePath;
             this->_symbol = symbol;

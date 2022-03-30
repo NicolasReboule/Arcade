@@ -11,10 +11,9 @@
 #include "api/IDisplayModule.hpp"
 #include "api/IGameModule.hpp"
 #include "api/event/SwitchEvent.hpp"
+#include "api/utils/CircularVector.hpp"
 #include <iostream>
 #include <filesystem>
-
-using SDirection = arcade::api::event::SwitchEvent::SwitchDirection;
 
 namespace arcade::api::library {
     /**
@@ -69,14 +68,14 @@ namespace arcade::api::library {
          * @param direction the direction of the switch
          * @return if the game has been switched correctly
          */
-        virtual bool switchGame(const SDirection direction) = 0;
+        virtual bool switchGame(const SwitchDirection &direction) = 0;
 
         /**
          * @brief Switch the current display
          * @param direction the direction of the switch
          * @return if the display has been switched correctly
          */
-        virtual bool switchDisplay(const SDirection direction) = 0;
+        virtual bool switchDisplay(const SwitchDirection &direction) = 0;
 
         /**
          * @brief Get the current game
@@ -107,6 +106,11 @@ namespace arcade::api::library {
          * @return the count of display
          */
         virtual std::size_t displayCount() const = 0;
+
+        /**
+         * @brief Unload all the libraries opened
+         */
+        virtual void unloadAll() = 0;
     };
 }
 

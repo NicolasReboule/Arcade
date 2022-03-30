@@ -8,7 +8,7 @@
 #ifndef ARCADE_NONCOPYABLE_HPP
 #define ARCADE_NONCOPYABLE_HPP
 
-namespace arcade {
+namespace arcade::api::utils {
     /**
      * @brief A non copyable class
      */

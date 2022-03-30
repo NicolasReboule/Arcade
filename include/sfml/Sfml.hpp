@@ -8,32 +8,45 @@
 #ifndef SFML_HPP_
 #define SFML_HPP_
 
-#include "api/IDisplayModule.hpp"
-#include "api/event/Events.hpp"
+#include "api/AbstractDisplayModule.hpp"
 #include <SFML/Graphics.hpp>
 
-namespace arcade::api
-{
-    class Sfml : public IDisplayModule {
-        public:
-            Sfml();
+namespace arcade::api {
+    class Sfml : public AbstractDisplayModule {
+    public:
+        Sfml();
 
-            void init() override;
-            void destroy() override;
-            void display() override;
-            void update() override;
-            inline bool isOpen() const override {return _isOpen;};
-            void clear() override;
-            inline const std::string &getName() const override {return _name;};
-            inline LibraryType getType() const override { return LibraryType::DISPLAY;};
-            static Sfml *getInstance();
-            bool pollEvent(event::IEvent &event) override;
+        static Sfml *getInstance();
 
-        private:
-            std::string _name;
-            sf::RenderWindow _window;
-            static std::unique_ptr<Sfml> _instance;
-            bool _isOpen;
+        void init() override;
+
+        void clear(const renderer::Color &color) override;
+
+        void draw(const renderer::IDrawable &drawable) override;
+
+        void createWindow(Vector2u size, const std::string &title) override;
+
+        bool pollEvent(std::unique_ptr<event::IEvent> &event) override;
+
+        void setSize(Vector2u size) override;
+
+        void setTitle(const std::string &title) override;
+
+        void setIcon(const std::string &path) override;
+
+        void destroy() override;
+
+        void setFramerateLimit(uint limit) override;
+
+        void display() override;
+
+        bool isOpen() const override;
+
+        void close() override;
+
+    private:
+        sf::RenderWindow _window;
+        static Sfml *_instance;
     };
 }
 

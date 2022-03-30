@@ -9,6 +9,15 @@
 
 std::unique_ptr<arcade::api::Pacman> arcade::api::Pacman::_instance;
 
+void arcade::api::Pacman::update(std::size_t tick)
+{
+}
+
+void arcade::api::Pacman::restart()
+{
+
+}
+
 arcade::api::Pacman::Pacman()
 {
     _name = "Pacman";

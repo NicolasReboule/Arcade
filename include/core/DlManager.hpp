@@ -10,7 +10,6 @@
 
 #include "DlLoader.hpp"
 #include "api/library/IDLManager.hpp"
-#include "api/CircularVector.hpp"
 
 namespace arcade {
     class DlManager : public api::library::IDLManager {
@@ -29,9 +28,9 @@ namespace arcade {
 
         void loadDisplayLibrary(const std::string &path) override;
 
-        bool switchGame(const SDirection direction) override;
+        bool switchGame(const SwitchDirection &direction) override;
 
-        bool switchDisplay(const SDirection direction) override;
+        bool switchDisplay(const SwitchDirection &direction) override;
 
         api::IGameModule *getGame() const override;
 
@@ -42,6 +41,8 @@ namespace arcade {
         std::size_t gameCount() const override;
 
         std::size_t displayCount() const override;
+
+        void unloadAll() override;
 
     private:
         std::string _path;

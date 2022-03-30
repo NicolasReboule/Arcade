@@ -6,57 +6,56 @@
 */
 
 #include "sdl2/Sdl2.hpp"
-#include "api/event/SwitchEvent.hpp"
-#include "api/library/ILibrary.hpp"
 
 std::unique_ptr<arcade::api::Sdl2> arcade::api::Sdl2::_instance;
 
-arcade::api::Sdl2::Sdl2()
+arcade::api::Sdl2::Sdl2() : AbstractDisplayModule("Sdl2")
 {
-    _name = "Sdl2";
-    _type = LibraryType::DISPLAY;
+    this->_renderer = nullptr;
+    this->_window = nullptr;
 }
 
 void arcade::api::Sdl2::init()
 {
-    std::cout << "sertdfghjklmùplojhgfdsfgthujiol" << std::endl;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
         exit(84);
     }
-    if (SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_SHOWN, &_window, &_renderer) < 0)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
-        SDL_Quit();
-    }
+    createWindow({800, 600}, "Arcade | Sdl2");
     _isOpen = true;
-}
-
-extern "C" arcade::api::Sdl2 *entryPoint()
-{
-    return arcade::api::Sdl2::getInstance();
 }
 
 void arcade::api::Sdl2::destroy()
 {
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
-    SDL_Quit();
+    close();
 }
 
-void arcade::api::Sdl2::display()
+void arcade::api::Sdl2::close()
 {
-    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+    if (isOpen())
+        SDL_Quit();
+    this->_isOpen = false;
 }
 
-void arcade::api::Sdl2::update()
+void arcade::api::Sdl2::clear(const arcade::api::renderer::Color &color)
+{
+    SDL_SetRenderDrawColor(_renderer, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    SDL_RenderClear(_renderer);
+}
+
+void arcade::api::Sdl2::draw(const arcade::api::renderer::IDrawable &drawable)
 {
 }
 
-const std::string &arcade::api::Sdl2::getName() const
+void arcade::api::Sdl2::createWindow(Vector2u size, const std::string &title)
 {
-    return _name;
+    if (SDL_CreateWindowAndRenderer((int) size.x, (int) size.y, SDL_WINDOW_SHOWN, &_window, &_renderer) < 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
+        SDL_Quit();
+    }
+    setTitle(title);
 }
 
 bool arcade::api::Sdl2::isOpen() const
@@ -64,10 +63,76 @@ bool arcade::api::Sdl2::isOpen() const
     return this->_isOpen;
 }
 
-void arcade::api::Sdl2::clear()
+bool arcade::api::Sdl2::pollEvent(std::unique_ptr<ArcadeEvent> &event)
 {
-    SDL_RenderClear(_renderer);
+    bool ev = false;
+    SDL_Event e;
+    event::IEvent *tmp;
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+            event = std::make_unique<event::CloseEvent>();
+            return true;
+        }
+        if (e.key.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    ev = true;
+                    event = std::make_unique<event::CloseEvent>();
+                    break;
+                case SDLK_UP:
+                    ev = true;
+                    event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+                    break;
+                case SDLK_DOWN:
+                    ev = true;
+                    event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+                    break;
+                case SDLK_RIGHT:
+                    ev = true;
+                    event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+                    break;
+                case SDLK_LEFT:
+                    ev = true;
+                    event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
+                    break;
+            }
+        }
+    }
+    return ev;
+}
+
+void arcade::api::Sdl2::setSize(Vector2u size)
+{
+    this->_size = size;
+    SDL_SetWindowSize(this->_window, (int) size.x, (int) size.y);
+}
+
+void arcade::api::Sdl2::setTitle(const std::string &title)
+{
+    SDL_SetWindowTitle(_window, title.c_str());
+    this->_title = title;
+}
+
+void arcade::api::Sdl2::setIcon(const std::string &path)
+{
+    SDL_Surface *Icon = SDL_LoadBMP(path.c_str());
+    SDL_SetWindowIcon(_window, Icon);
+    SDL_FreeSurface(Icon);
+}
+
+void arcade::api::Sdl2::setFramerateLimit(uint limit)
+{
+    this->_framerateLimit = limit;
+}
+
+void arcade::api::Sdl2::display()
+{
     SDL_RenderPresent(_renderer);
+}
+
+extern "C" arcade::api::Sdl2 *entryPoint()
+{
+    return arcade::api::Sdl2::getInstance();
 }
 
 arcade::api::Sdl2 *arcade::api::Sdl2::getInstance()
@@ -75,32 +140,4 @@ arcade::api::Sdl2 *arcade::api::Sdl2::getInstance()
     if (_instance == nullptr)
         _instance = std::make_unique<Sdl2>();
     return _instance.get();
-}
-
-bool arcade::api::Sdl2::pollEvent(arcade::api::event::IEvent &events)
-{
-    SDL_Event event;
-    arcade::api::event::IEvent tmp;
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.key.keysym.sym)
-        {
-        case SDLK_ESCAPE:
-            _isOpen = false;
-            break;
-        case SDLK_UP:
-            events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
-            break;
-        case SDLK_DOWN:
-            events = event::SwitchEvent(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
-            break;
-        case SDLK_RIGHT:
-            events = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
-            break;
-        case SDLK_LEFT:
-            events = event::SwitchEvent(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
-            break;
-        }
-    }
-    return false;
 }

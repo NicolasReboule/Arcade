@@ -10,7 +10,7 @@
 
 #include <string>
 #include <memory>
-#include "api/NonCopyable.hpp"
+#include "api/utils/NonCopyable.hpp"
 
 #define ENTRY_POINT_NAME "entryPoint"
 
@@ -29,19 +29,28 @@ namespace arcade::api::library {
      * class Library : public arcade::api::library::ILibrary {
      * public:
      *      Library();
+     *      ~Library();
      *
      *      const std::string &getName() const override;
      * private:
      *      static std::unique_ptr<Library> _instance;
+     *      //or use a pointer to the Library
+     *      //static Library *_instance;
      *      std::string _name;
      * }
      *
      * //Library.cpp
-     * std::unique_ptr<Library> Library::_instance;
+     * std::unique_ptr<Library> Library::_instance; //or use a pointer to the Library
+     * // Library *Library::_instance = nullptr;
      *
      * Library::Library()
      * {
      *      this->_name = "Library";
+     * }
+     *
+     * Library::~Library()
+     * {
+     *      delete _instance; //only when using pointer to library
      * }
      *
      * const std::string &Library::getName() const
@@ -56,6 +65,10 @@ namespace arcade::api::library {
      *
      * Library::Library *getInstance()
      * {
+     *      // or using library pointer
+     *      // if (_instance == nullptr)
+     *      //     _instance = new Library();
+     *      // return _instance;
      *      if (_instance == nullptr)
      *          _instance = std::make_unique<Library>();
      *      return _instance.get();
@@ -67,7 +80,7 @@ namespace arcade::api::library {
      * }
      * @endcode
      */
-    class ILibrary : public NonCopyable {
+    class ILibrary : public utils::NonCopyable {
     public:
         /**
         * @brief Type of library
@@ -75,7 +88,8 @@ namespace arcade::api::library {
         enum LibraryType {
             UNKNOWN = -1,
             DISPLAY = 0,
-            GAME = 1
+            GAME = 1,
+            MENU = 2
         };
 
         /**

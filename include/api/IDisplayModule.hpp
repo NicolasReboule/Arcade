@@ -8,15 +8,17 @@
 #ifndef ARCADE_IDISPLAYMODULE_HPP
 #define ARCADE_IDISPLAYMODULE_HPP
 
-#include "event/IEvent.hpp"
 #include "library/ILibrary.hpp"
+#include "window/IWindow.hpp"
+#include "renderer/IRenderTarget.hpp"
 #include <iostream>
+#include <chrono>
 
 namespace arcade::api {
     /**
      * @brief Interface for all the display
      */
-    class IDisplayModule : public library::ILibrary {
+    class IDisplayModule : public library::ILibrary, public window::IWindow, public renderer::IRenderTarget {
     public:
         virtual ~IDisplayModule() = default;
 
@@ -31,16 +33,9 @@ namespace arcade::api {
         virtual void destroy() = 0;
 
         /**
-         * @brief Display the game
+         * @brief Close the display module
          */
-        virtual void display() = 0;
-
-        /**
-         * @brief Check if an event is available and pop it from the event list TODO: potential event list, for now only one event
-         * @param event The event will be stored in it, if available
-         * @return if an event is available
-         */
-        virtual bool pollEvent(event::IEvent &event) = 0;
+        virtual void close() = 0;
 
         /**
          * Get the name of the display (for example: "SFML")
@@ -54,22 +49,6 @@ namespace arcade::api {
          * @return the type of the library
          */
         LibraryType getType() const override = 0;
-
-        /**
-         * @brief Update the display
-         */
-        virtual void update() = 0;
-
-        /**
-         * @brief Check if the system is open
-         * @return if the system is open
-         */
-        virtual bool isOpen() const = 0;
-
-        /**
-         * @brief Clear the system, should always clear the screen to black
-         */
-        virtual void clear() = 0;
     };
 }
 
