@@ -50,6 +50,8 @@ namespace arcade {
                 if (!sym)
                     throw arcade::api::ex::LibraryEntryPointNotFound(dlerror());
                 auto tmp = reinterpret_cast<T *(*)()>(sym)();
+                if (tmp == nullptr)
+                    throw arcade::api::ex::LibraryEntryPointNotFound("Entry point of the library has return a null pointer");
                 this->_instance = tmp;
             }
 

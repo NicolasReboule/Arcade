@@ -25,7 +25,6 @@ namespace arcade {
 
     private:
         DlManager _manager;
-        bool _isRunning;
     };
 }
 

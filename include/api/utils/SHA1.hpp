@@ -27,7 +27,7 @@
 
 namespace arcade::api::utils {
     /**
-    * @brief sha1.cpp - source code of
+    * @brief Source code of SHA1 algorithm
     *
     * ============
     * SHA-1 in C++

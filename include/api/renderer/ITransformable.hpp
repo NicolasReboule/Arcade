@@ -8,7 +8,7 @@
 #ifndef ARCADE_ITRANSFORMABLE_HPP
 #define ARCADE_ITRANSFORMABLE_HPP
 
-#include "api/Vector.hpp"
+#include "api/utils/Vector.hpp"
 
 namespace arcade::api::renderer {
     /**
@@ -29,7 +29,7 @@ namespace arcade::api::renderer {
          * @param x The x position
          * @param y The y position
          */
-        virtual void setPosition(int x, int y) = 0;
+        virtual void setPosition(float x, float y) = 0;
 
         /**
          * @brief Set the rotation of the object

@@ -9,6 +9,7 @@
 #define SDL2_HPP_
 
 #include <SDL2/SDL.h>
+#include <api/window/Keyboard.hpp>
 #include "api/AbstractDisplayModule.hpp"
 #include "api/IGameModule.hpp"
 
@@ -16,6 +17,8 @@ namespace arcade::api {
     class Sdl2 : public AbstractDisplayModule {
     public:
         Sdl2();
+
+        void reset() override;
 
         static Sdl2 *getInstance();
 
@@ -48,6 +51,7 @@ namespace arcade::api {
     private:
         SDL_Window *_window;
         SDL_Renderer *_renderer;
+        std::unordered_map<SDL_Keycode, KeyCode> _keyMap;
         static std::unique_ptr<Sdl2> _instance;
     };
 }

@@ -10,6 +10,7 @@
 
 #include "IDisplayModule.hpp"
 #include "event/Events.hpp"
+#include "renderer/Drawables.hpp"
 #include <unordered_map>
 
 namespace arcade::api {
@@ -72,6 +73,7 @@ namespace arcade::api {
         std::string _title; /**< The title of the window */
         std::size_t _framerateLimit; /**< The framerate limit of the window */
         bool _isOpen; /**< If the display module is open */
+        //std::unordered_map<std::string, std::unique_ptr<renderer::AbstractDrawable>> _drawables;
     };
 }
 

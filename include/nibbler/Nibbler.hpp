@@ -8,18 +8,21 @@
 #ifndef NIBBLER_HPP_
 #define NIBBLER_HPP_
 
-#include "api/IGameModule.hpp"
+#include "api/AbstractGameModule.hpp"
 namespace arcade::api {
-    class Nibbler : public IGameModule
+    class Nibbler : public AbstractGameModule
     {
         public:
             explicit Nibbler();
             ~Nibbler();
             inline void init() override {};
             inline void destroy() override {};
-            inline const std::string &getName() const override {return _name;};
+
+        bool isRunning() override;
+
+        inline const std::string &getName() const override {return _name;};
             static Nibbler *getInstance();
-            void onEvent(event::IEvent &event) override;
+            inline void onEvent(event::IEvent &event) override {};
             inline void render(IDisplayModule &display) override {};
             inline LibraryType getType() const { return GAME; }
 

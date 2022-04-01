@@ -8,8 +8,9 @@
 #ifndef ARCADE_IDRAWABLE_HPP
 #define ARCADE_IDRAWABLE_HPP
 
+#include "IRenderTarget.hpp"
+
 namespace arcade::api::renderer {
-    class IRenderTarget;
     /**
      * @brief base class for objects that can be drawn to a render target
      */
@@ -17,14 +18,19 @@ namespace arcade::api::renderer {
     public:
         virtual ~IDrawable() = default;
 
-    protected:
         /**
-         * @brief Draw the object on the render target
-         * This is a pure virtual function that has to be implemented
-         * by the derived class to define how the drawable should be drown.
-         * @param target Render target to draw to
+         * @brief Update the component
+         * @attention Needs to be implemented in children graphicals library to update the component
+         * @param drawable The drawable already updated
          */
-        virtual void draw(const IRenderTarget &target) = 0;
+        virtual void update(const IDrawable &drawable) = 0;
+
+        /**
+         * @brief Return the timestamp of the last use of this component
+         * @return the timestamp of the last use of this component
+         * @see std::chrono (nanoseconds)
+         */
+        virtual long getLastUpdate() const = 0;
     };
 }
 

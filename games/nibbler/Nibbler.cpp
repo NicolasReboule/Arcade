@@ -10,7 +10,7 @@
 
 std::unique_ptr<arcade::api::Nibbler> arcade::api::Nibbler::_instance;
 
-arcade::api::Nibbler::Nibbler()
+arcade::api::Nibbler::Nibbler(): AbstractGameModule("Nibbler")
 {
     _name = "Nibbler";
 }
@@ -41,9 +41,7 @@ arcade::api::Nibbler *arcade::api::Nibbler::getInstance()
     return _instance.get();
 }
 
-void arcade::api::Nibbler::onEvent(event::IEvent &event)
+bool arcade::api::Nibbler::isRunning()
 {
-    if (dynamic_cast<event::SwitchEvent *>(&event)) {
-        std::cout << "ojhgf" << std::endl;
-    }
+    return false;
 }

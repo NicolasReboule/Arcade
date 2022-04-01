@@ -18,7 +18,7 @@ void arcade::api::Pacman::restart()
 
 }
 
-arcade::api::Pacman::Pacman()
+arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman")
 {
     _name = "Pacman";
 }
@@ -38,4 +38,9 @@ arcade::api::Pacman *arcade::api::Pacman::getInstance()
     if (_instance == nullptr)
         _instance = std::make_unique<Pacman>();
     return _instance.get();
+}
+
+bool arcade::api::Pacman::isRunning()
+{
+    return false;
 }

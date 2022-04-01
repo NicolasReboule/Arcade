@@ -8,10 +8,10 @@
 #ifndef PACMAN_HPP_
 #define PACMAN_HPP_
 
-#include "api/IGameModule.hpp"
+#include "api/AbstractGameModule.hpp"
 
 namespace arcade::api {
-    class Pacman : public IGameModule {
+    class Pacman : public AbstractGameModule {
     public:
         explicit Pacman();
 
@@ -19,7 +19,9 @@ namespace arcade::api {
 
         inline void init() override
         {
-        };
+        }
+
+        bool isRunning() override;;
 
         inline void destroy() override
         {

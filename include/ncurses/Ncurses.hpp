@@ -44,6 +44,8 @@ namespace arcade::api {
 
         void display() override;
 
+        void reset() override;
+
     private:
         WINDOW *_window;
         static std::unique_ptr <NCurses> _instance;

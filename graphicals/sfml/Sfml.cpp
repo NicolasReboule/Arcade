@@ -55,12 +55,15 @@ bool arcade::api::Sfml::pollEvent(std::unique_ptr<event::IEvent> &event)
             } else if (e.key.code == sf::Keyboard::R) {
                 event = std::make_unique<RestartEvent>();
                 return true;
+            } else if (e.key.code == sf::Keyboard::M) {
+                event = std::make_unique<LaunchMenuEvent>();
+                return true;
             }
-            KeyCode code = static_cast<KeyCode>(e.key.code);
+            auto code = static_cast<KeyCode>(e.key.code);
             event = std::make_unique<KeyEvent>(code, KeyAction::PRESSED);
             return true;
         } else if (e.type == sf::Event::KeyReleased) {
-            KeyCode code = static_cast<KeyCode>(e.key.code);
+            auto code = static_cast<KeyCode>(e.key.code);
             event = std::make_unique<KeyEvent>(code, KeyAction::RELEASED);
             return true;
         }
@@ -127,4 +130,8 @@ void arcade::api::Sfml::close()
 void arcade::api::Sfml::display()
 {
     _window.display();
+}
+
+void arcade::api::Sfml::reset()
+{
 }

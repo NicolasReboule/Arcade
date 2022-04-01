@@ -30,6 +30,8 @@ namespace arcade::api {
 
         void setSize(Vector2u size) override;
 
+        void reset() override;
+
         void setTitle(const std::string &title) override;
 
         void setIcon(const std::string &path) override;

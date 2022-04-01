@@ -27,6 +27,8 @@ namespace arcade::api {
 
         /**
          * @brief Update the game
+         * @param tick actual timestamp in nanoseconds
+         * @see arcade::api::utils::Time#getNanosecondsTime
          */
         virtual void update(std::size_t tick) = 0;
 
@@ -65,6 +67,12 @@ namespace arcade::api {
          * @brief Restart the game
          */
         virtual void restart() = 0;
+
+        /**
+         * @brief Check if the game is running
+         * @return if the game is running
+         */
+        virtual bool isRunning() = 0;
     };
 }
 

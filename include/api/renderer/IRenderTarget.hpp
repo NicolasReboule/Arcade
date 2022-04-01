@@ -9,11 +9,12 @@
 #define ARCADE_IRENDERTARGET_HPP
 
 #include "api/utils/NonCopyable.hpp"
-#include "IDrawable.hpp"
 #include "Color.hpp"
 #include "api/utils/Vector.hpp"
 
 namespace arcade::api::renderer {
+    class IDrawable;
+
     /**
      * @brief Base class for all render targets (window, ...)
      */

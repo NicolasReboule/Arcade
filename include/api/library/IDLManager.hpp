@@ -45,6 +45,13 @@ namespace arcade::api::library {
         virtual bool isDisplayLibrary(const std::string &path) const = 0;
 
         /**
+         * @brief Check if the library is a valid MainMenu library
+         * @param path the path of th elibrary
+         * @return if the library is valid
+         */
+        virtual bool isMainMenuLibrary(const std::string &path) const = 0;
+
+        /**
          * @brief Load the library passed as argument of arcade
          */
         virtual void loadArgumentLibrary(const std::string &path) = 0;
@@ -62,6 +69,13 @@ namespace arcade::api::library {
          * @param path the path of the display library
          */
         virtual void loadDisplayLibrary(const std::string &path) = 0;
+
+        /**
+         * @brief Load the main menu library in the main menu variable
+         * @attention Check library before @see isMainMenuLibrary
+         * @param path the path of the main menu library
+         */
+        virtual void loadMainMenuLibrary(const std::string &path) = 0;
 
         /**
          * @brief Switch the current game
@@ -82,6 +96,12 @@ namespace arcade::api::library {
          * @return the current game
          */
         virtual api::IGameModule *getGame() const = 0;
+
+        /**
+         * @brief Get the main menu
+         * @return the main menu
+         */
+        virtual api::IGameModule *getMainMenu() const = 0;
 
         /**
          * @brief Get the current display

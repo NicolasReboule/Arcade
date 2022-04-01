@@ -86,6 +86,26 @@ namespace arcade::api::renderer {
          */
         std::uint8_t getAlpha() const { return this->alpha; }
 
+        /**
+         * @brief Check equality between two colors
+         * @param other another color
+         * @return true if the two color are equal, false otherwise
+         */
+        bool operator==(const Color &other) const
+        {
+            return this->red == other.red && this->green == other.green && this->blue == other.blue && this->alpha == other.alpha;
+        }
+
+        /**
+         * @brief Check inequality between two colors
+         * @param other another color
+         * @return true if the two color are not equal, false otherwise
+         */
+        bool operator!=(const Color &other) const
+        {
+            return !(*this == other);
+        }
+
         static const Color Black;       /**< Black predefined color */
         static const Color White;       /**< White predefined color */
         static const Color Red;         /**< Red predefined color */

@@ -19,6 +19,7 @@
 #include "window/Keyboard.hpp"
 #include "window/Mouse.hpp"
 #include "renderer/Color.hpp"
+#include "renderer/Drawables.hpp"
 #include "AbstractDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "utils/Time.hpp"

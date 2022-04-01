@@ -57,25 +57,39 @@ bool arcade::api::NCurses::pollEvent(std::unique_ptr<event::IEvent> &event)
     switch (ch) {
         case 27:
             ev = true;
-            event = std::make_unique<event::CloseEvent>();
+            event = std::make_unique<CloseEvent>();
+            break;
+        case 'r':
+            ev = true;
+            event = std::make_unique<RestartEvent>();
+            break;
+        case 'm':
+            ev = true;
+            event = std::make_unique<LaunchMenuEvent>();
             break;
         case KEY_UP:
             ev = true;
-            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::NEXT);
+            event = std::make_unique<SwitchEvent>(SwitchEvent::GAME, SwitchEvent::NEXT);
             break;
         case KEY_DOWN:
             ev = true;
-            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::GAME, event::SwitchEvent::PREV);
+            event = std::make_unique<SwitchEvent>(SwitchEvent::GAME, SwitchEvent::PREV);
             break;
         case KEY_RIGHT:
             ev = true;
-            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::NEXT);
+            event = std::make_unique<SwitchEvent>(SwitchEvent::DISPLAY, SwitchEvent::NEXT);
             break;
         case KEY_LEFT:
             ev = true;
-            event = std::make_unique<event::SwitchEvent>(event::SwitchEvent::DISPLAY, event::SwitchEvent::PREV);
+            event = std::make_unique<SwitchEvent>(SwitchEvent::DISPLAY, SwitchEvent::PREV);
             break;
         default:
+            if (tolower(ch) >=  'a' && tolower(ch) <= 'z' ) {
+                ev = true;
+                auto code = static_cast<KeyCode>((KeyCode::A +
+                                                  (tolower(ch - 'a'))));
+                event = std::make_unique<KeyEvent>(code, KeyAction::PRESSED);
+            }
             break;
     }
     return ev;
@@ -118,6 +132,10 @@ arcade::api::NCurses *arcade::api::NCurses::getInstance()
 arcade::api::NCurses::NCurses() : AbstractDisplayModule("Ncurse")
 {
     _window = nullptr;
+}
+
+void arcade::api::NCurses::reset()
+{
 }
 
 extern "C" arcade::api::NCurses *entryPoint()

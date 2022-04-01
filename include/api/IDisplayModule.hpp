@@ -14,6 +14,9 @@
 #include <iostream>
 #include <chrono>
 
+#define ARCADE_WIDTH (1280) /**< Default width of a window */
+#define ARCADE_HEIGHT (720) /**< Default height of a window */
+
 namespace arcade::api {
     /**
      * @brief Interface for all the display
@@ -36,6 +39,12 @@ namespace arcade::api {
          * @brief Close the display module
          */
         virtual void close() = 0;
+
+        /**
+         * @brief Reset the display module
+         * Remove all the current drawable and free ressources
+         */
+        virtual void reset() = 0;
 
         /**
          * Get the name of the display (for example: "SFML")
