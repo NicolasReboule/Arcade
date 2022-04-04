@@ -99,6 +99,18 @@ namespace arcade::api::utils {
         }
 
         /**
+         * @brief Set the actual index
+         * @param index the new index value
+         * @throws std::out_of_range if index is out of range
+         */
+        inline void setIndex(std::size_t index)
+        {
+            if (index >= this->_size)
+                throw std::out_of_range("Index out of range");
+            this->_index = index;
+        }
+
+        /**
          * @brief Return if the circular vector is empty
          * @return if the circular vector is empty
          */

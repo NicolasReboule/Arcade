@@ -67,13 +67,32 @@ namespace arcade::api {
         uint getFramerateLimit() const override { return this->_framerateLimit; };
 
     protected:
+        /**
+         * @brief Remove drawable from the map if they not updated for more than 5s
+         * @return true if the drawable is removed, false otherwise
+         */
+        bool checkDrawable(const std::string &id)
+        {
+            if (this->_drawables.contains(id)) {
+                long time = Time::getNanosecondsTime() - this->_drawables[id]->getLastUpdate();
+                std::chrono::nanoseconds ns(time);
+                std::chrono::seconds timeout(5);
+                std::chrono::seconds actual = std::chrono::duration_cast<std::chrono::seconds>(ns);
+                if (actual > timeout) {
+                    this->_drawables.erase(id);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // static std::unique_ptr<AbstractDisplayModule> _instance; /**< This need to be in children class*/
         std::string _name; /**< The name of the display module */
         Vector2u _size; /**< The size of the window */
         std::string _title; /**< The title of the window */
         std::size_t _framerateLimit; /**< The framerate limit of the window */
         bool _isOpen; /**< If the display module is open */
-        //std::unordered_map<std::string, std::unique_ptr<renderer::AbstractDrawable>> _drawables;
+        std::unordered_map<std::string, std::unique_ptr<renderer::AbstractDrawable>> _drawables;
     };
 }
 

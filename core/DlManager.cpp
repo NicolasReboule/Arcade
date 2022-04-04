@@ -18,7 +18,36 @@ void arcade::DlManager::unloadAll()
         item.unload();
     for (auto &item : this->_displayModules.getVector())
         item.unload();
-    _mainMenu.unload();
+}
+
+const std::vector<std::string> &arcade::DlManager::getGames() const
+{
+    return _gameList;
+}
+
+const std::vector<std::string> &arcade::DlManager::getDisplays() const
+{
+    return _displayList;
+}
+
+size_t arcade::DlManager::getGameIndex() const
+{
+    return _gameModules.index();
+}
+
+size_t arcade::DlManager::getDisplayIndex() const
+{
+    return _displayModules.index();
+}
+
+void arcade::DlManager::setGame(int gameIdx)
+{
+    _gameModules.setIndex(gameIdx);
+}
+
+void arcade::DlManager::setDisplay(int displayIdx)
+{
+    _displayModules.setIndex(displayIdx);
 }
 
 void arcade::DlManager::loadLibrairies(const std::string &dirPath)
@@ -30,8 +59,6 @@ void arcade::DlManager::loadLibrairies(const std::string &dirPath)
                 loadDisplayLibrary(it.path().string());
             } else if (isGameLibrary(it.path().string())) {
                 loadGameLibrary(it.path().string());
-            } else if (isMainMenuLibrary(it.path().string())) {
-                loadMainMenuLibrary(it.path().string());
             } else
                 std::cerr << "Erroraze" << std::endl;
         } catch (arcade::api::ex::LibraryAlreadyLoaded &e) {
@@ -44,8 +71,6 @@ void arcade::DlManager::loadLibrairies(const std::string &dirPath)
         throw api::ex::ArcadeException("no games");
     if (_displayModules.empty())
         throw api::ex::ArcadeException("no display");
-    if (_mainMenu.getInstance() == nullptr)
-        throw api::ex::ArcadeException("no main menu");
 }
 
 bool arcade::DlManager::isGameLibrary(const std::string &path) const
@@ -119,6 +144,7 @@ void arcade::DlManager::loadGameLibrary(const std::string &path)
         }
     });
     _gameModules.push(loader);
+    _gameList.push_back(loader->getName());
     _count++;
 }
 
@@ -140,6 +166,7 @@ void arcade::DlManager::loadDisplayLibrary(const std::string &path)
     });
     _count++;
     _displayModules.push(loader);
+    _displayList.push_back(loader->getName());
 }
 
 bool arcade::DlManager::switchGame(const SwitchDirection &direction)
@@ -185,39 +212,3 @@ size_t arcade::DlManager::displayCount() const
     return this->_displayModules.size();
 }
 
-bool arcade::DlManager::isMainMenuLibrary(const std::string &path) const
-{
-    arcade::DlLoader<api::IGameModule> loader;
-    try {
-        loader.load(path);
-        loader.loadInstance();
-        if (loader->getType() != LibraryType::MENU) {
-            loader.unload();
-            throw api::ex::LibraryInvalidEntryPoint("Invalid instance type of entry point");
-        }
-        loader.unload();
-    } catch (api::ex::LibraryNotFound &e) {
-        std::cerr << e.what() << std::endl;
-        return false;
-    } catch (api::ex::LibraryEntryPointNotFound &e) {
-        std::cerr << e.what() << std::endl;
-        return false;
-    } catch (api::ex::LibraryInvalidEntryPoint &e) {
-        std::cerr << e.what() << std::endl;
-        return false;
-    }
-    return true;
-}
-
-void arcade::DlManager::loadMainMenuLibrary(const std::string &path)
-{
-    if (_mainMenu.getInstance() != nullptr)
-        throw arcade::api::ex::LibraryAlreadyLoaded("already loaded: menu");
-    _mainMenu.load(path);
-    _mainMenu.loadInstance();
-}
-
-arcade::api::IGameModule *arcade::DlManager::getMainMenu() const
-{
-    return _mainMenu.getInstance();
-}

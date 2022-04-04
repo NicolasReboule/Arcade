@@ -13,6 +13,7 @@
 #include "api/utils/Time.hpp"
 #include "api/utils/SHA1.hpp"
 #include "api/ex/Exceptions.hpp"
+#include "api/Constant.hpp"
 
 namespace arcade::api::renderer {
     /**
@@ -24,13 +25,13 @@ namespace arcade::api::renderer {
         /**
          * @brief Construct an AbstractDrawable
          */
-        AbstractDrawable() : _position({0, 0}), _size({0, 0}), _scale({0, 0}), _origin({0, 0})
+        AbstractDrawable() : _position({0, 0}), _size({1, 1}), _scale({1, 1}), _origin({0, 0})
         {
             this->_lastUpdate = Time::getNanosecondsTime();
             this->_id = SHA1::create(std::to_string(this->_lastUpdate));
             this->_rotation = 0;
             #ifdef DEBUG
-                std::cout << "AbstractDrawable created with id: " << this->_id << std::endl;
+                std::cout << "AbstractDrawable created with id: " << this->_id << " Timestamp: " << this->_lastUpdate << std::endl;
             #endif
         }
 
@@ -38,11 +39,12 @@ namespace arcade::api::renderer {
          * @brief Get the id of the drawable
          * @return the id (sha1 hash)
          */
-        std::string getId() const { return this->_id; }
+        const std::string &getId() const final { return this->_id; }
 
         /**
          * @brief Set the id of the drawable
          * @param id the new id
+         * @deprecated this method will be removed in the future
          */
         void setId(const std::string &id) { this->_id = id; }
 
@@ -77,10 +79,10 @@ namespace arcade::api::renderer {
         void setOrigin(const Vector2f &origin) override { this->_origin = origin; }
         void setOrigin(float x, float y) override { this->_origin = {x, y}; }
 
-        const Vector2f &getPosition() const override { return this->_position; }
-        float getRotation() const override { return this->_rotation; }
-        const Vector2f &getScale() const override {  return this->_scale; }
-        const Vector2f &getOrigin() const override { return this->_origin; }
+        const Vector2f &getPosition() const final { return this->_position; }
+        float getRotation() const final { return this->_rotation; }
+        const Vector2f &getScale() const final {  return this->_scale; }
+        const Vector2f &getOrigin() const final { return this->_origin; }
 
         void move(const Vector2f &offset) override {  this->_position = { this->_position.x += offset.x, this->_position.y += offset.y}; }
         void move(float offsetX, float offsetY) override {  this->_position = {this->_position.x += offsetX, this->_position.y += offsetY}; }
@@ -94,7 +96,7 @@ namespace arcade::api::renderer {
          * @brief Get the size of the sprite
          * @return the size of the sprite
          */
-        virtual const Vector2f &getSize() const { return this->_size; }
+        const Vector2f &getSize() const { return this->_size; }
 
         /**
          * @brief Set the size of the sprite

@@ -12,6 +12,9 @@
 #include "api/AbstractCore.hpp"
 
 namespace arcade {
+    namespace menu {
+        class MainMenu;
+    }
     class Core : public api::AbstractCore {
     public:
         Core();
@@ -23,8 +26,17 @@ namespace arcade {
 
         void stop() override;
 
+        void update() override;
+
+        api::library::IDLManager &getDLManager() override;
+
+        void setUsername(const std::string &username) override;
+
+        const std::string &getUsername() const override;
+
     private:
         DlManager _manager;
+        menu::MainMenu *_menu;
     };
 }
 

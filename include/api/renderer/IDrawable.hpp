@@ -31,6 +31,12 @@ namespace arcade::api::renderer {
          * @see std::chrono (nanoseconds)
          */
         virtual long getLastUpdate() const = 0;
+
+        /**
+         * @brief Get the id of the drawable
+         * @return the id (sha1 hash)
+         */
+        virtual const std::string &getId() const = 0;
     };
 }
 

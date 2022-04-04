@@ -45,13 +45,6 @@ namespace arcade::api::library {
         virtual bool isDisplayLibrary(const std::string &path) const = 0;
 
         /**
-         * @brief Check if the library is a valid MainMenu library
-         * @param path the path of th elibrary
-         * @return if the library is valid
-         */
-        virtual bool isMainMenuLibrary(const std::string &path) const = 0;
-
-        /**
          * @brief Load the library passed as argument of arcade
          */
         virtual void loadArgumentLibrary(const std::string &path) = 0;
@@ -69,13 +62,6 @@ namespace arcade::api::library {
          * @param path the path of the display library
          */
         virtual void loadDisplayLibrary(const std::string &path) = 0;
-
-        /**
-         * @brief Load the main menu library in the main menu variable
-         * @attention Check library before @see isMainMenuLibrary
-         * @param path the path of the main menu library
-         */
-        virtual void loadMainMenuLibrary(const std::string &path) = 0;
 
         /**
          * @brief Switch the current game
@@ -98,16 +84,46 @@ namespace arcade::api::library {
         virtual api::IGameModule *getGame() const = 0;
 
         /**
-         * @brief Get the main menu
-         * @return the main menu
-         */
-        virtual api::IGameModule *getMainMenu() const = 0;
-
-        /**
          * @brief Get the current display
          * @return the current display
          */
         virtual api::IDisplayModule *getDisplay() const = 0;
+
+        /**
+         * @brief Get the list of games
+         * @return the list of games
+         */
+        virtual const std::vector<std::string> &getGames() const = 0;
+
+        /**
+         * @brief Get the list of displays
+         * @return the list of displays
+         */
+        virtual const std::vector<std::string> &getDisplays() const = 0;
+
+        /**
+         * @brief Get the index of the actual game
+         * @return the index of the actual game
+         */
+        virtual std::size_t getGameIndex() const = 0;
+
+        /**
+         * @brief Get the index of the actual display
+         * @return the index of the actual display
+         */
+        virtual std::size_t getDisplayIndex() const = 0;
+
+        /**
+         * @brief Set the game index
+         * @param gameIdx the new game index
+         */
+        virtual void setGame(int gameIdx) = 0;
+
+        /**
+         * @brief Set the display index
+         * @param displayIdx the new display index
+         */
+        virtual void setDisplay(int displayIdx) = 0;
 
         /**
          * @brief Get the count of libraries

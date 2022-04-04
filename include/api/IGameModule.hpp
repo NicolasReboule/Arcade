@@ -11,6 +11,7 @@
 #include "library/ILibrary.hpp"
 #include "IDisplayModule.hpp"
 #include "event/IEvent.hpp"
+#include <vector>
 
 namespace arcade::api {
     /**
@@ -73,6 +74,7 @@ namespace arcade::api {
          * @return if the game is running
          */
         virtual bool isRunning() = 0;
+
     };
 }
 

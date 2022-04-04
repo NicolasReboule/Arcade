@@ -6,6 +6,9 @@
 */
 
 #include "sfml/Sfml.hpp"
+#include "sfml/SFMLRectangle.hpp"
+#include "sfml/SFMLText.hpp"
+#include "sfml/SFMLSprite.hpp"
 
 arcade::api::Sfml *arcade::api::Sfml::_instance;
 
@@ -21,6 +24,32 @@ void arcade::api::Sfml::clear(const arcade::api::renderer::Color &color)
 
 void arcade::api::Sfml::draw(const arcade::api::renderer::IDrawable &drawable)
 {
+    if (this->checkDrawable(drawable.getId()) || !this->isOpen())
+        return;
+    try {
+        auto rect = dynamic_cast<const Rectangle &>(drawable);
+        if (!_drawables.contains(rect.getId()))
+            _drawables[rect.getId()] = std::make_unique<sfml::SFMLRectangle>(rect);
+        else
+            _drawables[rect.getId()]->update(rect);
+        _window.draw(dynamic_cast<sfml::SFMLRectangle *>(_drawables[rect.getId()].get())->getShape());
+    } catch (std::bad_cast &e) {}
+    try {
+        auto text = dynamic_cast<const Text &>(drawable);
+        if (!_drawables.contains(text.getId()))
+            _drawables[text.getId()] = std::make_unique<sfml::SFMLText>(text);
+        else
+            _drawables[text.getId()]->update(text);
+        _window.draw(dynamic_cast<sfml::SFMLText *>(_drawables[text.getId()].get())->getSfText());
+    } catch (std::bad_cast &e) {}
+    try {
+        auto sprite = dynamic_cast<const Sprite &>(drawable);
+        if (!_drawables.contains(sprite.getId()))
+            _drawables[sprite.getId()] = std::make_unique<sfml::SFMLSprite>(sprite);
+        else
+            _drawables[sprite.getId()]->update(sprite);
+        _window.draw(dynamic_cast<sfml::SFMLSprite *>(_drawables[sprite.getId()].get())->getSprite());
+    } catch (std::bad_cast &e) {}
 }
 
 void arcade::api::Sfml::createWindow(Vector2u size, const std::string &title)

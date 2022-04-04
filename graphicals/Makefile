@@ -39,13 +39,17 @@ OBJ_SFML = $(SRC_SFML:.cpp $(IFLAGS_SFML)=.o)
 
 OBJ_GRAPHICALS = $(OBJ_NCURSES) $(OBJ_SDL2) $(OBJ_SFML)
 
+CPPFLAGS = -W -Wall -Wextra -std=c++20
+
+CC = g++
+
 all:
 	make -j$(PROC) compile
 
-compile: $(OBJ_SDL2)
-	g++ -shared -o $(NAME_NCURSES) -fPIC $(OBJ_NCURSES) $(IFLAGS_NCURSES) $(NCURSES_FLAGS) $(IFLAGS_API)
-	g++ -shared -o $(NAME_SDL2) -fPIC $(OBJ_SDL2) $(IFLAGS_SDL2) $(SDL2_FLAGS)
-	g++ -shared -o $(NAME_SFML) -fPIC $(OBJ_SFML) $(IFLAGS_SFML) $(SMFL_FLAGS)
+compile: $(OBJ_GRAPHICALS)
+	g++ -shared -o $(NAME_NCURSES) -fPIC $(CPPFLAGS) $(OBJ_NCURSES) $(IFLAGS_NCURSES) $(NCURSES_FLAGS) $(IFLAGS_API)
+	g++ -shared -o $(NAME_SDL2) -fPIC $(CPPFLAGS) $(OBJ_SDL2) $(IFLAGS_SDL2) $(SDL2_FLAGS)
+	g++ -shared -o $(NAME_SFML) -fPIC $(CPPFLAGS) $(OBJ_SFML) $(IFLAGS_SFML) $(SMFL_FLAGS)
 	mkdir -p ../lib/
 	mv $(NAME_NCURSES) $(NAME_SDL2) $(NAME_SFML)  ../lib/
 

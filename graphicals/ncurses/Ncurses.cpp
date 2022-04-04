@@ -6,6 +6,9 @@
 */
 
 #include "ncurses/Ncurses.hpp"
+#include "ncurses/NcText.hpp"
+#include "ncurses/NcSprite.hpp"
+#include "ncurses/NcRectangle.hpp"
 
 std::unique_ptr<arcade::api::NCurses> arcade::api::NCurses::_instance;
 
@@ -34,6 +37,35 @@ void arcade::api::NCurses::clear(const arcade::api::renderer::Color &color)
 
 void arcade::api::NCurses::draw(const arcade::api::renderer::IDrawable &drawable)
 {
+    if (this->checkDrawable(drawable.getId()) || !this->isOpen())
+        return;
+    try {
+        auto rect = dynamic_cast<const Rectangle &>(drawable);
+        if (!_drawables.contains(rect.getId()))
+            _drawables[rect.getId()] = std::make_unique<ncurse::NcRectangle>(rect);
+        else
+            _drawables[rect.getId()]->update(rect);
+        auto lol = dynamic_cast<ncurse::NcRectangle *>(_drawables[rect.getId()].get());
+        lol->draw(stdscr);
+    } catch (std::bad_cast &e) {}
+    try {
+        auto text = dynamic_cast<const Text &>(drawable);
+        if (!_drawables.contains(text.getId()))
+            _drawables[text.getId()] = std::make_unique<ncurse::NcText>(text);
+        else
+            _drawables[text.getId()]->update(text);
+        auto lol = dynamic_cast<ncurse::NcText *>(_drawables[text.getId()].get());
+        lol->draw(stdscr);
+    } catch (std::bad_cast &e) {}
+    try {
+        auto sprite = dynamic_cast<const Sprite &>(drawable);
+        if (!_drawables.contains(sprite.getId()))
+            _drawables[sprite.getId()] = std::make_unique<ncurse::NcSprite>(sprite);
+        else
+            _drawables[sprite.getId()]->update(sprite);
+        auto lol = dynamic_cast<ncurse::NcSprite *>(_drawables[sprite.getId()].get());
+        lol->draw(stdscr);
+    } catch (std::bad_cast &e) {}
 }
 
 void arcade::api::NCurses::createWindow(Vector2u size, const std::string &title)

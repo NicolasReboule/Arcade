@@ -16,6 +16,7 @@
 #include "utils/CircularVector.hpp"
 #include "ex/Exceptions.hpp"
 #include "event/Events.hpp"
+#include "library/IDLManager.hpp"
 #include "window/Keyboard.hpp"
 #include "window/Mouse.hpp"
 #include "renderer/Color.hpp"

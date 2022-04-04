@@ -44,18 +44,25 @@ namespace arcade {
 
         void unloadAll() override;
 
-        bool isMainMenuLibrary(const std::string &path) const override;
+        const std::vector<std::string> &getGames() const override;
 
-        void loadMainMenuLibrary(const std::string &path) override;
+        const std::vector<std::string> &getDisplays() const override;
 
-        api::IGameModule *getMainMenu() const override;
+        size_t getGameIndex() const override;
+
+        size_t getDisplayIndex() const override;
+
+        void setGame(int gameIdx) override;
+
+        void setDisplay(int displayIdx) override;
 
     private:
         std::string _path;
         std::size_t _count;
         CircularVector<DlLoader<api::IDisplayModule>> _displayModules;
         CircularVector<DlLoader<api::IGameModule>> _gameModules;
-        DlLoader<api::IGameModule> _mainMenu;
+        std::vector<std::string> _displayList;
+        std::vector<std::string> _gameList;
     };
 }
 

@@ -25,13 +25,19 @@ namespace arcade::api {
             this->_game = nullptr;
             this->_libDirPath = "./lib";
         }
-        ~AbstractCore() = default;
+        virtual ~AbstractCore() = default;
 
         /**
          * @brief Init the core with the library passed as argument of the program
          * @param libPath the lib passed as argument of the program
          */
         virtual void init(const std::string &libPath) = 0;
+
+        /**
+         * @brief Destroy the current game & display.
+         * Update the display & game to the current getters and init them
+         */
+        virtual void update() = 0;
 
         /**
          * @brief Handle the event received by the display
@@ -49,10 +55,29 @@ namespace arcade::api {
          */
         virtual void stop() = 0;
 
+        /**
+         * @brief Get the dlmanager
+         * @return the dlmanager
+         */
+        virtual library::IDLManager &getDLManager() = 0;
+
+        /**
+         * @brief Set the username of the player
+         * @param username the username of the player
+         */
+        virtual void setUsername(const std::string &username) = 0;
+
+        /**
+         * @brief Get the username of the player
+         * @return the username of the player
+         */
+        virtual const std::string &getUsername() const = 0;
+
     protected:
         IDisplayModule *_display; /**< The actual display */
         IGameModule *_game; /**< The actual game */
         std::string _libDirPath; /**< The path of the lib directory */
+        std::string _username;
     };
 }
 

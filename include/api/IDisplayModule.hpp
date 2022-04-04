@@ -11,11 +11,9 @@
 #include "library/ILibrary.hpp"
 #include "window/IWindow.hpp"
 #include "renderer/IRenderTarget.hpp"
+#include "Constant.hpp"
 #include <iostream>
 #include <chrono>
-
-#define ARCADE_WIDTH (1280) /**< Default width of a window */
-#define ARCADE_HEIGHT (720) /**< Default height of a window */
 
 namespace arcade::api {
     /**
@@ -23,7 +21,7 @@ namespace arcade::api {
      */
     class IDisplayModule : public library::ILibrary, public window::IWindow, public renderer::IRenderTarget {
     public:
-        virtual ~IDisplayModule() = default;
+        ~IDisplayModule() override = default;
 
         /**
          * @brief Init the display module
