@@ -80,7 +80,6 @@ void arcade::ncurse::NcSprite::setSize(const Vector2f &size)
 void arcade::ncurse::NcSprite::update(
     const arcade::api::renderer::IDrawable &drawable)
 {
-    Sprite::update(drawable);
     try {
         auto sprite = dynamic_cast<const Sprite &>(drawable);
         this->_lastUpdate = Time::getNanosecondsTime();
@@ -108,5 +107,13 @@ void arcade::ncurse::NcSprite::setTexturePath(const std::string &texturePath)
 
 void arcade::ncurse::NcSprite::draw(WINDOW *window)
 {
+    for (api::NColors color : api::COLORS) {
+        if (this->getColor() == color.color)
+            wattron(window, COLOR_PAIR(color.idx));
+    }
     mvwprintw(window, this->getPosition().y, this->getPosition().x, "%c", this->getSymbol());
+    for (api::NColors color : api::COLORS) {
+        if (this->getColor() == color.color)
+            wattroff(window, COLOR_PAIR(color.idx));
+    }
 }

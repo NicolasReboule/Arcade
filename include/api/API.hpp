@@ -22,7 +22,7 @@
 #include "renderer/Color.hpp"
 #include "renderer/Drawables.hpp"
 #include "AbstractDisplayModule.hpp"
-#include "IGameModule.hpp"
+#include "AbstractGameModule.hpp"
 #include "utils/Time.hpp"
 #include "utils/SHA1.hpp"
 

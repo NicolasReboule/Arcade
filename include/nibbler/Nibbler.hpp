@@ -9,22 +9,35 @@
 #define NIBBLER_HPP_
 
 #include "api/AbstractGameModule.hpp"
+
 namespace arcade::api {
-    class Nibbler : public AbstractGameModule
-    {
-        public:
-            explicit Nibbler();
-            ~Nibbler();
-            inline void init() override {};
-            inline void destroy() override {};
+    class Nibbler : public AbstractGameModule {
+    public:
+        enum Direction {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        };
+        explicit Nibbler();
+
+        ~Nibbler();
+
+        const std::string &getName() const override;
+
+        LibraryType getType() const override;
+
+        void init() override;
+
+        void destroy() override;
 
         bool isRunning() override;
 
-        inline const std::string &getName() const override {return _name;};
-            static Nibbler *getInstance();
-            inline void onEvent(event::IEvent &event) override {};
-            inline void render(IDisplayModule &display) override {};
-            inline LibraryType getType() const { return GAME; }
+        static Nibbler *getInstance();
+
+        void onEvent(event::IEvent &event) override;
+
+        void render(IDisplayModule &display) override;
 
         void update(std::size_t tick) override;
 
@@ -32,7 +45,9 @@ namespace arcade::api {
 
     private:
         static std::unique_ptr<Nibbler> _instance;
-        std::string _name;
+        std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
+        std::size_t _time;
+        Direction _direction;
     };
 }
 

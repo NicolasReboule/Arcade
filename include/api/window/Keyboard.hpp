@@ -139,66 +139,89 @@ namespace arcade::api::window {
 using KeyCode = arcade::api::window::Keyboard::Key; /**< typedef because it's too long */
 using KeyAction = arcade::api::window::Keyboard::KeyAction; /**< typedef because it's too long */
 
-inline std::ostream &operator<<(std::ostream &os, const KeyCode code)
+/**
+ * @brief Get a string from the KeyCode
+ * @param code the key code
+ * @return the key code in string
+ */
+inline std::string operator*(const KeyCode code)
 {
     if (code == KeyCode::Unknown)
-        os << "Unknown";
+        return "Unknown";
     else if (code >= KeyCode::A && code <= KeyCode::Z)
-        os << static_cast<char>('A' + code);
+        return std::string("") + static_cast<char>('A' + code);
     else if (code >= KeyCode::Num0 && code <= KeyCode::Num9)
-        os << static_cast<char>('0' + (code - KeyCode::Num0));
+        return std::string("") + static_cast<char>('0' + (code - KeyCode::Num0));
     else if (code >= KeyCode::Numpad0 && code <= KeyCode::Numpad9)
-        os << "NumPad" << static_cast<char>('0' + (code - KeyCode::Numpad0));
+        return std::string("NumPad") + static_cast<char>('0' + (code - KeyCode::Numpad0));
     else if (code >= KeyCode::F1 && code <= KeyCode::F9)
-        os << "F" << static_cast<char>('0' + (code - KeyCode::F1 + 1));
+        return std::string("F") + static_cast<char>('0' + (code - KeyCode::F1 + 1));
     else if (code >= KeyCode::F10 && code <= KeyCode::F15)
-        os << "F1" << static_cast<char>('0' + (code - KeyCode::F10));
+        return std::string("F1") + static_cast<char>('0' + (code - KeyCode::F10));
     switch (code) {
-        case KeyCode::Escape: os << "Escape"; break;
-        case KeyCode::LControl: os << "LControl"; break;
-        case KeyCode::LShift: os << "LShift"; break;
-        case KeyCode::LAlt: os << "LAlt"; break;
-        case KeyCode::LSystem: os << "LSystem"; break;
-        case KeyCode::RControl: os << "RControl"; break;
-        case KeyCode::RShift: os << "RShift"; break;
-        case KeyCode::RAlt: os << "RAlt"; break;
-        case KeyCode::RSystem: os << "RSystem"; break;
-        case KeyCode::Menu: os << "Menu"; break;
-        case KeyCode::LBracket: os << "]"; break;
-        case KeyCode::RBracket: os << "["; break;
-        case KeyCode::Semicolon: os << ";"; break;
-        case KeyCode::Comma: os << ","; break;
-        case KeyCode::Period: os << "."; break;
-        case KeyCode::Quote: os << "'"; break;
-        case KeyCode::Slash: os << "/"; break;
-        case KeyCode::Backslash: os << "\\"; break;
-        case KeyCode::Tilde: os << "~"; break;
-        case KeyCode::Equal: os << "="; break;
-        case KeyCode::Hyphen: os << "-"; break;
-        case KeyCode::Space: os << "Space"; break;
-        case KeyCode::Enter: os << "Enter"; break;
-        case KeyCode::Backspace: os << "Backspace"; break;
-        case KeyCode::Tab: os << "Tab"; break;
-        case KeyCode::PageUp: os << "PageUp"; break;
-        case KeyCode::PageDown: os << "PageDown"; break;
-        case KeyCode::End: os << "End"; break;
-        case KeyCode::Home: os << "Home"; break;
-        case KeyCode::Insert: os << "Insert"; break;
-        case KeyCode::Delete: os << "Delete"; break;
-        case KeyCode::Add: os << "+"; break;
-        case KeyCode::Subtract: os << "-"; break;
-        case KeyCode::Multiply: os << "*"; break;
-        case KeyCode::Divide: os << "/"; break;
-        case KeyCode::Left: os << "Left"; break;
-        case KeyCode::Right: os << "Right"; break;
-        case KeyCode::Up: os << "Up"; break;
-        case KeyCode::Down: os << "Down"; break;
-        case KeyCode::Pause : os << "Pause"; break;
+        case KeyCode::Escape: return "Escape";
+        case KeyCode::LControl: return "LControl";
+        case KeyCode::LShift: return "LShift";
+        case KeyCode::LAlt: return "LAlt";
+        case KeyCode::LSystem: return "LSystem";
+        case KeyCode::RControl: return "RControl";
+        case KeyCode::RShift: return "RShift";
+        case KeyCode::RAlt: return "RAlt";
+        case KeyCode::RSystem: return "RSystem";
+        case KeyCode::Menu: return "Menu";
+        case KeyCode::LBracket: return "]";
+        case KeyCode::RBracket: return "[";
+        case KeyCode::Semicolon: return ";";
+        case KeyCode::Comma: return ",";
+        case KeyCode::Period: return ".";
+        case KeyCode::Quote: return "'";
+        case KeyCode::Slash: return "/";
+        case KeyCode::Backslash: return "\\";
+        case KeyCode::Tilde: return "~";
+        case KeyCode::Equal: return "=";
+        case KeyCode::Hyphen: return "-";
+        case KeyCode::Space: return "Space";
+        case KeyCode::Enter: return "Enter";
+        case KeyCode::Backspace: return "Backspace";
+        case KeyCode::Tab: return "Tab";
+        case KeyCode::PageUp: return "PageUp";
+        case KeyCode::PageDown: return "PageDown";
+        case KeyCode::End: return "End";
+        case KeyCode::Home: return "Home";
+        case KeyCode::Insert: return "Insert";
+        case KeyCode::Delete: return "Delete";
+        case KeyCode::Add: return "+";
+        case KeyCode::Subtract: return "-";
+        case KeyCode::Multiply: return "*";
+        case KeyCode::Divide: return "/";
+        case KeyCode::Left: return "Left";
+        case KeyCode::Right: return "Right";
+        case KeyCode::Up: return "Up";
+        case KeyCode::Down: return "Down";
+        case KeyCode::Pause : return "Pause";
         default: break;
     }
+    return "";
+}
+
+/**
+ * @brief Show the KeyCode in ostream
+ * @param os the ostream
+ * @param code the key code
+ * @return the ostream with the key code
+ */
+inline std::ostream &operator<<(std::ostream &os, const KeyCode code)
+{
+    os << *code;
     return os;
 }
 
+/**
+ * @brief Show the KeyAction in ostream
+ * @param os the ostream
+ * @param action the key action
+ * @return the osteam with the key action
+ */
 inline std::ostream &operator<<(std::ostream &os, const KeyAction action)
 {
     if (action == KeyAction::PRESSED)

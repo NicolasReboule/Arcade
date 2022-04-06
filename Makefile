@@ -31,6 +31,8 @@ fclean: clean
 	make fclean -C core
 	make fclean -C games
 	make fclean -C graphicals
+	rm -f ./arcade
+	rm -rf $(LIB_DIR)
 
 re: fclean all
 

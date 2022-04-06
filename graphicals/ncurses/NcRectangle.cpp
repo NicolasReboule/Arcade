@@ -74,7 +74,7 @@ void arcade::ncurse::NcRectangle::scale(float factorX, float factorY)
 
 void arcade::ncurse::NcRectangle::setSize(const Vector2f &size)
 {
-    AbstractDrawable::setSize(size);
+    AbstractDrawable::setSize({size.x/TTY_RATIO, size.y/TTY_RATIO});
 }
 
 void arcade::ncurse::NcRectangle::update(
@@ -113,11 +113,10 @@ void arcade::ncurse::NcRectangle::draw(WINDOW *window)
         if (this->getBorderColor() == color.color)
             wattron(window, COLOR_PAIR(color.idx));
     }
-    int x = (int)this->getPosition().x;
-    int y = (int)this->getPosition().y;
-    int h = (int)this->getSize().y;
-    int w = (int)this->getSize().x;
-
+    int y = (int) this->getPosition().y;
+    int x = (int) this->getPosition().x;
+    int h = (int) this->getSize().y;
+    int w = (int) this->getSize().x;
     mvwhline(window, y, x, 0, w);
     mvwhline(window, y + h, x, 0, w);
     mvwvline(window, y, x, 0, h);
@@ -125,5 +124,9 @@ void arcade::ncurse::NcRectangle::draw(WINDOW *window)
     mvwaddch(window, y, x, ACS_ULCORNER);
     mvwaddch(window, y + h, x, ACS_LLCORNER);
     mvwaddch(window, y, x + w, ACS_URCORNER);
-    mvwaddch(window, y + x, x + w, ACS_LRCORNER);
+    mvwaddch(window, y + h, x + w, ACS_LRCORNER);
+    for (api::NColors color : api::COLORS) {
+        if (this->getBorderColor() == color.color)
+            wattroff(window, COLOR_PAIR(color.idx));
+    }
 }

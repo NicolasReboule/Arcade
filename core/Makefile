@@ -7,13 +7,13 @@
 
 NAME = arcade
 
-IFLAGS_CORE = -I ../include/core/ -I ../include -I ../include/sdl2 -I ../include/ncurces -I ../include/api
+IFLAGS_CORE = -I ../include
 
 SRC_CORE = $(wildcard ./*.cpp)
 
-OBJ_CORE = $(SRC_CORE:.cpp $(IFLAGS_CORE)=.o)
+OBJ_CORE = $(SRC_CORE:.cpp=.o)
 
-CPP_FLAGS = -Wall -Wextra -std=c++20
+CPPFLAGS = -Wall -Wextra -std=c++20 $(IFLAGS_CORE)
 
 PROC ?= 1
 
@@ -21,7 +21,7 @@ all:
 	make -j$(PROC) compile
 
 compile: $(OBJ_CORE)
-	g++ -o $(NAME) $(OBJ_CORE) $(CPP_FLAGS) $(IFLAGS_CORE) -ldl
+	g++ -o $(NAME) $(OBJ_CORE) $(CPP_FLAGS) -ldl
 	mv $(NAME) ../
 
 clean:

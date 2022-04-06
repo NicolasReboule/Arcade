@@ -55,6 +55,33 @@ namespace arcade::api::utils {
             return std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
         };
 
+        /**
+         * @brief Get the time in nanoseconds
+         * @param time the time in seconds to convert
+         * @return the time in nanoseconds
+         */
+        inline static long getNanoTime(std::chrono::seconds time) {
+            return std::chrono::duration_cast<std::chrono::nanoseconds>(time).count();
+        }
+
+        /**
+         * @brief Get the time in nanoseconds
+         * @param time the time in milliseconds to convert
+         * @return the time in nanoseconds
+         */
+        inline static long getNanoTime(std::chrono::milliseconds time) {
+            return std::chrono::duration_cast<std::chrono::nanoseconds>(time).count();
+        }
+
+        /**
+         * @brief Get the time in nanoseconds
+         * @param time the time in microseconds to convert
+         * @return the time in nanoseconds
+         */
+        inline static long getNanoTime(std::chrono::microseconds time) {
+            return std::chrono::duration_cast<std::chrono::nanoseconds>(time).count();
+        }
+
     };
 }
 

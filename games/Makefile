@@ -7,13 +7,9 @@
 
 OBJ_GAMES = $(OBJ_NIBBLER) $(OBJ_PACMAN)
 
-OBJ_PACMAN = $(SRC_PACMAN:.cpp $(IFLAGS_PACMAN)=.o)
+OBJ_PACMAN = $(SRC_PACMAN:.cpp=.o)
 
-OBJ_NIBBLER = $(SRC_NIBBLER:.cpp $(IFLAGS_NIBBLER)=.o)
-
-IFLAGS_PACMAN = -I ../include/pacman -I ../include
-
-IFLAGS_NIBBLER = -I ../include/nibbler -I ../include
+OBJ_NIBBLER = $(SRC_NIBBLER:.cpp=.o)
 
 SRC_PACMAN = $(wildcard ./pacman/*.cpp)
 
@@ -23,14 +19,14 @@ NAME_NIBBLER = arcade_nibbler.so
 
 NAME_PACMAN = arcade_pacman.so
 
-CPPFLAGS = -W -Wall -Wextra -std=c++20
+CPPFLAGS = -W -Wall -Wextra -std=c++20 -I ../include -fPIC
 
 all:
 	make -j$(PROC) compile
 
 compile: $(OBJ_GAMES)
-	g++ -shared -o $(NAME_PACMAN) -fPIC $(CPPFLAGS) $(OBJ_PACMAN) $(IFLAGS_PACMAN)
-	g++ -shared -o $(NAME_NIBBLER) -fPIC $(CPPFLAGS) $(OBJ_NIBBLER) $(IFLAGS_NIBBLER)
+	g++ -shared -o $(NAME_PACMAN) $(CPPFLAGS) $(OBJ_PACMAN)
+	g++ -shared -o $(NAME_NIBBLER) $(CPPFLAGS) $(OBJ_NIBBLER)
 	mkdir -p ../lib/
 	mv $(NAME_NIBBLER) ../lib/
 	mv $(NAME_PACMAN) ../lib/
@@ -44,4 +40,4 @@ fclean: clean
 	rm -rf ../lib/$(NAME_NIBBLER)
 	rm -rf ../lib/$(NAME_PACMAN)
 
-re: fclean re
+re: fclean all

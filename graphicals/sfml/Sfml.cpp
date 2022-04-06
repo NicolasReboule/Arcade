@@ -115,6 +115,7 @@ void arcade::api::Sfml::setTitle(const std::string &title)
 
 void arcade::api::Sfml::setIcon(const std::string &path)
 {
+    (void)path;
 }
 
 void arcade::api::Sfml::setFramerateLimit(uint limit)
@@ -124,7 +125,7 @@ void arcade::api::Sfml::setFramerateLimit(uint limit)
 
 void arcade::api::Sfml::init()
 {
-    createWindow({800, 600}, "Arcade | Sfml");
+    createWindow({ARCADE_WIDTH, ARCADE_HEIGHT}, "Arcade | Sfml");
     setFramerateLimit(60);
 }
 
@@ -147,6 +148,7 @@ bool arcade::api::Sfml::isOpen() const
 
 void arcade::api::Sfml::destroy()
 {
+    _drawables.clear();
     close();
 }
 
@@ -163,4 +165,6 @@ void arcade::api::Sfml::display()
 
 void arcade::api::Sfml::reset()
 {
+    _drawables.clear();
+    clear(ArcadeColor ::Black);
 }

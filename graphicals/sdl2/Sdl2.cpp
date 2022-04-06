@@ -6,6 +6,9 @@
 */
 
 #include "sdl2/Sdl2.hpp"
+#include "sdl2/SDLText.hpp"
+#include "sdl2/SDLRectangle.hpp"
+#include "sdl2/SDLSprite.hpp"
 
 std::unique_ptr<arcade::api::Sdl2> arcade::api::Sdl2::_instance;
 
@@ -80,14 +83,21 @@ void arcade::api::Sdl2::init()
                      SDL_GetError());
         exit(84);
     }
-    createWindow({800, 600}, "Arcade | Sdl2");
+    if (TTF_Init() < 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s",
+                     SDL_GetError());
+        exit(84);
+    }
+    createWindow({ARCADE_WIDTH, ARCADE_HEIGHT}, "Arcade | Sdl2");
     _isOpen = true;
 }
 
 void arcade::api::Sdl2::destroy()
 {
+    this->_drawables.clear();
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
+    TTF_Quit();
     close();
 }
 
@@ -107,6 +117,35 @@ void arcade::api::Sdl2::clear(const arcade::api::renderer::Color &color)
 
 void arcade::api::Sdl2::draw(const arcade::api::renderer::IDrawable &drawable)
 {
+    if (this->checkDrawable(drawable.getId()) || !this->isOpen())
+        return;
+    try {
+        auto rect = dynamic_cast<const Rectangle &>(drawable);
+        if (!_drawables.contains(rect.getId()))
+            _drawables[rect.getId()] = std::make_unique<sdl::SDLRectangle>(rect);
+        else
+            _drawables[rect.getId()]->update(rect);
+        auto lol = dynamic_cast<sdl::SDLRectangle *>(_drawables[rect.getId()].get());
+        lol->draw(_window, _renderer);
+    } catch (std::bad_cast &e) {}
+    try {
+        auto text = dynamic_cast<const Text &>(drawable);
+        if (!_drawables.contains(text.getId()))
+            _drawables[text.getId()] = std::make_unique<sdl::SDLText>(text);
+        else
+            _drawables[text.getId()]->update(text);
+        auto lol = dynamic_cast<sdl::SDLText *>(_drawables[text.getId()].get());
+        lol->draw(_window, _renderer);
+    } catch (std::bad_cast &e) {}
+    try {
+        auto sprite = dynamic_cast<const Sprite &>(drawable);
+        if (!_drawables.contains(sprite.getId()))
+            _drawables[sprite.getId()] = std::make_unique<sdl::SDLSprite>(sprite);
+        else
+            _drawables[sprite.getId()]->update(sprite);
+        auto lol = dynamic_cast<sdl::SDLSprite *>(_drawables[sprite.getId()].get());
+        lol->draw(_window, _renderer);
+    } catch (std::bad_cast &e) {}
 }
 
 void arcade::api::Sdl2::createWindow(Vector2u size, const std::string &title)
@@ -222,4 +261,6 @@ arcade::api::Sdl2 *arcade::api::Sdl2::getInstance()
 
 void arcade::api::Sdl2::reset()
 {
+    _drawables.clear();
+    clear(ArcadeColor ::Black);
 }

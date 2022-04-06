@@ -8,19 +8,10 @@
 #include "core/Core.hpp"
 #include <chrono>
 
-void update(std::size_t tick)
-{
-    static std::size_t next = 0;
-
-    std::cout << tick << "\n" << next << std::endl;
-}
-
 int main(int ac, char **av)
 {
     if (ac != 2)
         return 84;
-    auto time = std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-    std::cout << time << std::endl;
     std::string argPath(av[1]);
     arcade::Core core;
     try {

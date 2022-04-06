@@ -35,7 +35,11 @@ namespace arcade::menu {
         Core *_core;
         std::size_t _gameIdx;
         std::size_t _displayIdx;
+        Text _username;
+        bool _hasUsername;
         bool _onDisplay;
+        bool _gameSelected;
+        bool _displaySelected;
         std::vector<std::unique_ptr<Text>> _displayDrawables;
         std::vector<std::unique_ptr<Text>> _gamesDrawables;
         std::list<std::unique_ptr<Text>> _highscoresDrawables;

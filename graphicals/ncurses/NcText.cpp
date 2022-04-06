@@ -126,5 +126,14 @@ void arcade::ncurse::NcText::setHighlightColor(
 
 void arcade::ncurse::NcText::draw(WINDOW *window)
 {
-    mvwprintw(window, this->getPosition().y, this->getPosition().x, "%s", this->getText().c_str());
+    for (api::NColors color : api::COLORS) {
+        if (this->getColor() == color.color) {
+            wattron(window, COLOR_PAIR(color.idx + (this->isHighlighted() ? 10 : 0)));
+        }
+    }
+    mvwprintw(window, (int) this->getPosition().y, (int) this->getPosition().x, this->getText().c_str());
+    for (api::NColors color : api::COLORS) {
+        if (this->getColor() == color.color)
+            wattroff(window, COLOR_PAIR(color.idx + (this->isHighlighted() ? 10 : 0)));
+    }
 }
