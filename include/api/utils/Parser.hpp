@@ -43,9 +43,15 @@ namespace arcade::api::utils {
      *          {'*', MapType::POWERUP}
      *      };
      *      Parser<MapType> parser("assets/map/nibbler.txt", map, {60, 45}); //instanciate a parser with the map file, the map type enum, and the size max of the map
-     *      oarser.parse(); //parse the map, will throw some errors @see Parser::parse()
+     *      parser.parse(); //parse the map, will throw some errors @see Parser::parse()
      *      parser.getMap(); //get the map (2d std::vector<MapType>)
-     * }
+     *      std::cout << parser.getBuffer() << std::endl; //contains the map in string
+     *
+     *      for (auto &item : parser.getMap()) { //display the map type
+     *          for (auto &c : item)
+     *              std::cout << static_cast<int>(c) << " ";
+     *          std::cout << std::endl;
+     *      }
      *
      * @endcode
      * @tparam T an Enum class

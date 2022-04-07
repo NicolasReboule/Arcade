@@ -28,6 +28,7 @@ namespace arcade::api::renderer {
             this->_highlightColor = Color::White;
             this->_rotation = 0;
             this->_highlighted = false;
+            this->_centered = false;
         }
         ~Text() override = default;
 
@@ -75,6 +76,12 @@ namespace arcade::api::renderer {
         virtual void setHighlightColor(const Color &color) { this->_highlightColor = color; }
 
         /**
+         * @brief Set the text centered in X axis (will modify the origin)
+         * @param centered if the text is centered
+         */
+        virtual void setCentered(bool centered) { this->_centered = centered; }
+
+        /**
          * @brief Get the text
          * @return the text
          */
@@ -104,12 +111,19 @@ namespace arcade::api::renderer {
          */
         const Color &getHighlightColor() const { return this->_highlightColor; }
 
+        /**
+         * @brief Check if the text is centered
+         * @return true if the text is centered, false otherwise
+         */
+        bool isCentered() const { return this->_centered; }
+
     private:
         std::string _text;
         std::string _fontPath;
         Color _color;
         bool _highlighted;
         Color _highlightColor;
+        bool _centered;
     };
 }
 

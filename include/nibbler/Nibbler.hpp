@@ -66,7 +66,9 @@ namespace arcade::api {
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
         std::vector<std::unique_ptr<Sprite>> _snakeDrawables;
         std::vector<std::vector<MapType>> _parsed_map;
+        Vector2u _map_size;
         Sprite _food;
+        Random _rand;
         std::size_t _time;
         Direction _direction;
         std::unordered_map<char, MapType> _map;

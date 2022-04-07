@@ -20,6 +20,15 @@ namespace arcade::api::renderer {
     class Sprite : public AbstractDrawable {
     public:
         /**
+         * @brief The flip type possibility
+         */
+        enum FlipType {
+            NONE, /**< No flip */
+            HORIZONTAL, /**< Horizontal flip */
+            VERTICAL /**< Vertical flip */
+        };
+
+        /**
          * @brief Constructor
          * @param texturePath the path of the texture
          * @param symbol the symbol (ncurses)
@@ -30,6 +39,7 @@ namespace arcade::api::renderer {
             this->_symbol = symbol;
             this->_rotation = 0;
             this->_color = ArcadeColor::White;
+            this->_flipType = FlipType::NONE;
         }
 
         ~Sprite() override = default;
@@ -83,13 +93,27 @@ namespace arcade::api::renderer {
          */
         const std::string &getTexturePath() const { return this->_texturePath; }
 
+        /**
+         * @brief Get the flip type @see FlipType
+         * @return the flip type
+         */
+        FlipType getFlipType() const { return this->_flipType; }
+
+        /**
+         * @brief Set the flip type @see FlipType
+         * @param flipType
+         */
+        virtual void setFlipType(const FlipType &flipType) { this->_flipType = flipType; }
+
     protected:
         std::string _texturePath;
         char _symbol;
         Color _color;
+        FlipType _flipType;
     };
 }
 
 using Sprite = arcade::api::renderer::Sprite;
+using FlipType = arcade::api::renderer::Sprite::FlipType;
 
 #endif //ARCADE_SPRITE_HPP

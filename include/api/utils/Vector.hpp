@@ -20,6 +20,27 @@ namespace arcade::api::utils {
     {
         T x;
         T y;
+
+        /**
+         * @brief Compare the x & y values of two vectors
+         * @param other the other vector to compare
+         * @return true if it's equal, false otherwise
+         */
+        inline bool operator==(const Vector2<T> &other) const
+        {
+            return x == other.x && y == other.y;
+        }
+
+        /**
+         * @brief Compare the x & y values of two vectors
+         * @param other the other vector to compare
+         * @return true if it's not equal, false otherwise
+         */
+        inline bool operator!=(const Vector2<T> &other) const
+        {
+            return (x != other.x || y != other.y);
+        }
+
     };
 
     /**
@@ -32,6 +53,27 @@ namespace arcade::api::utils {
         T x;
         T y;
         T z;
+
+        /**
+         * @brief Compare the x, y & z values of two vectors
+         * @param other the other vector to compare
+         * @return true if it's equal, false otherwise
+         */
+        inline bool operator==(const Vector3<T> &other) const
+        {
+            return x == other.x && y == other.y && z == other.z;
+        }
+
+        /**
+         * @brief Compare the x, y & z values of two vectors
+         * @param other the other vector to compare
+         * @return true if it's not equal, false otherwise
+         */
+        inline bool operator!=(const Vector3<T> &other) const
+        {
+            return (x != other.x || y != other.y || z != other.z);
+        }
+
     };
 
 }
