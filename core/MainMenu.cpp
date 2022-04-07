@@ -8,7 +8,7 @@
 #include "core/MainMenu.hpp"
 
 arcade::menu::MainMenu::MainMenu(Core *core) : api::AbstractGameModule("MainMenu"),
-                                               _username("Username: ", "walkthemoon.ttf", ArcadeColor::Blue)
+                                               _username("Username: ", "assets/walkthemoon.ttf", ArcadeColor::Blue)
 {
     _core = core;
     _gameIdx = 0;
@@ -169,7 +169,7 @@ void arcade::menu::MainMenu::initDisplays()
     float y = 200;
     auto displays = _core->getDLManager().getDisplays();
     for (auto &item : displays) {
-        Text text(item, "walkthemoon.ttf", ArcadeColor::Blue);
+        Text text(item, "assets/walkthemoon.ttf", ArcadeColor::Blue);
         text.setPosition(400, y);
         y += 200;
         _displayDrawables.push_back(std::make_unique<Text>(text));
@@ -182,7 +182,7 @@ void arcade::menu::MainMenu::initGames()
     float y = 200;
     auto games = _core->getDLManager().getGames();
     for (auto &item : games) {
-        Text text(item, "walkthemoon.ttf", ArcadeColor::Blue);
+        Text text(item, "assets/walkthemoon.ttf", ArcadeColor::Blue);
         text.setPosition(200, y);
         y += 200;
         _gamesDrawables.push_back(std::make_unique<Text>(text));

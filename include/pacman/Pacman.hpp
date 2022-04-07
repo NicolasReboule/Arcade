@@ -13,6 +13,23 @@
 namespace arcade::api {
     class Pacman : public AbstractGameModule {
     public:
+        enum class MapType {
+            NONE,
+            BORDER,
+            PAC,
+            GHOST,
+            FOOD,
+            PORTAL
+        };
+
+        enum Direction {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT,
+            NOPE
+        };
+
         explicit Pacman();
 
         ~Pacman();
@@ -33,8 +50,21 @@ namespace arcade::api {
 
         void restart() override;
 
+        void initMap();
+        void initBorder(float, float);
+        void initPac(float, float);
+        void initGhost(float, float);
+        void initFood(float, float);
+        void initPortal(float, float);
+
     private:
         static std::unique_ptr<Pacman> _instance;
+        std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
+        Sprite _pac;
+        std::size_t _time;
+        Direction _direction;
+        std::unordered_map<char, MapType> _map;
+
     };
 }
 

@@ -11,6 +11,7 @@
 #define ARCADE_WIDTH (1280) /**< Default width of a window */
 #define ARCADE_HEIGHT (720) /**< Default height of a window */
 #define TTY_RATIO (16) /**< Ratio of the terminal */
+#define RATIO_CENTER (TTY_RATIO / 2.0f) /**< Middle of the TTY_RATIO */
 
 #include "api/renderer/Color.hpp"
 

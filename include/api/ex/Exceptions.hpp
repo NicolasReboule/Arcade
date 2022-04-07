@@ -21,5 +21,7 @@
 #include "LibraryInvalidHandle.hpp"
 #include "LibraryNotFound.hpp"
 #include "LibraryNotLoaded.hpp"
+#include "ParserException.hpp"
+
 
 #endif //ARCADE_EXCEPTIONS_HPP

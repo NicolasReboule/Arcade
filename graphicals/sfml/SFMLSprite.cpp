@@ -113,7 +113,7 @@ void arcade::sfml::SFMLSprite::setSize(const Vector2f &size)
 void arcade::sfml::SFMLSprite::setColor(const arcade::api::renderer::Color &color)
 {
     Sprite::setColor(color);
-    this->_sprite.setColor(sf::Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+//    this->_sprite.setColor(sf::Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
 }
 
 void arcade::sfml::SFMLSprite::setTexturePath(const std::string &texturePath)

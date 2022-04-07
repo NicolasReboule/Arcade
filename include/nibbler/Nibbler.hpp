@@ -13,6 +13,14 @@
 namespace arcade::api {
     class Nibbler : public AbstractGameModule {
     public:
+        enum class MapType {
+            NONE,
+            BORDER,
+            WALL,
+            SNAKE,
+            FOOD,
+        };
+
         enum Direction {
             UP,
             DOWN,
@@ -43,11 +51,25 @@ namespace arcade::api {
 
         void restart() override;
 
+        void moveSnake();
+
+        void addTail();
+
+        void initMap();
+        void initBorder(float, float);
+        void initSnake(float, float);
+        void initWall(float, float);
+        void initFood(float, float);
+
     private:
         static std::unique_ptr<Nibbler> _instance;
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
+        std::vector<std::unique_ptr<Sprite>> _snakeDrawables;
+        Sprite _food;
         std::size_t _time;
         Direction _direction;
+        std::unordered_map<char, MapType> _map;
+
     };
 }
 

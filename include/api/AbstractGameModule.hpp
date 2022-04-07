@@ -13,6 +13,7 @@
 #include "renderer/Drawables.hpp"
 #include "ex/ArcadeException.hpp"
 #include "utils/Random.hpp"
+#include "utils/Parser.hpp"
 #include <list>
 
 namespace arcade::api {

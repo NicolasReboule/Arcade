@@ -30,6 +30,8 @@ void arcade::Core::run()
     while (_display->isOpen()) {
         if (_display->pollEvent(event))
             this->handleEvent(event);
+        if (!_display->isOpen())
+            break;
         _display->clear();
         _game->update(Time::getNanosecondsTime());
         _game->render(*_display);
