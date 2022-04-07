@@ -144,8 +144,8 @@ void arcade::api::Nibbler::initMap()
     float y = 0;
     Parser<MapType> parser("assets/nibbler.txt", _map, {60, 45});
     parser.parse();
-    auto parse_map = parser.getMap();
-    for (auto &item: parse_map) {
+    _parsed_map = parser.getMap();
+    for (auto &item: _parsed_map) {
         x = 0;
         for (auto &type: item) {
             if (type == MapType::BORDER || type == MapType::WALL) {
