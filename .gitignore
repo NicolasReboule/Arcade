@@ -2,7 +2,6 @@ lib/
 arcade
 *.so
 *.a
-*.txt
 ~*
 *.gc*
 *.o
