@@ -34,8 +34,10 @@ arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman"),
 
 void arcade::api::Pacman::initPortal(float x, float y)
 {
-    (void)x;
-    (void)y;
+    Sprite portal("assets/red.png", 'O');
+    portal.setColor(ArcadeColor::Blue);
+    portal.setPosition(x, y);
+    _portalDrawables.push_back(std::make_unique<Sprite>(portal));
 }
 
 void arcade::api::Pacman::initMap()
@@ -44,8 +46,8 @@ void arcade::api::Pacman::initMap()
     float y = 0;
     Parser<MapType> parser("assets/Pacman.txt", _map, {60, 45});
     parser.parse();
-    auto parse_map = parser.getMap();
-    for (auto &item: parse_map) {
+    _parsed = parser.getMap();
+    for (auto &item: _parsed) {
         x = 0;
         for (auto &type: item) {
             if (type == MapType::BORDER) {
@@ -54,8 +56,10 @@ void arcade::api::Pacman::initMap()
                 this->initPac(x*TTY_RATIO, y*TTY_RATIO);
             } else if (type == MapType::FOOD) {
                 this->initFood(x, y);
-            } else if (type == MapType::GHOST)
+            } else if (type == MapType::GHOST) {
                 this->initGhost(x*TTY_RATIO, y*TTY_RATIO);
+            } else if (type == MapType::PORTAL)
+                this->initPortal(x*TTY_RATIO, y*TTY_RATIO);
             x++;
         }
         y++;
@@ -68,12 +72,13 @@ void arcade::api::Pacman::initBorder(float x, float y)
         "assets/dirt.png", 'X');
     wall->setPosition(x * TTY_RATIO, y * TTY_RATIO);
     wall->setColor(ArcadeColor::Red);
-    _gamesDrawables.push_back(std::move(wall));
+    _pacmanDrawables.push_back(std::move(wall));
 }
 
 void arcade::api::Pacman::initPac(float x, float y)
 {
     _pac.setPosition(x, y);
+    _pac.setColor(ArcadeColor::Yellow);
 }
 
 void arcade::api::Pacman::initGhost(float x, float y)
@@ -85,9 +90,9 @@ void arcade::api::Pacman::initGhost(float x, float y)
 void arcade::api::Pacman::initFood(float x, float y)
 {
     std::unique_ptr<Sprite> food = std::make_unique<Sprite>(
-        "assets/food.png", 'F');
+        "assets/food.png", '.');
     food->setPosition(x * TTY_RATIO, y * TTY_RATIO);
-    _gamesDrawables.push_back(std::move(food));
+    _foodDrawables.push_back(std::move(food));
 }
 
 arcade::api::Pacman::~Pacman()
@@ -98,6 +103,34 @@ arcade::api::Pacman::~Pacman()
 bool arcade::api::Pacman::isRunning()
 {
     return AbstractGameModule::isRunning();
+}
+
+void arcade::api::Pacman::clearCase()
+{
+    Vector2f actual = _pac.getPosition();
+    auto it = _foodDrawables.begin();
+    for (; it != _foodDrawables.end(); it++) {
+        if (actual.x == it->get()->getPosition().x && actual.y == it->get()->getPosition().y) {
+            _foodDrawables.erase(it);
+            break;
+        }
+    }
+}
+
+void arcade::api::Pacman::teleport()
+{
+    Vector2f actual = _pac.getPosition();
+    auto it = _portalDrawables.begin();
+    int i = 0;
+    for (; it != _portalDrawables.end(); it++, i++) {
+        if (actual.x == it->get()->getPosition().x && actual.y == it->get()->getPosition().y) {
+            if (i % 2 == 0)
+                _pac.setPosition((it + 1)->get()->getPosition());
+            else
+                _pac.setPosition((it - 1)->get()->getPosition());
+            break;
+        }
+    }
 }
 
 void arcade::api::Pacman::init()
@@ -113,21 +146,34 @@ void arcade::api::Pacman::update(std::size_t tick)
     if (tick < this->_time)
         return;
     _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
-    if (_direction == RIGHT) {
+    Vector2f actual = _pac.getPosition();
+    if (_direction == RIGHT && \
+        _parsed[actual.y / TTY_RATIO][(actual.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
         _pac.move(TTY_RATIO, 0);
         _direction = NOPE;
+        clearCase();
+        teleport();
     }
-    if (_direction == LEFT) {
+    if (_direction == LEFT && \
+        _parsed[actual.y / TTY_RATIO][(actual.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
         _pac.move(-TTY_RATIO, 0);
         _direction = NOPE;
+        clearCase();
+        teleport();
     }
-    if (_direction == DOWN) {
+    if (_direction == DOWN && \
+        _parsed[(actual.y + TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
         _pac.move(0, TTY_RATIO);
         _direction = NOPE;
+        clearCase();
+        teleport();
     }
-    if (_direction == UP) {
+    if (_direction == UP && \
+        _parsed[(actual.y - TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
         _pac.move(0, -TTY_RATIO);
         _direction = NOPE;
+        clearCase();
+        teleport();
     }
 }
 
@@ -155,12 +201,20 @@ void arcade::api::Pacman::render(arcade::api::IDisplayModule &display)
         display.draw(*item);
     for (auto &item : _gamesDrawables)
         display.draw(*item);
+    for (auto &item : _pacmanDrawables)
+        display.draw(*item);
+    for (auto &item : _foodDrawables)
+        display.draw(*item);
+    for (auto &item : _portalDrawables)
+        display.draw(*item);
     display.draw(_pac);
 }
 
 void arcade::api::Pacman::destroy()
 {
     _drawables.clear();
+    _pacmanDrawables.clear();
+    _foodDrawables.clear();
     _gamesDrawables.clear();
 }
 

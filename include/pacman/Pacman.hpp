@@ -56,15 +56,20 @@ namespace arcade::api {
         void initGhost(float, float);
         void initFood(float, float);
         void initPortal(float, float);
+        void clearCase();
+        void teleport();
 
     private:
         static std::unique_ptr<Pacman> _instance;
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
+        std::vector<std::unique_ptr<Sprite>> _pacmanDrawables;
+        std::vector<std::unique_ptr<Sprite>> _foodDrawables;
+        std::vector<std::unique_ptr<Sprite>> _portalDrawables;
         Sprite _pac;
         std::size_t _time;
         Direction _direction;
         std::unordered_map<char, MapType> _map;
-
+        std::vector<std::vector<MapType>> _parsed;
     };
 }
 
