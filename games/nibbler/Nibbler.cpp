@@ -52,7 +52,6 @@ void arcade::api::Nibbler::update(std::size_t tick)
     if (_direction == RIGHT) {
         if (_parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
             _snakeDrawables[0]->move(TTY_RATIO, 0);
-            _snakeDrawables[0]->setRotation(0);
             if (isTail())
                 _isAlive = false;
         } else
@@ -61,7 +60,6 @@ void arcade::api::Nibbler::update(std::size_t tick)
     if (_direction == LEFT) {
         if (_parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
             _snakeDrawables[0]->move(-TTY_RATIO, 0);
-            _snakeDrawables[0]->setRotation(-180);
             if (isTail())
                 _isAlive = false;
         } else
@@ -70,7 +68,6 @@ void arcade::api::Nibbler::update(std::size_t tick)
     if (_direction == DOWN) {
         if (_parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO][(int) pos.x / TTY_RATIO] != MapType::BORDER) {
             _snakeDrawables[0]->move(0, TTY_RATIO);
-            _snakeDrawables[0]->setRotation(90);
             if (isTail())
                 _isAlive = false;
         } else
@@ -79,7 +76,6 @@ void arcade::api::Nibbler::update(std::size_t tick)
     if (_direction == UP) {
         if (_parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO][(int) pos.x / TTY_RATIO] != MapType::BORDER) {
         _snakeDrawables[0]->move(0, -TTY_RATIO);
-        _snakeDrawables[0]->setRotation(90);
             if (isTail())
                 _isAlive = false;
         } else
@@ -250,7 +246,7 @@ void arcade::api::Nibbler::initBorder(float x, float y)
 
 void arcade::api::Nibbler::initSnake(float x, float y)
 {
-    auto s1 = std::make_unique<Sprite>("assets/pacman.png", 'S');
+    auto s1 = std::make_unique<Sprite>("assets/red.png", 'S');
     s1->setPosition(x, y);
     auto s2 = std::make_unique<Sprite>("assets/red.png", 'S');
     s2->setPosition(x - TTY_RATIO, y);

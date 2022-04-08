@@ -28,6 +28,7 @@ arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman"),
         {'G', MapType::GHOST},
         {'+', MapType::PORTAL},
     };
+    _pac.setOrigin(RATIO_CENTER, RATIO_CENTER);
     _direction = NOPE;
     _time = 0;
     _isWin = false;
@@ -37,6 +38,7 @@ void arcade::api::Pacman::initPortal(float x, float y)
 {
     Sprite portal("assets/red.png", 'O');
     portal.setColor(ArcadeColor::Blue);
+    portal.setOrigin(RATIO_CENTER, RATIO_CENTER);
     portal.setPosition(x, y);
     _portalDrawables.push_back(std::make_unique<Sprite>(portal));
 }
@@ -44,26 +46,26 @@ void arcade::api::Pacman::initPortal(float x, float y)
 void arcade::api::Pacman::initMap()
 {
     float x = 0;
-    float y = 0;
+    float y = RATIO_CENTER;
     Parser<MapType> parser("assets/pacman.txt", _map, {60, 45});
     parser.parse();
     _parsed = parser.getMap();
     for (auto &item: _parsed) {
-        x = 0;
+        x = RATIO_CENTER;
         for (auto &type: item) {
             if (type == MapType::BORDER) {
                 this->initBorder(x, y);
             } else if (type == MapType::PAC) {
-                this->initPac(x*TTY_RATIO, y*TTY_RATIO);
+                this->initPac(x, y);
             } else if (type == MapType::FOOD) {
                 this->initFood(x, y);
             } else if (type == MapType::GHOST) {
-                this->initGhost(x*TTY_RATIO, y*TTY_RATIO);
+                this->initGhost(x, y);
             } else if (type == MapType::PORTAL)
-                this->initPortal(x*TTY_RATIO, y*TTY_RATIO);
-            x++;
+                this->initPortal(x, y);
+            x+=TTY_RATIO;
         }
-        y++;
+        y+=TTY_RATIO;
     }
 }
 
@@ -71,7 +73,8 @@ void arcade::api::Pacman::initBorder(float x, float y)
 {
     std::unique_ptr<Sprite> wall = std::make_unique<Sprite>(
         "assets/brick.png", 'X');
-    wall->setPosition(x * TTY_RATIO, y * TTY_RATIO);
+    wall->setPosition(x, y);
+    wall->setOrigin(RATIO_CENTER, RATIO_CENTER);
     wall->setColor(ArcadeColor::Red);
     _pacmanDrawables.push_back(std::move(wall));
 }
@@ -92,7 +95,8 @@ void arcade::api::Pacman::initFood(float x, float y)
 {
     std::unique_ptr<Sprite> food = std::make_unique<Sprite>(
         "assets/pacmanBoof.png", '.');
-    food->setPosition(x * TTY_RATIO, y * TTY_RATIO);
+    food->setPosition(x, y);
+    food->setOrigin(RATIO_CENTER, RATIO_CENTER);
     food->setColor(ArcadeColor::Green);
     _foodDrawables.push_back(std::move(food));
 }
