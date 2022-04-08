@@ -121,5 +121,6 @@ void arcade::sdl::SDLSprite::draw(SDL_Window *window, SDL_Renderer *render)
     SDL_QueryTexture(texture, nullptr, nullptr, &rect.w, &rect.h);
     SDL_SetRenderDrawColor(render, this->getColor().getRed(), this->getColor().getGreen(), this->getColor().getBlue(), this->getColor().getAlpha());
     SDL_RenderCopy(render, texture, nullptr, &rect);
+    SDL_RenderCopyEx(render, texture, nullptr, &rect, 0, nullptr, this->_flip);
     SDL_DestroyTexture(texture);
 }

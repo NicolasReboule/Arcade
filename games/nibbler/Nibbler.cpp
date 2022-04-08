@@ -20,9 +20,21 @@ arcade::api::Nibbler::Nibbler() : AbstractGameModule("Nibbler"),
         {'S', MapType::SNAKE},
         {'f', MapType::FOOD},
     };
+    _isAlive = true;
     _map_size = {0, 0};
     _direction = RIGHT;
     _time = 0;
+}
+
+bool arcade::api::Nibbler::isTail()
+{
+    Vector2f pos = _snakeDrawables[0]->getPosition();
+
+    for(auto it = _snakeDrawables.begin() + 1; it != _snakeDrawables.end(); it++) {
+        if ((*it)->getPosition() == pos)
+            return true;
+    }
+    return false;
 }
 
 void arcade::api::Nibbler::update(std::size_t tick)
@@ -32,26 +44,50 @@ void arcade::api::Nibbler::update(std::size_t tick)
     if (tick < this->_time)
         return;
     _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
+    if (!_isAlive)
+        return;
     this->moveSnake();
     Vector2f pos = _snakeDrawables[0]->getPosition();
-    if (_direction == RIGHT &&
-        _parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x + TTY_RATIO) /
-                                             TTY_RATIO] != MapType::BORDER)
+    if (_direction == RIGHT) {
+        if (_parsed_map[(int) pos.y / TTY_RATIO]
+        [(int) (pos.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
         _snakeDrawables[0]->move(TTY_RATIO, 0);
-    if (_direction == LEFT &&
-        _parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x - TTY_RATIO) /
-                                             TTY_RATIO] != MapType::BORDER)
+            if (isTail())
+                _isAlive = false;
+        }
+        else
+            _isAlive = false;
+    }
+    if (_direction == LEFT) {
+        if (_parsed_map[(int) pos.y / TTY_RATIO]
+        [(int) (pos.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
         _snakeDrawables[0]->move(-TTY_RATIO, 0);
-    if (_direction == DOWN &&
-        _parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO][(int) pos.x /
-                                                           TTY_RATIO] !=
-        MapType::BORDER)
-        _snakeDrawables[0]->move(0, TTY_RATIO);
-    if (_direction == UP &&
-        _parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO][(int) pos.x /
-                                                           TTY_RATIO] !=
-        MapType::BORDER)
+            if (isTail())
+                    _isAlive = false;
+        }
+        else
+            _isAlive = false;
+    }
+    if (_direction == DOWN) {
+        if (_parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO]
+        [(int) pos.x / TTY_RATIO] != MapType::BORDER) {
+            _snakeDrawables[0]->move(0, TTY_RATIO);
+            if (isTail())
+                _isAlive = false;
+        }
+        else
+            _isAlive = false;
+    }
+    if (_direction == UP) {
+        if (_parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO]
+        [(int) pos.x / TTY_RATIO] != MapType::BORDER) {
         _snakeDrawables[0]->move(0, -TTY_RATIO);
+            if (isTail())
+                    _isAlive = false;
+        }
+        else
+            _isAlive = false;
+    }
     addTail();
 }
 
@@ -110,6 +146,7 @@ void arcade::api::Nibbler::restart()
 {
     _direction = Direction::RIGHT;
     _map_size = {0,0};
+    _isAlive =  true;
     this->destroy();
     this->init();
 }
@@ -138,31 +175,36 @@ const std::string &arcade::api::Nibbler::getName() const
 
 void arcade::api::Nibbler::onEvent(arcade::api::event::IEvent &event)
 {
-    try {
-        auto ev = dynamic_cast<const KeyEvent &>(event);
-        if (ev.isPressed()) {
-            if (ev.getKey() == KeyCode::Z && _direction != DOWN)
-                _direction = UP;
-            if (ev.getKey() == KeyCode::S && _direction != UP)
-                _direction = DOWN;
-            if (ev.getKey() == KeyCode::Q && _direction != RIGHT)
-                _direction = LEFT;
-            if (ev.getKey() == KeyCode::D && _direction != LEFT)
-                _direction = RIGHT;
+    if (_isAlive)
+        try {
+            auto ev = dynamic_cast<const KeyEvent &>(event);
+            if (ev.isPressed()) {
+                if (ev.getKey() == KeyCode::Z && _direction != DOWN)
+                    _direction = UP;
+                if (ev.getKey() == KeyCode::S && _direction != UP)
+                    _direction = DOWN;
+                if (ev.getKey() == KeyCode::Q && _direction != RIGHT)
+                    _direction = LEFT;
+                if (ev.getKey() == KeyCode::D && _direction != LEFT)
+                    _direction = RIGHT;
+            }
+        } catch (std::bad_cast &e) {
         }
-    } catch (std::bad_cast &e) {
-    }
 }
 
 void arcade::api::Nibbler::render(arcade::api::IDisplayModule &display)
 {
-    for (auto &item: _drawables)
-        display.draw(*item);
-    for (auto &item: _gamesDrawables)
-        display.draw(*item);
-    for (auto &item: _snakeDrawables)
-        display.draw(*item);
-    display.draw(_food);
+    if (_isAlive) {
+        for (auto &item: _drawables)
+            display.draw(*item);
+        for (auto &item: _gamesDrawables)
+            display.draw(*item);
+        for (auto &item: _snakeDrawables)
+            display.draw(*item);
+        display.draw(_food);
+    } else
+        for (auto &item: _dieDrawables)
+            display.draw(*item);
 }
 
 LibraryType arcade::api::Nibbler::getType() const
@@ -174,6 +216,7 @@ void arcade::api::Nibbler::init()
 {
     _time = 0;
     this->initMap();
+    this->initDie();
 }
 
 void arcade::api::Nibbler::initMap()
@@ -200,6 +243,13 @@ void arcade::api::Nibbler::initMap()
     }
 }
 
+void arcade::api::Nibbler::initDie()
+{
+    Text end("GAME OVER", "assets/walkthemoon.ttf", ArcadeColor::Red);
+    end.setPosition(ARCADE_WIDTH / 2, ARCADE_HEIGHT / 2);
+    _dieDrawables.push_back(std::make_unique<Text>(end));
+}
+
 void arcade::api::Nibbler::destroy()
 {
     _drawables.clear();
@@ -210,7 +260,7 @@ void arcade::api::Nibbler::destroy()
 void arcade::api::Nibbler::initBorder(float x, float y)
 {
     std::unique_ptr<Sprite> wall = std::make_unique<Sprite>(
-        "assets/dirt.png", 'X');
+        "assets/brick.png", 'X');
     wall->setPosition(x * TTY_RATIO, y * TTY_RATIO);
     _gamesDrawables.push_back(std::move(wall));
 }

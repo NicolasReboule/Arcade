@@ -44,7 +44,7 @@ void arcade::api::Pacman::initMap()
 {
     float x = 0;
     float y = 0;
-    Parser<MapType> parser("assets/Pacman.txt", _map, {60, 45});
+    Parser<MapType> parser("assets/pacman.txt", _map, {60, 45});
     parser.parse();
     _parsed = parser.getMap();
     for (auto &item: _parsed) {
@@ -69,7 +69,7 @@ void arcade::api::Pacman::initMap()
 void arcade::api::Pacman::initBorder(float x, float y)
 {
     std::unique_ptr<Sprite> wall = std::make_unique<Sprite>(
-        "assets/dirt.png", 'X');
+        "assets/brick.png", 'X');
     wall->setPosition(x * TTY_RATIO, y * TTY_RATIO);
     wall->setColor(ArcadeColor::Red);
     _pacmanDrawables.push_back(std::move(wall));
@@ -90,8 +90,9 @@ void arcade::api::Pacman::initGhost(float x, float y)
 void arcade::api::Pacman::initFood(float x, float y)
 {
     std::unique_ptr<Sprite> food = std::make_unique<Sprite>(
-        "assets/food.png", '.');
+        "assets/pacmanBoof.png", '.');
     food->setPosition(x * TTY_RATIO, y * TTY_RATIO);
+    food->setColor(ArcadeColor::Green);
     _foodDrawables.push_back(std::move(food));
 }
 

@@ -51,5 +51,6 @@ namespace arcade::sdl {
 
     private:
         SDL_Surface *_surface;
+        SDL_RendererFlip _flip;
     };
 }

@@ -55,7 +55,10 @@ namespace arcade::api {
 
         void addTail();
 
+        bool isTail();
+
         void initMap();
+        void initDie();
         void initBorder(float, float);
         void initSnake(float, float);
         void initWall(float, float);
@@ -65,7 +68,9 @@ namespace arcade::api {
         static std::unique_ptr<Nibbler> _instance;
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
         std::vector<std::unique_ptr<Sprite>> _snakeDrawables;
+        std::vector<std::unique_ptr<renderer::AbstractDrawable>> _dieDrawables;
         std::vector<std::vector<MapType>> _parsed_map;
+        bool _isAlive;
         Vector2u _map_size;
         Sprite _food;
         Random _rand;
