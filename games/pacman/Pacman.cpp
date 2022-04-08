@@ -30,6 +30,7 @@ arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman"),
     };
     _direction = NOPE;
     _time = 0;
+    _isWin = false;
 }
 
 void arcade::api::Pacman::initPortal(float x, float y)
@@ -138,6 +139,10 @@ void arcade::api::Pacman::init()
 {
     _time = 0;
     this->initMap();
+    this->_isWin = false;
+    Text text("You Won !", "assets/walkthemoon.ttf", ArcadeColor::Yellow);
+    text.setPosition(ARCADE_WIDTH / 2, ARCADE_HEIGHT / 2);
+    _winDrawables.push_back(std::make_unique<Text>(text));
 }
 
 void arcade::api::Pacman::update(std::size_t tick)
@@ -182,6 +187,8 @@ void arcade::api::Pacman::update(std::size_t tick)
         clearCase();
         teleport();
     }
+    if (_foodDrawables.empty())
+        _isWin = true;
 }
 
 void arcade::api::Pacman::onEvent(arcade::api::event::IEvent &event)
@@ -204,17 +211,22 @@ void arcade::api::Pacman::onEvent(arcade::api::event::IEvent &event)
 
 void arcade::api::Pacman::render(arcade::api::IDisplayModule &display)
 {
-    for (auto &item : _drawables)
-        display.draw(*item);
-    for (auto &item : _gamesDrawables)
-        display.draw(*item);
-    for (auto &item : _pacmanDrawables)
-        display.draw(*item);
-    for (auto &item : _foodDrawables)
-        display.draw(*item);
-    for (auto &item : _portalDrawables)
-        display.draw(*item);
-    display.draw(_pac);
+    if (!_isWin) {
+        for (auto &item : _drawables)
+            display.draw(*item);
+        for (auto &item : _gamesDrawables)
+            display.draw(*item);
+        for (auto &item : _pacmanDrawables)
+            display.draw(*item);
+        for (auto &item : _foodDrawables)
+            display.draw(*item);
+        for (auto &item : _portalDrawables)
+            display.draw(*item);
+        display.draw(_pac);
+    } else {
+        for (auto &item : _winDrawables)
+            display.draw(*item);
+    }
 }
 
 void arcade::api::Pacman::destroy()
@@ -223,6 +235,8 @@ void arcade::api::Pacman::destroy()
     _pacmanDrawables.clear();
     _foodDrawables.clear();
     _gamesDrawables.clear();
+    _portalDrawables.clear();
+    _winDrawables.clear();
 }
 
 extern "C" arcade::api::Pacman *entryPoint()

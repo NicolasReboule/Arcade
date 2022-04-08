@@ -65,11 +65,13 @@ namespace arcade::api {
         std::vector<std::unique_ptr<Sprite>> _pacmanDrawables;
         std::vector<std::unique_ptr<Sprite>> _foodDrawables;
         std::vector<std::unique_ptr<Sprite>> _portalDrawables;
+        std::vector<std::unique_ptr<renderer::AbstractDrawable>> _winDrawables;
         Sprite _pac;
         std::size_t _time;
         Direction _direction;
         std::unordered_map<char, MapType> _map;
         std::vector<std::vector<MapType>> _parsed;
+        bool _isWin;
     };
 }
 
