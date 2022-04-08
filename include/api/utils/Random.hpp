@@ -61,6 +61,19 @@ namespace arcade::api::utils {
         }
 
         /**
+         * @brief Generate a random std::size_t using the std::default_random_engine & uniform_int_distribution
+         * @param min the minimum value
+         * @param max the maximum value
+         * @return a random std::size_t number
+         */
+        std::size_t generateSizeT(std::size_t min, std::size_t max)
+        {
+            std::default_random_engine gen(this->_random_device());
+            std::uniform_int_distribution<std::size_t> uniform_dist(min, max);
+            return uniform_dist(gen);
+        }
+
+        /**
          * @brief Generate a random double using the std::default_random_engine & uniform_real_distribution
          * @param min the minimum value
          * @param max the maximum value

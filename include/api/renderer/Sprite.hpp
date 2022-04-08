@@ -33,7 +33,7 @@ namespace arcade::api::renderer {
          * @param texturePath the path of the texture
          * @param symbol the symbol (ncurses)
          */
-        explicit Sprite(const std::string &texturePath, const char symbol) : AbstractDrawable()
+        explicit Sprite(const std::string &texturePath, const char symbol) : AbstractDrawable(), _textureOffset({0, 0})
         {
             this->_texturePath = texturePath;
             this->_symbol = symbol;
@@ -82,6 +82,18 @@ namespace arcade::api::renderer {
         virtual void setTexturePath(const std::string &texturePath) { this->_texturePath = texturePath; }
 
         /**
+         * @brief Set the flip type @see FlipType
+         * @param flipType
+         */
+        virtual void setFlipType(const FlipType &flipType) { this->_flipType = flipType; }
+
+        /**
+         * @brief Set the offset of the texture (like setTextureRect in SFML)
+         * @param offset the offset
+         */
+        virtual void setTextureOffset(const Vector2i &offset) { this->_textureOffset = offset; }
+
+        /**
          * @brief Get the symbol of the sprite, used for ncurses
          * @return the symbol of the sprite
          */
@@ -100,16 +112,17 @@ namespace arcade::api::renderer {
         FlipType getFlipType() const { return this->_flipType; }
 
         /**
-         * @brief Set the flip type @see FlipType
-         * @param flipType
+         * @brief Get the texture offset
+         * @return the texture offset
          */
-        virtual void setFlipType(const FlipType &flipType) { this->_flipType = flipType; }
+        const Vector2i &getTextureOffset() const { return this->_textureOffset; }
 
     protected:
         std::string _texturePath;
         char _symbol;
         Color _color;
         FlipType _flipType;
+        Vector2i _textureOffset;
     };
 }
 

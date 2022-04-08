@@ -23,6 +23,7 @@ arcade::api::Nibbler::Nibbler() : AbstractGameModule("Nibbler"),
     _isAlive = true;
     _map_size = {0, 0};
     _direction = RIGHT;
+    _tmpDirection = RIGHT;
     _time = 0;
 }
 
@@ -30,10 +31,9 @@ bool arcade::api::Nibbler::isTail()
 {
     Vector2f pos = _snakeDrawables[0]->getPosition();
 
-    for(auto it = _snakeDrawables.begin() + 1; it != _snakeDrawables.end(); it++) {
+    for(auto it = _snakeDrawables.begin() + 1; it != _snakeDrawables.end(); it++)
         if ((*it)->getPosition() == pos)
             return true;
-    }
     return false;
 }
 
@@ -46,46 +46,43 @@ void arcade::api::Nibbler::update(std::size_t tick)
     _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
     if (!_isAlive)
         return;
+    _direction = _tmpDirection;
     this->moveSnake();
     Vector2f pos = _snakeDrawables[0]->getPosition();
     if (_direction == RIGHT) {
-        if (_parsed_map[(int) pos.y / TTY_RATIO]
-        [(int) (pos.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
-        _snakeDrawables[0]->move(TTY_RATIO, 0);
+        if (_parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+            _snakeDrawables[0]->move(TTY_RATIO, 0);
+            _snakeDrawables[0]->setRotation(0);
             if (isTail())
                 _isAlive = false;
-        }
-        else
+        } else
             _isAlive = false;
     }
     if (_direction == LEFT) {
-        if (_parsed_map[(int) pos.y / TTY_RATIO]
-        [(int) (pos.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
-        _snakeDrawables[0]->move(-TTY_RATIO, 0);
+        if (_parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+            _snakeDrawables[0]->move(-TTY_RATIO, 0);
+            _snakeDrawables[0]->setRotation(-180);
             if (isTail())
-                    _isAlive = false;
-        }
-        else
+                _isAlive = false;
+        } else
             _isAlive = false;
     }
     if (_direction == DOWN) {
-        if (_parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO]
-        [(int) pos.x / TTY_RATIO] != MapType::BORDER) {
+        if (_parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO][(int) pos.x / TTY_RATIO] != MapType::BORDER) {
             _snakeDrawables[0]->move(0, TTY_RATIO);
+            _snakeDrawables[0]->setRotation(90);
             if (isTail())
                 _isAlive = false;
-        }
-        else
+        } else
             _isAlive = false;
     }
     if (_direction == UP) {
-        if (_parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO]
-        [(int) pos.x / TTY_RATIO] != MapType::BORDER) {
+        if (_parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO][(int) pos.x / TTY_RATIO] != MapType::BORDER) {
         _snakeDrawables[0]->move(0, -TTY_RATIO);
+        _snakeDrawables[0]->setRotation(90);
             if (isTail())
-                    _isAlive = false;
-        }
-        else
+                _isAlive = false;
+        } else
             _isAlive = false;
     }
     addTail();
@@ -105,29 +102,14 @@ void arcade::api::Nibbler::addTail()
             x = _rand.generate(1, (int)_map_size.x - 1);
             y = _rand.generate(1, (int)_map_size.y - 1);
         }
-        _food.setPosition(x * TTY_RATIO, y * TTY_RATIO);
+        _food.setPosition((float)x * TTY_RATIO, (float)y * TTY_RATIO);
         _parsed_map[y][x] = MapType::FOOD;
     }
 }
 
 void arcade::api::Nibbler::moveSnake()
 {
-    Vector2f pos = _snakeDrawables[0]->getPosition();
-    if ((_direction == RIGHT &&
-         _parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x + TTY_RATIO) /
-                                              TTY_RATIO] == MapType::BORDER) ||
-        (_direction == LEFT &&
-         _parsed_map[(int) pos.y / TTY_RATIO][(int) (pos.x - TTY_RATIO) /
-                                              TTY_RATIO] == MapType::BORDER) ||
-        (_direction == DOWN &&
-         _parsed_map[(int) (pos.y + TTY_RATIO) / TTY_RATIO][(int) pos.x /
-                                                            TTY_RATIO] ==
-         MapType::BORDER) ||
-        (_direction == UP &&
-         _parsed_map[(int) (pos.y - TTY_RATIO) / TTY_RATIO][(int) pos.x /
-                                                            TTY_RATIO] ==
-         MapType::BORDER) ||
-        this->_snakeDrawables.empty())
+    if (this->_snakeDrawables.empty())
         return;
     for (auto it = _snakeDrawables.end() - 1;
          it != _snakeDrawables.begin(); it--) {
@@ -145,6 +127,7 @@ arcade::api::Nibbler::~Nibbler()
 void arcade::api::Nibbler::restart()
 {
     _direction = Direction::RIGHT;
+    _tmpDirection = Direction::RIGHT;
     _map_size = {0,0};
     _isAlive =  true;
     this->destroy();
@@ -180,13 +163,13 @@ void arcade::api::Nibbler::onEvent(arcade::api::event::IEvent &event)
             auto ev = dynamic_cast<const KeyEvent &>(event);
             if (ev.isPressed()) {
                 if (ev.getKey() == KeyCode::Z && _direction != DOWN)
-                    _direction = UP;
+                    _tmpDirection = UP;
                 if (ev.getKey() == KeyCode::S && _direction != UP)
-                    _direction = DOWN;
+                    _tmpDirection = DOWN;
                 if (ev.getKey() == KeyCode::Q && _direction != RIGHT)
-                    _direction = LEFT;
+                    _tmpDirection = LEFT;
                 if (ev.getKey() == KeyCode::D && _direction != LEFT)
-                    _direction = RIGHT;
+                    _tmpDirection = RIGHT;
             }
         } catch (std::bad_cast &e) {
         }
@@ -199,8 +182,8 @@ void arcade::api::Nibbler::render(arcade::api::IDisplayModule &display)
             display.draw(*item);
         for (auto &item: _gamesDrawables)
             display.draw(*item);
-        for (auto &item: _snakeDrawables)
-            display.draw(*item);
+        for (auto it = (long)_snakeDrawables.size() - 1; it >= 0; it--)
+            display.draw(*_snakeDrawables[it]);
         display.draw(_food);
     } else
         for (auto &item: _dieDrawables)
@@ -267,7 +250,7 @@ void arcade::api::Nibbler::initBorder(float x, float y)
 
 void arcade::api::Nibbler::initSnake(float x, float y)
 {
-    auto s1 = std::make_unique<Sprite>("assets/red.png", 'S');
+    auto s1 = std::make_unique<Sprite>("assets/pacman.png", 'S');
     s1->setPosition(x, y);
     auto s2 = std::make_unique<Sprite>("assets/red.png", 'S');
     s2->setPosition(x - TTY_RATIO, y);

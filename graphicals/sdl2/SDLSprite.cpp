@@ -29,6 +29,7 @@ void arcade::sdl::SDLSprite::setPosition(float x, float y)
 void arcade::sdl::SDLSprite::setRotation(float rotation)
 {
     AbstractDrawable::setRotation(rotation);
+    _angle = rotation;
 }
 
 void arcade::sdl::SDLSprite::setScale(const Vector2f &scale)
@@ -93,6 +94,7 @@ arcade::sdl::SDLSprite::update(const arcade::api::renderer::IDrawable &drawable)
         this->setOrigin(sprite.getOrigin());
         this->setColor(sprite.getColor());
         this->setTexturePath(sprite.getTexturePath());
+        this->setFlipType(sprite.getFlipType());
     } catch (std::bad_cast &e) {
         throw api::ex::DrawableException("SDLSprite::update(): " +  std::string(e.what()));
     }}
@@ -120,7 +122,22 @@ void arcade::sdl::SDLSprite::draw(SDL_Window *window, SDL_Renderer *render)
     SDL_Rect rect = {(int)this->getPosition().x, (int)this->getPosition().y, 0, 0};
     SDL_QueryTexture(texture, nullptr, nullptr, &rect.w, &rect.h);
     SDL_SetRenderDrawColor(render, this->getColor().getRed(), this->getColor().getGreen(), this->getColor().getBlue(), this->getColor().getAlpha());
-    SDL_RenderCopy(render, texture, nullptr, &rect);
-    SDL_RenderCopyEx(render, texture, nullptr, &rect, 0, nullptr, this->_flip);
+    SDL_RenderCopyEx(render, texture, nullptr, &rect, this->_angle, nullptr, this->_flip);
     SDL_DestroyTexture(texture);
+}
+
+void arcade::sdl::SDLSprite::setFlipType(const FlipType &flipType)
+{
+    Sprite::setFlipType(flipType);
+    switch (flipType) {
+        case NONE:
+            _flip = SDL_FLIP_NONE;
+            break;
+        case HORIZONTAL:
+            _flip = SDL_FLIP_HORIZONTAL;
+            break;
+        case VERTICAL:
+            _flip = SDL_FLIP_VERTICAL;
+            break;
+    }
 }

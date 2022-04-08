@@ -49,8 +49,11 @@ namespace arcade::sdl {
 
         void setTexturePath(const std::string &texturePath) override;
 
+        void setFlipType(const FlipType &flipType) override;
+
     private:
         SDL_Surface *_surface;
         SDL_RendererFlip _flip;
+        double _angle;
     };
 }

@@ -71,12 +71,14 @@ namespace arcade::api {
         std::vector<std::unique_ptr<renderer::AbstractDrawable>> _dieDrawables;
         std::vector<std::vector<MapType>> _parsed_map;
         bool _isAlive;
-        Vector2u _map_size;
+        Vector2u _map_size{};
         Sprite _food;
         Random _rand;
         std::size_t _time;
         Direction _direction;
+        Direction _tmpDirection;
         std::unordered_map<char, MapType> _map;
+
 
     };
 }

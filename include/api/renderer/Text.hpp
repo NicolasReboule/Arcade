@@ -20,6 +20,15 @@ namespace arcade::api::renderer {
      */
     class Text : public AbstractDrawable {
     public:
+        /**
+         * @brief The text position, will be used to automatically alignate the text with their current position
+         */
+        enum TextPosition {
+            LEFT, /*< Left position (aka x: 0) */
+            MIDDLE, /**< Middle position (aka x: width/2) */
+            RIGHT /**< Right position (aka x: -width) */
+        };
+
         explicit Text(const std::string &text, const std::string &fontPath, const Color &color) : AbstractDrawable()
         {
             this->_text = text;
@@ -28,7 +37,7 @@ namespace arcade::api::renderer {
             this->_highlightColor = Color::White;
             this->_rotation = 0;
             this->_highlighted = false;
-            this->_centered = false;
+            this->_textPosition = TextPosition::LEFT;
         }
         ~Text() override = default;
 
@@ -76,10 +85,10 @@ namespace arcade::api::renderer {
         virtual void setHighlightColor(const Color &color) { this->_highlightColor = color; }
 
         /**
-         * @brief Set the text centered in X axis (will modify the origin)
-         * @param centered if the text is centered
+         * @brief Set the text position, the origin will be modified
+         * @param textPosition the new text position
          */
-        virtual void setCentered(bool centered) { this->_centered = centered; }
+        virtual void setTextPosition(TextPosition textPosition) { this->_textPosition = textPosition; }
 
         /**
          * @brief Get the text
@@ -112,10 +121,10 @@ namespace arcade::api::renderer {
         const Color &getHighlightColor() const { return this->_highlightColor; }
 
         /**
-         * @brief Check if the text is centered
-         * @return true if the text is centered, false otherwise
+         * @brief Get the TextPosition
+         * @return the text position
          */
-        bool isCentered() const { return this->_centered; }
+        TextPosition getTextPosition() const { return this->_textPosition; }
 
     private:
         std::string _text;
@@ -123,10 +132,11 @@ namespace arcade::api::renderer {
         Color _color;
         bool _highlighted;
         Color _highlightColor;
-        bool _centered;
+        TextPosition _textPosition;
     };
 }
 
 using Text = arcade::api::renderer::Text;
+using TextPosition = arcade::api::renderer::Text::TextPosition;
 
 #endif //ARCADE_TEXT_HPP

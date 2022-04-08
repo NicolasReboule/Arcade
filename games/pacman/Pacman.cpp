@@ -150,6 +150,8 @@ void arcade::api::Pacman::update(std::size_t tick)
     Vector2f actual = _pac.getPosition();
     if (_direction == RIGHT && \
         _parsed[actual.y / TTY_RATIO][(actual.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        _pac.setFlipType(FlipType::NONE);
+        _pac.setRotation(0);
         _pac.move(TTY_RATIO, 0);
         _direction = NOPE;
         clearCase();
@@ -157,7 +159,9 @@ void arcade::api::Pacman::update(std::size_t tick)
     }
     if (_direction == LEFT && \
         _parsed[actual.y / TTY_RATIO][(actual.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        _pac.setFlipType(FlipType::HORIZONTAL);
         _pac.move(-TTY_RATIO, 0);
+        _pac.setRotation(0);
         _direction = NOPE;
         clearCase();
         teleport();
@@ -165,6 +169,7 @@ void arcade::api::Pacman::update(std::size_t tick)
     if (_direction == DOWN && \
         _parsed[(actual.y + TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
         _pac.move(0, TTY_RATIO);
+        _pac.setRotation(90);
         _direction = NOPE;
         clearCase();
         teleport();
@@ -172,6 +177,7 @@ void arcade::api::Pacman::update(std::size_t tick)
     if (_direction == UP && \
         _parsed[(actual.y - TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
         _pac.move(0, -TTY_RATIO);
+        _pac.setRotation(-90);
         _direction = NOPE;
         clearCase();
         teleport();
