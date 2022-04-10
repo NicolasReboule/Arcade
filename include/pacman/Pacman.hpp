@@ -51,6 +51,12 @@ namespace arcade::api {
 
         void restart() override;
 
+        // void moveGhosts();
+
+        // void moveGhost(int);
+
+        // bool posIsValid(int, Vector2f*);
+
         void initMap();
         void initScore();
         void initPacgum(float, float);
@@ -66,6 +72,7 @@ namespace arcade::api {
         static std::unique_ptr<Pacman> _instance;
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
         std::vector<std::unique_ptr<Sprite>> _pacmanDrawables;
+        std::vector<std::unique_ptr<Sprite>> _ghostDrawables;
         std::vector<std::unique_ptr<Sprite>> _foodDrawables;
         std::vector<std::unique_ptr<Sprite>> _portalDrawables;
         std::vector<std::unique_ptr<Text>> _scoreDrawables;
@@ -77,6 +84,7 @@ namespace arcade::api {
         std::vector<std::vector<MapType>> _parsed;
         bool _isGod;
         std::size_t _stateTime;
+        // std::size_t _ghostTime;
         bool _isWin;
     };
 }

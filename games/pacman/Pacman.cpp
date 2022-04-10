@@ -92,8 +92,43 @@ void arcade::api::Pacman::initPac(float x, float y)
 
 void arcade::api::Pacman::initGhost(float x, float y)
 {
-    (void)x;
-    (void)y;
+    static int ghostnb = 0;
+    if (ghostnb == 0) {
+        std::unique_ptr<Sprite> alwyn = std::make_unique<Sprite>("assets/alwyn.png", 'G');
+        alwyn->setPosition(x, y);
+        alwyn->setOrigin(RATIO_CENTER, RATIO_CENTER);
+        alwyn->setColor(ArcadeColor::Red);
+        ghostnb = 1;
+        _ghostDrawables.push_back(std::move(alwyn));
+        return;
+    }
+    if (ghostnb == 1) {
+        std::unique_ptr<Sprite> hugo = std::make_unique<Sprite>("assets/hugo.png", 'G');
+        hugo->setPosition(x, y);
+        hugo->setOrigin(RATIO_CENTER, RATIO_CENTER);
+        hugo->setColor(ArcadeColor::Yellow);
+        ghostnb++;
+        _ghostDrawables.push_back(std::move(hugo));
+        return;
+    }
+    if (ghostnb == 2) {
+        std::unique_ptr<Sprite> noa = std::make_unique<Sprite>("assets/noa.png", 'G');
+        noa->setPosition(x, y);
+        noa->setOrigin(RATIO_CENTER, RATIO_CENTER);
+        noa->setColor(ArcadeColor::Cyan);
+        ghostnb++;
+        _ghostDrawables.push_back(std::move(noa));
+        return;
+    }
+    if (ghostnb == 3) {
+        std::unique_ptr<Sprite> quentin = std::make_unique<Sprite>("assets/quentin.png", 'G');
+        quentin->setPosition(x, y);
+        quentin->setOrigin(RATIO_CENTER, RATIO_CENTER);
+        quentin->setColor(ArcadeColor::Magenta);
+        ghostnb = 0;
+        _ghostDrawables.push_back(std::move(quentin));
+        return;
+    }
 }
 
 void arcade::api::Pacman::initFood(float x, float y)
@@ -136,10 +171,10 @@ bool arcade::api::Pacman::isRunning()
 
 void arcade::api::Pacman::clearCase()
 {
-    Vector2f actual = _pac.getPosition();
+    Vector2f pos = _pac.getPosition();
     auto it = _foodDrawables.begin();
     for (; it != _foodDrawables.end(); it++) {
-        if (actual.x == it->get()->getPosition().x && actual.y == it->get()->getPosition().y) {
+        if (pos.x == it->get()->getPosition().x && pos.y == it->get()->getPosition().y) {
             if (it->get()->getSymbol() == 'o') {
                 _isGod = true;
                 _stateTime = _time;
@@ -155,11 +190,11 @@ void arcade::api::Pacman::clearCase()
 
 void arcade::api::Pacman::teleport()
 {
-    Vector2f actual = _pac.getPosition();
+    Vector2f pos = _pac.getPosition();
     auto it = _portalDrawables.begin();
     int i = 0;
     for (; it != _portalDrawables.end(); it++, i++) {
-        if (actual.x == it->get()->getPosition().x && actual.y == it->get()->getPosition().y) {
+        if (pos.x == it->get()->getPosition().x && pos.y == it->get()->getPosition().y) {
             if (i % 2 == 0)
                 _pac.setPosition((it + 1)->get()->getPosition());
             else
@@ -173,6 +208,7 @@ void arcade::api::Pacman::init()
 {
     _time = 0;
     _stateTime = 0;
+    // _ghostTime = 0;
     _score = 0;
     this->initMap();
     this->initScore();
@@ -184,16 +220,19 @@ void arcade::api::Pacman::init()
 
 void arcade::api::Pacman::update(std::size_t tick)
 {
-    if (this->_time == 0)
+    if (this->_time == 0) {
         _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
+        // _ghostTime = tick + Time::getNanoTime(std::chrono::milliseconds(95));
+    }
     if (tick < this->_time)
         return;
     _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
     if (_time >= _stateTime + Time::getNanoTime(std::chrono::seconds(5)))
         _isGod = false;
-    Vector2f actual = _pac.getPosition();
+    Vector2f pos = _pac.getPosition();
     if (_direction == RIGHT && \
-        _parsed[actual.y / TTY_RATIO][(actual.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        _parsed[pos.y / TTY_RATIO][(pos.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        // moveGhosts();
         _pac.setFlipType(FlipType::NONE);
         _pac.setRotation(0);
         _pac.move(TTY_RATIO, 0);
@@ -202,7 +241,8 @@ void arcade::api::Pacman::update(std::size_t tick)
         teleport();
     }
     if (_direction == LEFT && \
-        _parsed[actual.y / TTY_RATIO][(actual.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        _parsed[pos.y / TTY_RATIO][(pos.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+        // moveGhosts();
         _pac.setFlipType(FlipType::HORIZONTAL);
         _pac.move(-TTY_RATIO, 0);
         _pac.setRotation(-180);
@@ -211,7 +251,8 @@ void arcade::api::Pacman::update(std::size_t tick)
         teleport();
     }
     if (_direction == DOWN && \
-        _parsed[(actual.y + TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
+        _parsed[(pos.y + TTY_RATIO) / TTY_RATIO][pos.x / TTY_RATIO] != MapType::BORDER) {
+        // moveGhosts();
         _pac.move(0, TTY_RATIO);
         _pac.setRotation(90);
         _direction = NOPE;
@@ -219,7 +260,8 @@ void arcade::api::Pacman::update(std::size_t tick)
         teleport();
     }
     if (_direction == UP && \
-        _parsed[(actual.y - TTY_RATIO) / TTY_RATIO][actual.x / TTY_RATIO] != MapType::BORDER) {
+        _parsed[(pos.y - TTY_RATIO) / TTY_RATIO][pos.x / TTY_RATIO] != MapType::BORDER) {
+        // moveGhosts();
         _pac.move(0, -TTY_RATIO);
         _pac.setRotation(-90);
         _direction = NOPE;
@@ -257,6 +299,8 @@ void arcade::api::Pacman::render(arcade::api::IDisplayModule &display)
             display.draw(*item);
         for (auto &item : _pacmanDrawables)
             display.draw(*item);
+        for (auto &item : _ghostDrawables)
+            display.draw(*item);
         for (auto &item : _foodDrawables)
             display.draw(*item);
         for (auto &item : _portalDrawables)
@@ -279,7 +323,55 @@ void arcade::api::Pacman::destroy()
     _portalDrawables.clear();
     _winDrawables.clear();
     _scoreDrawables.clear();
+    _ghostDrawables.clear();
 }
+
+// bool arcade::api::Pacman::posIsValid(int i, Vector2f *pos)
+// {
+//     std::cout << pos->x << " " << pos->y << std::endl;
+//     if (i == 0 &&  _parsed[pos->y / TTY_RATIO][(pos->x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+//         pos->x += TTY_RATIO;
+//         return true;
+//     }
+//     if (i == 1 && _parsed[pos->y / TTY_RATIO][(pos->x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
+//         pos->x -= TTY_RATIO;
+//         return true;
+//     }
+//     if (i == 2 && _parsed[(pos->y + TTY_RATIO) / TTY_RATIO][pos->x / TTY_RATIO] != MapType::BORDER) {
+//         pos->y += TTY_RATIO;
+//         return true;
+//     }
+//     if (i == 3 && _parsed[(pos->y - TTY_RATIO) / TTY_RATIO][pos->x / TTY_RATIO] != MapType::BORDER) {
+//         pos->y -= TTY_RATIO;
+//         return true;
+//     }
+//     return false;
+// }
+
+// void arcade::api::Pacman::moveGhost(int ghostIndex)
+// {
+//     Vector2f pos = _ghostDrawables[ghostIndex]->getPosition();
+//     srand(time(NULL));
+//     int i = 0;
+//     do {
+//         i = rand() % 3;
+//     } while (!posIsValid(i, &pos));
+//     _ghostDrawables[ghostIndex]->move(pos);
+// }
+
+// void arcade::api::Pacman::moveGhosts()
+// {
+//     if (_time >= _ghostTime + Time::getNanoTime(std::chrono::seconds(5)))
+//         moveGhost(0);
+//     if (_time >= _ghostTime + Time::getNanoTime(std::chrono::seconds(15)))
+//         moveGhost(1);
+//     if (_time >= _ghostTime + Time::getNanoTime(std::chrono::seconds(25)))
+//         moveGhost(2);
+//     if (_time >= _ghostTime + Time::getNanoTime(std::chrono::seconds(35))) {
+//         std::cout << _time << " "  << (_time + Time::getNanoTime(std::chrono::seconds(35))) << std::endl;
+//         moveGhost(3);
+//     }
+// }
 
 extern "C" arcade::api::Pacman *entryPoint()
 {

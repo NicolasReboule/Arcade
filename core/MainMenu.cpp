@@ -201,9 +201,9 @@ void arcade::menu::MainMenu::initHighscore()
         if(higscore.first != "" || higscore.second != 0) {
             Text text("Highest score = " + higscore.first + " : " + std::to_string(higscore.second), "assets/walkthemoon.ttf", ArcadeColor::Yellow);
             text.setPosition(380, y);
-            y += 200;
             _highscoresDrawables.push_back(std::make_unique<Text>(text));
         }
+            y += 200;
     }
 }
 
