@@ -42,7 +42,6 @@ int main(int ac, char **av)
     } catch (std::exception &e) {
         std::cout << "Core: Initialization" << std::endl;
         std::cerr << "Core: " << e.what() << std::endl;
-        std::cout << "Core: Initialized" << std::endl;
         return 84;
     }
     try {
@@ -54,7 +53,6 @@ int main(int ac, char **av)
     try {
         std::cout << "Core: Stopping" << std::endl;
         core.stop();
-        std::cout << "Core: Stopped" << std::endl;
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }

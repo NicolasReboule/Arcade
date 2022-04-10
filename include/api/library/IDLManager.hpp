@@ -15,6 +15,12 @@
 #include <iostream>
 #include <filesystem>
 
+/**
+ * @file IDLManager.hpp
+ * @example examples/MyDLManager.hpp
+ * @example examples/MyDLManager.cpp
+ */
+
 namespace arcade::api::library {
     /**
      * @brief Class to manage the libraries

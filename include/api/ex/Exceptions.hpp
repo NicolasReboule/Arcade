@@ -14,6 +14,7 @@
  */
 
 #include "ArcadeException.hpp"
+#include "BuilderException.hpp"
 #include "DrawableException.hpp"
 #include "LibraryAlreadyLoaded.hpp"
 #include "LibraryEntryPointNotFound.hpp"

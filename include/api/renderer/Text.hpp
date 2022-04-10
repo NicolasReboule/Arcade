@@ -42,6 +42,12 @@ namespace arcade::api::renderer {
         ~Text() override = default;
 
         /**
+         * @brief Copy constructor used for builder
+         * @param other the other text to copy
+         */
+        Text(const Text &other) = default;
+
+        /**
           * @brief Update the text
           * @attention Needs to be implemented in child class
           * @param drawable the updated text

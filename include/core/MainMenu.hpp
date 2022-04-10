@@ -48,5 +48,6 @@ namespace arcade::menu {
         void initGlobalMenu();
         void initDisplays();
         void initGames();
+        void initHighscore();
     };
 }

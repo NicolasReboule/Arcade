@@ -45,6 +45,12 @@ namespace arcade::api::renderer {
         ~Sprite() override = default;
 
         /**
+         * @brief Copy constructor used for builder
+         * @param other the other sprite to copy
+         */
+         Sprite(const Sprite &other) = default;
+
+        /**
          * @brief Update the sprite
          * @attention Needs to be implemented in child class
          * @param drawable the updated sprite
@@ -64,7 +70,7 @@ namespace arcade::api::renderer {
         const Color &getColor() const { return this->_color; }
 
         /**
-         * @brief Set the color of the sprite
+         * @brief Set the color of the sprite (tty only)
          * @param color the color to set
          */
         virtual void setColor(const Color &color) { this->_color = color; }
@@ -91,7 +97,7 @@ namespace arcade::api::renderer {
          * @brief Set the offset of the texture (like setTextureRect in SFML)
          * @param offset the offset
          */
-        virtual void setTextureOffset(const Vector2i &offset) { this->_textureOffset = offset; }
+        virtual void setTextureOffset(const Vector2i &textureOffset) { this->_textureOffset = textureOffset; }
 
         /**
          * @brief Get the symbol of the sprite, used for ncurses

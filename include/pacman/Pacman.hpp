@@ -19,7 +19,8 @@ namespace arcade::api {
             PAC,
             GHOST,
             FOOD,
-            PORTAL
+            PORTAL,
+            PACGUM
         };
 
         enum Direction {
@@ -51,6 +52,8 @@ namespace arcade::api {
         void restart() override;
 
         void initMap();
+        void initScore();
+        void initPacgum(float, float);
         void initBorder(float, float);
         void initPac(float, float);
         void initGhost(float, float);
@@ -65,12 +68,15 @@ namespace arcade::api {
         std::vector<std::unique_ptr<Sprite>> _pacmanDrawables;
         std::vector<std::unique_ptr<Sprite>> _foodDrawables;
         std::vector<std::unique_ptr<Sprite>> _portalDrawables;
+        std::vector<std::unique_ptr<Text>> _scoreDrawables;
         std::vector<std::unique_ptr<renderer::AbstractDrawable>> _winDrawables;
         Sprite _pac;
         std::size_t _time;
         Direction _direction;
         std::unordered_map<char, MapType> _map;
         std::vector<std::vector<MapType>> _parsed;
+        bool _isGod;
+        std::size_t _stateTime;
         bool _isWin;
     };
 }

@@ -37,6 +37,8 @@ void arcade::menu::MainMenu::init()
     this->initGlobalMenu();
     this->initDisplays();
     this->initGames();
+    this->_core->loadHighScore(SCORE_DIR);
+    this->initHighscore();
 }
 
 void arcade::menu::MainMenu::update(std::size_t tick)
@@ -138,10 +140,10 @@ void arcade::menu::MainMenu::render(api::IDisplayModule &display)
     else {
         for (auto &item: _gamesDrawables)
             display.draw(*item);
+        for (auto &item : _highscoresDrawables)
+            display.draw(*item);
         display.draw(_username);
     }
-//    for (auto &item : _highscoresDrawables)
-//        display.draw(*item);
 }
 
 void arcade::menu::MainMenu::destroy()
@@ -188,5 +190,20 @@ void arcade::menu::MainMenu::initGames()
         _gamesDrawables.push_back(std::make_unique<Text>(text));
     }
     _gamesDrawables[_gameIdx]->setColor(ArcadeColor::Cyan);
+}
+
+void arcade::menu::MainMenu::initHighscore()
+{
+    float y = 200;
+    auto games = _core->getDLManager().getGames();
+    for (auto &item : games) {
+        std::pair<std::string, std::size_t> higscore = _core->getHighScore(item);
+        if(higscore.first != "" || higscore.second != 0) {
+            Text text("Highest score = " + higscore.first + " : " + std::to_string(higscore.second), "assets/walkthemoon.ttf", ArcadeColor::Yellow);
+            text.setPosition(380, y);
+            y += 200;
+            _highscoresDrawables.push_back(std::make_unique<Text>(text));
+        }
+    }
 }
 

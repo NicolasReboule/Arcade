@@ -59,6 +59,7 @@ namespace arcade::api {
 
         void initMap();
         void initDie();
+        void initScore();
         void initBorder(float, float);
         void initSnake(float, float);
         void initWall(float, float);
@@ -69,6 +70,7 @@ namespace arcade::api {
         std::vector<std::unique_ptr<Sprite>> _gamesDrawables;
         std::vector<std::unique_ptr<Sprite>> _snakeDrawables;
         std::vector<std::unique_ptr<renderer::AbstractDrawable>> _dieDrawables;
+        std::vector<std::unique_ptr<Text>> _scoreDrawables;
         std::vector<std::vector<MapType>> _parsed_map;
         bool _isAlive;
         Vector2u _map_size{};
@@ -78,8 +80,6 @@ namespace arcade::api {
         Direction _direction;
         Direction _tmpDirection;
         std::unordered_map<char, MapType> _map;
-
-
     };
 }
 

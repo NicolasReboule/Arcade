@@ -34,6 +34,15 @@ namespace arcade {
 
         const std::string &getUsername() const override;
 
+        void checkHighScore();
+
+        void saveHighScore(const std::string &gameName, std::size_t score) override;
+
+        void loadHighScore(const std::string &dirPath) override;
+
+        std::pair<std::string, std::size_t> getHighScore(const std::string &gameName);
+
+        bool hasHighScore(const std::string &gameName);
     private:
         DlManager _manager;
         menu::MainMenu *_menu;

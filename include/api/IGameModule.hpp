@@ -75,6 +75,12 @@ namespace arcade::api {
          */
         virtual bool isRunning() = 0;
 
+        /**
+         * @brief Get the score of the game
+         * @return the score of the game
+         */
+        virtual std::size_t &getScore() = 0;
+
     };
 }
 

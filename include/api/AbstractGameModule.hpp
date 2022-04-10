@@ -16,6 +16,12 @@
 #include "utils/Parser.hpp"
 #include <list>
 
+/**
+ * @file AbstractGameModule.hpp
+ * @example examples/MyGame.hpp
+ * @example examples/MyGame.cpp
+ */
+
 namespace arcade::api {
     /**
      * @brief Abstract class for game module
@@ -33,6 +39,7 @@ namespace arcade::api {
         {
             this->_name = name;
             this->_isRunning = true;
+            this->_score = 0;
         }
 
         /**
@@ -63,9 +70,15 @@ namespace arcade::api {
             return this->_isRunning;
         }
 
+        size_t &getScore() override
+        {
+            return this->_score;
+        }
+
     protected:
         std::string _name; /**< The name of the library */
         bool _isRunning; /**< If the game is running */
+        std::size_t _score; /**< The score of the game */
         std::list<std::unique_ptr<renderer::AbstractDrawable>> _drawables; /**< The list of drawable, unique_ptr used for inheritance call */
     };
 }

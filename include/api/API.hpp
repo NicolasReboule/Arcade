@@ -19,6 +19,7 @@
 #include "library/IDLManager.hpp"
 #include "window/Keyboard.hpp"
 #include "window/Mouse.hpp"
+#include "renderer/builder/Builders.hpp"
 #include "renderer/Color.hpp"
 #include "renderer/Drawables.hpp"
 #include "AbstractDisplayModule.hpp"

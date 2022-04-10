@@ -11,6 +11,11 @@
 #include "api/ex/Exceptions.hpp"
 #include <string>
 
+/**
+ * @file IDLLoader.hpp
+ * @example examples/MyDLLoader.hpp
+ */
+
 namespace arcade::api::library {
     /**
      * @brief Interface for the library loader

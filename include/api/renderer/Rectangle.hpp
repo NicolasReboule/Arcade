@@ -38,6 +38,12 @@ namespace arcade::api::renderer {
         ~Rectangle() override = default;
 
         /**
+         * @brief Copy constructor used for builder
+         * @param other the other rectangle to copy
+         */
+        Rectangle(const Rectangle &other) = default;
+
+        /**
          * @brief Update the rectangle
          * @attention Needs to be implemented in child class
          * @param drawable the updated rectangle
@@ -57,6 +63,12 @@ namespace arcade::api::renderer {
         bool isFilled() const { return this->_filled; }
 
         /**
+         * @brief Set rectangle filled
+         * @param filled if it's filled
+         */
+        virtual void setFilled(bool filled) { this->_filled = filled; }
+
+        /**
         * @brief Get the fill color of the rectangle
         * @return the fill color of the rectangle
         */
@@ -66,7 +78,7 @@ namespace arcade::api::renderer {
          * @brief Set the fill color of the rectangle
          * @param color the new fill color
          */
-        virtual void setFillColor(const Color &color) { this->_fillColor = color; }
+        virtual void setFillColor(const Color &fillColor) { this->_fillColor = fillColor; }
 
         /**
          * @brief Get the border color of the rectangle

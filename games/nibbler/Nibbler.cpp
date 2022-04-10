@@ -91,6 +91,8 @@ void arcade::api::Nibbler::addTail()
     std::size_t y = _rand.generate(1, (int)_map_size.y) - 1;
     if (_snakeDrawables[0]->getPosition() == _food.getPosition()) {
         Sprite sup("assets/red.png", 'S');
+        _score += 100;
+        _scoreDrawables[0]->setText("Your score: " + std::to_string(_score));
         sup.setPosition(-64, 0);
         _parsed_map[(int)pos.y/TTY_RATIO][(int)pos.x/TTY_RATIO] = MapType::NONE;
         _snakeDrawables.push_back(std::make_unique<Sprite>(sup));
@@ -124,6 +126,7 @@ void arcade::api::Nibbler::restart()
 {
     _direction = Direction::RIGHT;
     _tmpDirection = Direction::RIGHT;
+    _score = 0;
     _map_size = {0,0};
     _isAlive =  true;
     this->destroy();
@@ -178,12 +181,18 @@ void arcade::api::Nibbler::render(arcade::api::IDisplayModule &display)
             display.draw(*item);
         for (auto &item: _gamesDrawables)
             display.draw(*item);
+        for (auto &item: _scoreDrawables)
+            display.draw(*item);
         for (auto it = (long)_snakeDrawables.size() - 1; it >= 0; it--)
             display.draw(*_snakeDrawables[it]);
         display.draw(_food);
-    } else
+    } else {
+        _scoreDrawables[0]->setPosition(ARCADE_WIDTH / 2, ARCADE_HEIGHT / 2 + 100);
+        for (auto &item: _scoreDrawables)
+            display.draw(*item);
         for (auto &item: _dieDrawables)
             display.draw(*item);
+    }
 }
 
 LibraryType arcade::api::Nibbler::getType() const
@@ -194,8 +203,10 @@ LibraryType arcade::api::Nibbler::getType() const
 void arcade::api::Nibbler::init()
 {
     _time = 0;
+    _score = 0;
     this->initMap();
     this->initDie();
+    this->initScore();
 }
 
 void arcade::api::Nibbler::initMap()
@@ -234,6 +245,8 @@ void arcade::api::Nibbler::destroy()
     _drawables.clear();
     _gamesDrawables.clear();
     _snakeDrawables.clear();
+    _scoreDrawables.clear();
+    _dieDrawables.clear();
 }
 
 void arcade::api::Nibbler::initBorder(float x, float y)
@@ -271,4 +284,11 @@ void arcade::api::Nibbler::initWall(float x, float y)
 void arcade::api::Nibbler::initFood(float x, float y)
 {
     _food.setPosition(x * TTY_RATIO, y * TTY_RATIO);
+}
+
+void arcade::api::Nibbler::initScore()
+{
+    Text score("Your score: " + std::to_string(_score), "assets/walkthemoon.ttf", ArcadeColor::Yellow);
+    score.setPosition(200, 50);
+    _scoreDrawables.push_back(std::make_unique<Text>(score));
 }

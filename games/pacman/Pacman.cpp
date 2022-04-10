@@ -12,6 +12,8 @@ std::unique_ptr<arcade::api::Pacman> arcade::api::Pacman::_instance;
 void arcade::api::Pacman::restart()
 {
     _direction = NOPE;
+    _score = 0;
+    _isGod = false;
     this->destroy();
     this->init();
 }
@@ -24,7 +26,7 @@ arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman"),
         {' ', MapType::NONE},
         {'P', MapType::PAC},
         {'-', MapType::FOOD},
-        {'C', MapType::FOOD},
+        {'C', MapType::PACGUM},
         {'G', MapType::GHOST},
         {'+', MapType::PORTAL},
     };
@@ -32,6 +34,7 @@ arcade::api::Pacman::Pacman(): AbstractGameModule("Pacman"),
     _direction = NOPE;
     _time = 0;
     _isWin = false;
+    _isGod = false;
 }
 
 void arcade::api::Pacman::initPortal(float x, float y)
@@ -61,8 +64,10 @@ void arcade::api::Pacman::initMap()
                 this->initFood(x, y);
             } else if (type == MapType::GHOST) {
                 this->initGhost(x, y);
-            } else if (type == MapType::PORTAL)
+            } else if (type == MapType::PORTAL) {
                 this->initPortal(x, y);
+            } else if (type == MapType::PACGUM)
+                this->initPacgum(x, y);
             x+=TTY_RATIO;
         }
         y+=TTY_RATIO;
@@ -75,7 +80,7 @@ void arcade::api::Pacman::initBorder(float x, float y)
         "assets/brick.png", 'X');
     wall->setPosition(x, y);
     wall->setOrigin(RATIO_CENTER, RATIO_CENTER);
-    wall->setColor(ArcadeColor::Red);
+    wall->setColor(ArcadeColor::Magenta);
     _pacmanDrawables.push_back(std::move(wall));
 }
 
@@ -101,6 +106,24 @@ void arcade::api::Pacman::initFood(float x, float y)
     _foodDrawables.push_back(std::move(food));
 }
 
+void arcade::api::Pacman::initPacgum(float x, float y)
+{
+    std::unique_ptr<Sprite> pacgum = std::make_unique<Sprite>(
+        "assets/pacgum.png", '.');
+    pacgum->setPosition(x, y);
+    pacgum->setSymbol('o');
+    pacgum->setOrigin(RATIO_CENTER, RATIO_CENTER);
+    pacgum->setColor(ArcadeColor::Red);
+    _foodDrawables.push_back(std::move(pacgum));
+}
+
+void arcade::api::Pacman::initScore()
+{
+    Text score("Your score: " + std::to_string(_score), "assets/walkthemoon.ttf", ArcadeColor::Yellow);
+    score.setPosition(200, 50);
+    _scoreDrawables.push_back(std::make_unique<Text>(score));
+}
+
 arcade::api::Pacman::~Pacman()
 {
     std::cout << "Pacman : bye" << std::endl;
@@ -117,6 +140,13 @@ void arcade::api::Pacman::clearCase()
     auto it = _foodDrawables.begin();
     for (; it != _foodDrawables.end(); it++) {
         if (actual.x == it->get()->getPosition().x && actual.y == it->get()->getPosition().y) {
+            if (it->get()->getSymbol() == 'o') {
+                _isGod = true;
+                _stateTime = _time;
+                _score += 1000;
+            } else
+                _score += 100;
+            _scoreDrawables[0]->setText("Your score: " + std::to_string(_score));
             _foodDrawables.erase(it);
             break;
         }
@@ -142,7 +172,10 @@ void arcade::api::Pacman::teleport()
 void arcade::api::Pacman::init()
 {
     _time = 0;
+    _stateTime = 0;
+    _score = 0;
     this->initMap();
+    this->initScore();
     this->_isWin = false;
     Text text("You Won !", "assets/walkthemoon.ttf", ArcadeColor::Yellow);
     text.setPosition(ARCADE_WIDTH / 2, ARCADE_HEIGHT / 2);
@@ -156,6 +189,8 @@ void arcade::api::Pacman::update(std::size_t tick)
     if (tick < this->_time)
         return;
     _time = tick + Time::getNanoTime(std::chrono::milliseconds(95));
+    if (_time >= _stateTime + Time::getNanoTime(std::chrono::seconds(5)))
+        _isGod = false;
     Vector2f actual = _pac.getPosition();
     if (_direction == RIGHT && \
         _parsed[actual.y / TTY_RATIO][(actual.x + TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
@@ -170,7 +205,7 @@ void arcade::api::Pacman::update(std::size_t tick)
         _parsed[actual.y / TTY_RATIO][(actual.x - TTY_RATIO) / TTY_RATIO] != MapType::BORDER) {
         _pac.setFlipType(FlipType::HORIZONTAL);
         _pac.move(-TTY_RATIO, 0);
-        _pac.setRotation(0);
+        _pac.setRotation(-180);
         _direction = NOPE;
         clearCase();
         teleport();
@@ -226,6 +261,8 @@ void arcade::api::Pacman::render(arcade::api::IDisplayModule &display)
             display.draw(*item);
         for (auto &item : _portalDrawables)
             display.draw(*item);
+        for (auto &item : _scoreDrawables)
+            display.draw(*item);
         display.draw(_pac);
     } else {
         for (auto &item : _winDrawables)
@@ -241,6 +278,7 @@ void arcade::api::Pacman::destroy()
     _gamesDrawables.clear();
     _portalDrawables.clear();
     _winDrawables.clear();
+    _scoreDrawables.clear();
 }
 
 extern "C" arcade::api::Pacman *entryPoint()

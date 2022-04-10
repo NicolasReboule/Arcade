@@ -13,6 +13,12 @@
 #include "renderer/Drawables.hpp"
 #include <unordered_map>
 
+/**
+ * @file AbstractDisplayModule.hpp
+ * @example examples/MyDisplay.hpp
+ * @example examples/MyDisplay.cpp
+ */
+
 namespace arcade::api {
     /**
      * @brief Abstract class for display module

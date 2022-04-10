@@ -36,6 +36,12 @@ namespace arcade::api::renderer {
         }
 
         /**
+         * @brief Copy constructor used for builder
+         * @param other the other abstract drawable to copy
+         */
+        AbstractDrawable(const AbstractDrawable &other) = default;
+
+        /**
          * @brief Get the id of the drawable
          * @return the id (sha1 hash)
          */
@@ -106,7 +112,7 @@ namespace arcade::api::renderer {
 
     protected:
         std::string _id; /**< The id of the drawable (sha1 hash using timestamp) */
-        long _lastUpdate;
+        long _lastUpdate; /**< The last update timestamp */
         Vector2f _position; /**< The position of the drawable */
         Vector2f _size; /**< The the size of the drawable */
         Vector2f _scale; /**< The scale of the drawable */

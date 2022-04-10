@@ -22,6 +22,7 @@ namespace arcade::api::library {
      * this method need to be static and return a pointer to your library
      *
      * Your entryPoint method name should be the same as the define **ENTRY_POINT_NAME**
+     * @see ENTRY_POINT_NAME
      *
      * Basic implementation of ILibrary
      * @code
